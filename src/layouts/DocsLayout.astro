@@ -1,0 +1,237 @@
+---
+import BaseLayout from './BaseLayout.astro'
+import DocsSidebar from '../components/DocsSidebar.astro'
+import { allDocItems } from '../lib/docs-nav'
+
+interface Props {
+  title: string
+  slug: string
+}
+
+const { title, slug } = Astro.props
+const base = import.meta.env.BASE_URL.replace(/\/$/, '')
+
+const idx = allDocItems.findIndex((d) => d.slug === slug)
+const prev = idx > 0 ? allDocItems[idx - 1] : null
+const next = idx >= 0 && idx < allDocItems.length - 1 ? allDocItems[idx + 1] : null
+---
+
+<BaseLayout title={`${title} — Obsidian Project Manager`}>
+  <div class="docs-shell">
+    <div class="docs-grid">
+      <DocsSidebar currentSlug={slug} />
+      <article class="doc-content">
+        <slot />
+        <nav class="doc-pager">
+          {prev ? (
+            <a class="pager-link prev" href={`${base}/docs/${prev.slug}`}>
+              <span class="pager-dir">Previous</span>
+              <span class="pager-title">{prev.title}</span>
+            </a>
+          ) : <span></span>}
+          {next ? (
+            <a class="pager-link next" href={`${base}/docs/${next.slug}`}>
+              <span class="pager-dir">Next</span>
+              <span class="pager-title">{next.title}</span>
+            </a>
+          ) : <span></span>}
+        </nav>
+      </article>
+    </div>
+  </div>
+</BaseLayout>
+
+<style is:global>
+  .doc-content {
+    color: var(--on-surface-variant);
+    line-height: 1.7;
+    max-width: 44rem;
+  }
+  .doc-content h1 {
+    font-size: 2.5rem;
+    line-height: 1.1;
+    margin-bottom: 0.5rem;
+    color: var(--on-surface);
+  }
+  .doc-content h2 {
+    font-size: 1.5rem;
+    margin-top: 3rem;
+    margin-bottom: 1rem;
+    color: var(--on-surface);
+    font-family: var(--font-display);
+    font-weight: 600;
+  }
+  .doc-content h3 {
+    font-size: 1.0625rem;
+    margin-top: 2rem;
+    margin-bottom: 0.75rem;
+    color: var(--on-surface);
+    font-family: var(--font-body);
+    font-weight: 600;
+  }
+  .doc-content h4 {
+    font-size: 0.9375rem;
+    margin-top: 1.5rem;
+    margin-bottom: 0.5rem;
+    color: var(--on-surface);
+  }
+  .doc-content p {
+    margin: 0 0 1rem;
+    font-size: 0.9375rem;
+  }
+  .doc-content ul, .doc-content ol {
+    margin: 0 0 1.25rem;
+    padding-left: 1.25rem;
+    font-size: 0.9375rem;
+  }
+  .doc-content li {
+    margin-bottom: 0.4rem;
+  }
+  .doc-content li > ul, .doc-content li > ol {
+    margin-top: 0.4rem;
+    margin-bottom: 0.4rem;
+  }
+  .doc-content strong { color: var(--on-surface); font-weight: 600; }
+  .doc-content blockquote {
+    margin: 1.25rem 0;
+    padding: 0.85rem 1.25rem;
+    background: var(--surface-container-low);
+    border-left: 2px solid var(--primary);
+    border-radius: var(--radius-sm);
+    color: var(--on-surface);
+    font-size: 0.9375rem;
+  }
+  .doc-content blockquote p { margin: 0; font-size: inherit; }
+  .doc-content blockquote p + p { margin-top: 0.5rem; }
+
+  .doc-placeholder {
+    display: flex;
+    flex-direction: column;
+    gap: 0.35rem;
+    padding: 1rem 1.25rem;
+    margin: 1.25rem 0;
+    background: var(--surface-container-low);
+    border-radius: var(--radius-md);
+    background-image: repeating-linear-gradient(135deg, transparent 0 8px, rgba(105, 81, 154, 0.04) 8px 16px);
+  }
+  .doc-placeholder-label {
+    font-size: 0.6875rem;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    color: var(--primary);
+  }
+  .doc-placeholder-desc {
+    font-size: 0.875rem;
+    color: var(--on-surface-variant);
+    font-style: italic;
+  }
+
+  .doc-content table {
+    width: 100%;
+    border-collapse: collapse;
+    margin: 1.25rem 0;
+    font-size: 0.875rem;
+    background: var(--surface-container-lowest);
+    border-radius: var(--radius-md);
+    overflow: hidden;
+  }
+  .doc-content thead {
+    background: var(--surface-container-low);
+  }
+  .doc-content th, .doc-content td {
+    padding: 0.6rem 0.85rem;
+    text-align: left;
+    vertical-align: top;
+  }
+  .doc-content th {
+    font-weight: 600;
+    color: var(--on-surface);
+    font-size: 0.8125rem;
+    text-transform: uppercase;
+    letter-spacing: 0.04em;
+  }
+  .doc-content tbody tr + tr td {
+    border-top: 1px solid rgba(195, 199, 204, 0.4);
+  }
+  .doc-content td { color: var(--on-surface); }
+
+  .doc-content code {
+    font-family: 'JetBrains Mono', 'SF Mono', Menlo, monospace;
+    font-size: 0.85em;
+    background: var(--surface-container-low);
+    padding: 0.1em 0.35em;
+    border-radius: var(--radius-xs);
+  }
+  .doc-content pre {
+    margin: 1.25rem 0;
+    padding: 1rem 1.25rem;
+    background: var(--surface-container-lowest);
+    border-radius: var(--radius-md);
+    overflow-x: auto;
+    font-size: 0.8125rem;
+    line-height: 1.55;
+    box-shadow: var(--shadow-ambient);
+  }
+  .doc-content pre code {
+    background: none;
+    padding: 0;
+  }
+
+  .doc-content hr {
+    border: none;
+    height: 1px;
+    background: rgba(195, 199, 204, 0.5);
+    margin: 2.5rem 0;
+  }
+
+  .doc-pager {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 1rem;
+    margin-top: 4rem;
+    padding-top: 2rem;
+  }
+  .pager-link {
+    display: flex;
+    flex-direction: column;
+    gap: 0.25rem;
+    padding: 1rem 1.25rem;
+    background: var(--surface-container-low);
+    border-radius: var(--radius-md);
+    color: var(--on-surface);
+  }
+  .pager-link.next { align-items: flex-end; text-align: right; }
+  .pager-link:hover { background: var(--surface-container-lowest); color: var(--on-surface); }
+  .pager-dir {
+    font-size: 0.6875rem;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    color: var(--on-surface-variant);
+    font-weight: 500;
+  }
+  .pager-title {
+    font-size: 0.875rem;
+    font-weight: 500;
+  }
+</style>
+
+<style>
+  .docs-shell {
+    padding: 3rem 1.5rem 4rem;
+    max-width: 80rem;
+    margin: 0 auto;
+  }
+  .docs-grid {
+    display: grid;
+    grid-template-columns: 16rem 1fr;
+    gap: 3rem;
+    align-items: start;
+  }
+  @media (max-width: 960px) {
+    .docs-grid {
+      grid-template-columns: 1fr;
+      gap: 1.5rem;
+    }
+  }
+</style>
