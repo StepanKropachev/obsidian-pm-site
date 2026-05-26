@@ -18,30 +18,34 @@
 }
 
 :root {
-  --surface: #f8f9fb;
-  --surface-container-low: #f1f4f7;
-  --surface-container: #eaeef2;
-  --surface-container-high: #dbe4ea;
-  --surface-container-highest: #dbe4ea;
-  --surface-container-lowest: #ffffff;
+  color-scheme: dark;
 
-  --on-surface: #2b3438;
-  --on-surface-variant: #586065;
-  --outline: #707479;
-  --outline-variant: #c3c7cc;
+  --surface: #08090a;
+  --surface-container-low: #0e0f11;
+  --surface-container: #131416;
+  --surface-container-high: #1a1b1e;
+  --surface-container-highest: #232428;
+  --surface-container-lowest: #1c1d20;
 
-  --primary: #69519a;
-  --primary-dim: #5d458d;
+  --on-surface: #f7f8f8;
+  --on-surface-variant: #8a8f98;
+  --outline: #62666d;
+  --outline-variant: #2a2c30;
+
+  --primary: #8b71d0;
+  --primary-dim: #6f5ab8;
   --on-primary: #ffffff;
-  --primary-container: #e7ddff;
-  --on-primary-container: #251843;
+  --primary-container: #2a1e4a;
+  --on-primary-container: #d6c9ff;
+  --primary-tint: rgba(139, 113, 208, 0.12);
 
-  --secondary: #306a48;
-  --secondary-container: #b2f1c5;
-  --on-secondary-container: #215c3b;
+  --secondary: #57c490;
+  --secondary-container: #1c3a2a;
+  --on-secondary-container: #9cf0c0;
 
-  --shadow-rgb: 43, 52, 56;
-  --shadow-ambient: 0 0 24px rgba(var(--shadow-rgb), 0.06);
+  --shadow-rgb: 0, 0, 0;
+  --shadow-ambient: 0 0 24px rgba(var(--shadow-rgb), 0.4);
+  --hairline: rgba(255, 255, 255, 0.06);
 
   --radius-xs: 0.125rem;
   --radius-sm: 0.25rem;
@@ -67,12 +71,19 @@ html, body {
 
 body {
   font-family: var(--font-body);
+  font-feature-settings: 'cv02', 'cv03', 'cv04', 'cv11', 'ss01', 'ss03';
   font-size: 0.875rem;
   line-height: 1.6;
   color: var(--on-surface-variant);
   background: var(--surface);
   -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
   text-rendering: optimizeLegibility;
+}
+
+::selection {
+  background: var(--primary-container);
+  color: var(--on-primary-container);
 }
 
 h1, h2, h3, h4 {
@@ -158,7 +169,7 @@ button {
   padding: 0.75rem 1rem;
 }
 .btn-secondary:hover {
-  background: rgba(105, 81, 154, 0.08);
+  background: var(--primary-tint);
   color: var(--primary);
 }
 

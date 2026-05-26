@@ -21,9 +21,10 @@ const base = import.meta.env.BASE_URL.replace(/\/$/, '')
     position: sticky;
     top: 0;
     z-index: 50;
-    background: rgba(248, 249, 251, 0.85);
-    backdrop-filter: blur(20px);
-    -webkit-backdrop-filter: blur(20px);
+    background: rgba(8, 9, 10, 0.72);
+    backdrop-filter: blur(20px) saturate(140%);
+    -webkit-backdrop-filter: blur(20px) saturate(140%);
+    box-shadow: inset 0 -1px 0 var(--hairline);
   }
   .nav-inner {
     display: flex;

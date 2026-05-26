@@ -97,7 +97,7 @@ const bars = [
     display: grid;
     grid-template-columns: repeat(6, 1fr);
     height: 1.5rem;
-    border-bottom: 1px dashed rgba(112, 116, 121, 0.2);
+    border-bottom: 1px dashed rgba(255, 255, 255, 0.08);
     position: relative;
   }
   .gantt-week {
@@ -107,7 +107,7 @@ const bars = [
     font-size: 0.65rem;
     color: var(--on-surface-variant);
     padding-left: 0.4rem;
-    border-left: 1px dashed rgba(112, 116, 121, 0.15);
+    border-left: 1px dashed rgba(255, 255, 255, 0.06);
   }
   .gantt-week:first-child { border-left: none; }
   .gantt-rows {
@@ -125,8 +125,8 @@ const bars = [
     content: '';
     position: absolute;
     inset: 0;
-    border-left: 1px dashed rgba(112, 116, 121, 0.1);
-    background-image: linear-gradient(to right, transparent calc(100% / 6 - 1px), rgba(112, 116, 121, 0.1) calc(100% / 6 - 1px), rgba(112, 116, 121, 0.1) calc(100% / 6), transparent calc(100% / 6));
+    border-left: 1px dashed rgba(255, 255, 255, 0.05);
+    background-image: linear-gradient(to right, transparent calc(100% / 6 - 1px), rgba(255, 255, 255, 0.05) calc(100% / 6 - 1px), rgba(255, 255, 255, 0.05) calc(100% / 6), transparent calc(100% / 6));
     background-size: calc(100% / 6) 100%;
   }
   .gantt-bar {
@@ -137,9 +137,9 @@ const bars = [
     min-width: 0.5rem;
   }
   .t-progress { background: linear-gradient(180deg, var(--primary) 0%, var(--primary-dim) 100%); }
-  .t-todo { background: var(--surface-container-high); }
-  .t-review { background: #fcd87a; }
-  .t-blocked { background: #ffb3ad; }
+  .t-todo { background: var(--surface-container-highest); }
+  .t-review { background: #c79a3c; }
+  .t-blocked { background: #b3554d; }
   .gantt-milestone {
     position: absolute;
     top: 0.35rem;
@@ -155,7 +155,7 @@ const bars = [
     top: 0;
     bottom: -100rem;
     width: 1px;
-    background: rgba(105, 81, 154, 0.4);
+    background: rgba(139, 113, 208, 0.55);
     z-index: 1;
   }
   @media (max-width: 720px) {

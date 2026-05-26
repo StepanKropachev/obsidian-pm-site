@@ -112,7 +112,7 @@ const next = idx >= 0 && idx < allDocItems.length - 1 ? allDocItems[idx + 1] : n
     margin: 1.25rem 0;
     background: var(--surface-container-low);
     border-radius: var(--radius-md);
-    background-image: repeating-linear-gradient(135deg, transparent 0 8px, rgba(105, 81, 154, 0.04) 8px 16px);
+    background-image: repeating-linear-gradient(135deg, transparent 0 8px, rgba(139, 113, 208, 0.08) 8px 16px);
   }
   .doc-placeholder-label {
     font-size: 0.6875rem;
@@ -152,7 +152,7 @@ const next = idx >= 0 && idx < allDocItems.length - 1 ? allDocItems[idx + 1] : n
     letter-spacing: 0.04em;
   }
   .doc-content tbody tr + tr td {
-    border-top: 1px solid rgba(195, 199, 204, 0.4);
+    border-top: 1px solid var(--hairline);
   }
   .doc-content td { color: var(--on-surface); }
 
@@ -181,7 +181,7 @@ const next = idx >= 0 && idx < allDocItems.length - 1 ? allDocItems[idx + 1] : n
   .doc-content hr {
     border: none;
     height: 1px;
-    background: rgba(195, 199, 204, 0.5);
+    background: var(--hairline);
     margin: 2.5rem 0;
   }
 
