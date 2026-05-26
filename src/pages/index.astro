@@ -1,19 +1,410 @@
 ---
-const buildTime = new Date().toISOString()
+import BaseLayout from '../layouts/BaseLayout.astro'
+import MockupTable from '../components/MockupTable.astro'
+import MockupGantt from '../components/MockupGantt.astro'
+import MockupKanban from '../components/MockupKanban.astro'
+
+const base = import.meta.env.BASE_URL.replace(/\/$/, '')
+
+const features = [
+  { icon: 'tune', title: 'Custom fields', body: 'Typed fields per project — text, number, date, select, multi-select, person, checkbox, URL.' },
+  { icon: 'bookmark', title: 'Saved views', body: 'Save filters, sorts, and view mode. Switch between them with a click.' },
+  { icon: 'account_tree', title: 'Subtasks', body: 'Nest tasks to any depth. Parent progress rolls up from children.' },
+  { icon: 'arrow_forward', title: 'Dependencies', body: 'Link blockers. Auto-schedule shifts dependents when predecessors move.' },
+  { icon: 'timer', title: 'Time tracking', body: 'Start a timer on any task. Log manually. Review estimated vs actual.' },
+  { icon: 'bolt', title: 'Quick add', body: 'Capture a task without leaving the keyboard. Inline-edit status, priority, due date.' },
+  { icon: 'check_box', title: 'Bulk edit', body: 'Multi-select and update status, priority, dates, assignees, tags, or archive in one move.' },
+  { icon: 'palette', title: 'Native feel', body: 'Looks at home in any Obsidian theme. Light or dark, your colors stay yours.' },
+]
+
+const principles = [
+  { title: 'Your data stays in your vault.', body: 'Every task is a markdown file you own. No database. No proprietary format.' },
+  { title: 'Works offline.', body: 'Plan, edit, and track without a network connection. Sync however you already do.' },
+  { title: 'Keyboard first.', body: 'Quick add, inline edit, and modal shortcuts. Mouse optional.' },
+  { title: 'Open source.', body: 'MIT licensed. Read the code, file issues, send a PR.' },
+]
+
+const installSteps = [
+  { n: 1, body: 'Open Obsidian → Settings → Community plugins.' },
+  { n: 2, body: 'Click Browse and search "Project Manager".' },
+  { n: 3, body: 'Install, then enable.' },
+  { n: 4, body: 'Click the new ribbon icon to open your first project.' },
+]
 ---
 
-<html lang="en">
-  <head>
-    <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width" />
-    <meta name="generator" content={Astro.generator} />
-    <title>Obsidian Project Manager</title>
-  </head>
-  <body>
-    <main>
-      <h1>Obsidian Project Manager</h1>
-      <p>Site under construction.</p>
-      <p><small>Build: {buildTime}</small></p>
-    </main>
-  </body>
-</html>
+<BaseLayout title="Obsidian Project Manager — Project management for Obsidian">
+  <section class="hero">
+    <div class="container">
+      <p class="eyebrow">For Obsidian</p>
+      <h1>Project management <br /><span class="hero-em">for Obsidian.</span></h1>
+      <p class="hero-sub">Tables, Gantt, and kanban — your tasks stored as plain markdown in your vault.</p>
+      <div class="hero-ctas">
+        <a class="btn btn-primary" href="https://obsidian.md/plugins?id=obsidian-pm" rel="noopener">
+          <span class="icon">download</span>
+          Install from Obsidian
+        </a>
+        <a class="btn btn-secondary" href="https://github.com/stepankropachev/obsidian-pm" rel="noopener">
+          View on GitHub
+        </a>
+      </div>
+    </div>
+    <div class="container hero-mockup-wrap">
+      <div class="hero-mockup">
+        <MockupTable />
+      </div>
+    </div>
+  </section>
+
+  <section class="pitch">
+    <div class="container container-narrow pitch-inner">
+      <h2>Plain markdown. <br />Real project management.</h2>
+      <p class="lede">
+        Every task is a markdown file with YAML frontmatter. Open them in any editor, version them in git, sync them how you like. No database. No proprietary format. Just files you own.
+      </p>
+    </div>
+  </section>
+
+  <section class="three-view">
+    <div class="container">
+      <header class="section-head">
+        <p class="eyebrow">One project. Three views.</p>
+        <h2>Three ways to see the same data.</h2>
+      </header>
+
+      <div class="view-row">
+        <div class="view-copy">
+          <h3>Table</h3>
+          <p>Filter, sort, and edit thousands of tasks at the speed of a spreadsheet. Inline-edit status, priority, due date, progress. Multi-select for bulk changes.</p>
+          <a href={`${base}/docs/table-view`} class="link-arrow">Read the docs <span class="icon">arrow_forward</span></a>
+        </div>
+        <div class="view-mockup"><MockupTable /></div>
+      </div>
+
+      <div class="view-row reverse">
+        <div class="view-copy">
+          <h3>Gantt</h3>
+          <p>Plan timelines visually. Drag bars to reschedule, resize to change duration, switch granularity from day to quarter. Dependencies render as lines.</p>
+          <a href={`${base}/docs/gantt-view`} class="link-arrow">Read the docs <span class="icon">arrow_forward</span></a>
+        </div>
+        <div class="view-mockup"><MockupGantt /></div>
+      </div>
+
+      <div class="view-row">
+        <div class="view-copy">
+          <h3>Kanban</h3>
+          <p>Move work across statuses with a single drag. Quick-add at the bottom of any column. Filters shared with the table.</p>
+          <a href={`${base}/docs/kanban-view`} class="link-arrow">Read the docs <span class="icon">arrow_forward</span></a>
+        </div>
+        <div class="view-mockup"><MockupKanban /></div>
+      </div>
+    </div>
+  </section>
+
+  <section class="features">
+    <div class="container">
+      <header class="section-head">
+        <p class="eyebrow">Features</p>
+        <h2>Everything you need to run a project.</h2>
+      </header>
+      <div class="feature-grid">
+        {features.map((f) => (
+          <div class="feature-card">
+            <span class="icon feature-icon">{f.icon}</span>
+            <h4>{f.title}</h4>
+            <p>{f.body}</p>
+          </div>
+        ))}
+      </div>
+    </div>
+  </section>
+
+  <section class="principles">
+    <div class="container">
+      <header class="section-head">
+        <p class="eyebrow">Principles</p>
+        <h2>Built on principles.</h2>
+      </header>
+      <div class="principle-grid">
+        {principles.map((p) => (
+          <div class="principle">
+            <h4>{p.title}</h4>
+            <p>{p.body}</p>
+          </div>
+        ))}
+      </div>
+    </div>
+  </section>
+
+  <section class="proof">
+    <div class="container container-narrow proof-inner">
+      <h2>Free, open source, MIT licensed.</h2>
+      <p class="lede">Star the repo. File an issue. Send a pull request.</p>
+      <div class="proof-ctas">
+        <a class="btn btn-primary" href="https://github.com/stepankropachev/obsidian-pm" rel="noopener">
+          <span class="icon">star</span>
+          Star on GitHub
+        </a>
+        <a class="btn btn-secondary" href={`${base}/docs/install`}>Read the docs</a>
+      </div>
+    </div>
+  </section>
+
+  <section class="install">
+    <div class="container">
+      <header class="section-head">
+        <p class="eyebrow">Install</p>
+        <h2>Install in 30 seconds.</h2>
+      </header>
+      <ol class="install-steps">
+        {installSteps.map((s) => (
+          <li>
+            <span class="step-n">{s.n}</span>
+            <p>{s.body}</p>
+          </li>
+        ))}
+      </ol>
+    </div>
+  </section>
+</BaseLayout>
+
+<style>
+  .hero {
+    background: var(--surface);
+    padding: 4rem 0 0;
+    overflow: hidden;
+  }
+  .hero h1 {
+    margin-top: 1rem;
+    max-width: 32rem;
+  }
+  .hero-em {
+    background: linear-gradient(180deg, var(--primary) 0%, var(--primary-dim) 100%);
+    -webkit-background-clip: text;
+    background-clip: text;
+    color: transparent;
+  }
+  .hero-sub {
+    margin-top: 1.5rem;
+    max-width: 32rem;
+    font-size: 1.0625rem;
+    line-height: 1.55;
+    color: var(--on-surface-variant);
+  }
+  .hero-ctas {
+    margin-top: 2rem;
+    display: flex;
+    gap: 1rem;
+    flex-wrap: wrap;
+  }
+  .hero-mockup-wrap {
+    margin-top: 4rem;
+    margin-bottom: -6rem;
+    padding-right: 0;
+  }
+  .hero-mockup {
+    transform: translateX(2%);
+    max-width: 64rem;
+    margin-left: auto;
+  }
+
+  .pitch {
+    background: var(--surface-container-low);
+    padding-top: 11rem;
+    padding-bottom: 6rem;
+  }
+  .pitch-inner {
+    max-width: 38rem;
+    margin: 0;
+    padding-left: 1.5rem;
+  }
+  .lede {
+    margin-top: 1.5rem;
+    font-size: 1.0625rem;
+    line-height: 1.7;
+    color: var(--on-surface-variant);
+  }
+
+  .three-view {
+    background: var(--surface);
+    padding: 6rem 0;
+  }
+  .section-head {
+    margin-bottom: 4rem;
+    max-width: 32rem;
+  }
+  .section-head h2 {
+    margin-top: 0.75rem;
+  }
+  .view-row {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) minmax(0, 1.4fr);
+    gap: 3rem;
+    align-items: center;
+    margin-bottom: 5rem;
+  }
+  .view-row.reverse {
+    grid-template-columns: minmax(0, 1.4fr) minmax(0, 1fr);
+  }
+  .view-row.reverse .view-copy { order: 2; }
+  .view-row.reverse .view-mockup { order: 1; }
+  .view-row:last-child { margin-bottom: 0; }
+  .view-copy h3 {
+    font-family: var(--font-display);
+    font-size: 1.75rem;
+    font-weight: 600;
+    color: var(--on-surface);
+    margin-bottom: 1rem;
+  }
+  .view-copy p {
+    font-size: 0.9375rem;
+    line-height: 1.65;
+    margin-bottom: 1.25rem;
+    max-width: 28rem;
+  }
+  .link-arrow {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.35rem;
+    font-size: 0.875rem;
+    font-weight: 500;
+  }
+  .link-arrow .icon {
+    font-size: 1rem;
+    color: inherit;
+    transition: transform 120ms ease;
+  }
+  .link-arrow:hover .icon {
+    transform: translateX(2px);
+  }
+
+  .features {
+    background: var(--surface-container-low);
+    padding: 6rem 0;
+  }
+  .feature-grid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 1rem;
+  }
+  .feature-card {
+    background: var(--surface-container-lowest);
+    border-radius: var(--radius-lg);
+    padding: 1.5rem;
+  }
+  .feature-card .feature-icon {
+    font-size: 1.5rem;
+    color: var(--primary);
+    margin-bottom: 1rem;
+    display: block;
+  }
+  .feature-card h4 {
+    margin-bottom: 0.5rem;
+    color: var(--on-surface);
+  }
+  .feature-card p {
+    font-size: 0.8125rem;
+    line-height: 1.55;
+    color: var(--on-surface-variant);
+  }
+  @media (max-width: 960px) {
+    .feature-grid { grid-template-columns: repeat(2, 1fr); }
+  }
+  @media (max-width: 540px) {
+    .feature-grid { grid-template-columns: 1fr; }
+  }
+
+  .principles {
+    background: var(--surface);
+    padding: 6rem 0;
+  }
+  .principle-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 2.5rem 3rem;
+  }
+  .principle h4 {
+    color: var(--on-surface);
+    margin-bottom: 0.5rem;
+    font-size: 1.0625rem;
+  }
+  .principle p {
+    font-size: 0.9375rem;
+    line-height: 1.6;
+    max-width: 26rem;
+  }
+  @media (max-width: 720px) {
+    .principle-grid { grid-template-columns: 1fr; }
+  }
+
+  .proof {
+    background: var(--surface-container-low);
+    padding: 6rem 0;
+  }
+  .proof-inner {
+    text-align: left;
+    margin: 0;
+  }
+  .proof-ctas {
+    margin-top: 2rem;
+    display: flex;
+    gap: 1rem;
+    flex-wrap: wrap;
+  }
+
+  .install {
+    background: var(--surface);
+    padding: 6rem 0;
+  }
+  .install-steps {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 1.5rem;
+    counter-reset: install;
+  }
+  .install-steps li {
+    background: var(--surface-container-lowest);
+    border-radius: var(--radius-lg);
+    padding: 1.75rem 1.5rem 2rem;
+  }
+  .step-n {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 2rem;
+    height: 2rem;
+    border-radius: 50%;
+    background: var(--primary-container);
+    color: var(--on-primary-container);
+    font-family: var(--font-display);
+    font-weight: 600;
+    font-size: 0.9375rem;
+    margin-bottom: 1.25rem;
+  }
+  .install-steps p {
+    font-size: 0.875rem;
+    line-height: 1.55;
+    color: var(--on-surface-variant);
+  }
+  @media (max-width: 960px) {
+    .install-steps { grid-template-columns: repeat(2, 1fr); }
+  }
+  @media (max-width: 540px) {
+    .install-steps { grid-template-columns: 1fr; }
+  }
+
+  @media (max-width: 720px) {
+    .view-row, .view-row.reverse {
+      grid-template-columns: 1fr;
+      gap: 1.5rem;
+    }
+    .view-row.reverse .view-copy { order: 1; }
+    .view-row.reverse .view-mockup { order: 2; }
+    .hero h1 { font-size: 2.5rem; }
+    .pitch h2, .three-view h2, .features h2, .principles h2, .install h2, .proof h2 { font-size: 1.625rem; }
+    .hero-mockup-wrap { margin-bottom: -3rem; }
+    .pitch { padding-top: 7rem; }
+  }
+</style>

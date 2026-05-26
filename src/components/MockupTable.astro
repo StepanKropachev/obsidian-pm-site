@@ -1,0 +1,193 @@
+---
+interface Props {
+  compact?: boolean
+}
+const { compact = false } = Astro.props
+
+const rows = [
+  { title: 'Audit current site', status: 'in progress', statusKey: 'progress', priority: 'high', due: 'May 30', progress: 40 },
+  { title: 'New homepage copy', status: 'todo', statusKey: 'todo', priority: 'high', due: 'Jun 04', progress: 0 },
+  { title: 'Reusable components library', status: 'in review', statusKey: 'review', priority: 'medium', due: 'Jun 11', progress: 75 },
+  { title: 'Migrate blog posts', status: 'todo', statusKey: 'todo', priority: 'low', due: 'Jun 18', progress: 0 },
+  { title: 'Accessibility audit', status: 'blocked', statusKey: 'blocked', priority: 'medium', due: 'Jun 21', progress: 15 },
+  { title: 'Launch announcement', status: 'todo', statusKey: 'todo', priority: 'high', due: 'Jul 02', progress: 0 },
+]
+---
+
+<div class={`mockup mockup-table ${compact ? 'is-compact' : ''}`} aria-hidden="true">
+  <div class="m-titlebar">
+    <span class="m-dot"></span>
+    <span class="m-dot"></span>
+    <span class="m-dot"></span>
+    <span class="m-titlebar-label">Website Redesign</span>
+  </div>
+  <div class="m-toolbar">
+    <span class="pill"><span class="i-search"></span>Search</span>
+    <span class="pill pill-active">status: todo, in progress</span>
+    <span class="pill">priority</span>
+    <span class="pill">assignee</span>
+    <span class="pill-saved">My open items</span>
+  </div>
+  <div class="m-table">
+    <div class="m-row m-header">
+      <div class="c-check"></div>
+      <div class="c-title">Title</div>
+      <div class="c-status">Status</div>
+      <div class="c-prio">Priority</div>
+      <div class="c-due">Due</div>
+      <div class="c-prog">Progress</div>
+    </div>
+    {rows.map((row) => (
+      <div class="m-row">
+        <div class="c-check"><span class="check"></span></div>
+        <div class="c-title">{row.title}</div>
+        <div class="c-status"><span class={`status-pill s-${row.statusKey}`}>{row.status}</span></div>
+        <div class="c-prio"><span class={`prio p-${row.priority}`}>{row.priority}</span></div>
+        <div class="c-due">{row.due}</div>
+        <div class="c-prog"><span class="prog-bar"><span class="prog-fill" style={`width: ${row.progress}%`}></span></span></div>
+      </div>
+    ))}
+  </div>
+</div>
+
+<style>
+  .mockup {
+    background: var(--surface-container-lowest);
+    border-radius: var(--radius-lg);
+    box-shadow: var(--shadow-ambient);
+    overflow: hidden;
+    font-family: var(--font-body);
+    font-size: 0.75rem;
+    color: var(--on-surface-variant);
+  }
+  .m-titlebar {
+    display: flex;
+    align-items: center;
+    gap: 0.4rem;
+    padding: 0.6rem 0.85rem;
+    background: var(--surface-container-low);
+  }
+  .m-dot {
+    width: 0.6rem;
+    height: 0.6rem;
+    border-radius: 50%;
+    background: var(--surface-container-high);
+  }
+  .m-titlebar-label {
+    margin-left: 0.5rem;
+    font-size: 0.75rem;
+    color: var(--on-surface-variant);
+    font-weight: 500;
+  }
+  .m-toolbar {
+    display: flex;
+    gap: 0.4rem;
+    padding: 0.85rem 1rem;
+    flex-wrap: wrap;
+    align-items: center;
+  }
+  .pill, .pill-saved {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.25rem;
+    padding: 0.3rem 0.6rem;
+    border-radius: var(--radius-sm);
+    background: var(--surface-container-low);
+    color: var(--on-surface-variant);
+    font-size: 0.6875rem;
+    line-height: 1;
+  }
+  .pill-active {
+    background: var(--primary-container);
+    color: var(--on-primary-container);
+  }
+  .pill-saved {
+    margin-left: auto;
+    background: transparent;
+    color: var(--primary);
+    font-weight: 500;
+  }
+  .i-search {
+    width: 0.5rem;
+    height: 0.5rem;
+    border-radius: 50%;
+    border: 1.5px solid currentColor;
+    opacity: 0.6;
+  }
+  .m-table {
+    padding: 0.25rem 0.5rem 0.75rem;
+  }
+  .m-row {
+    display: grid;
+    grid-template-columns: 1.5rem minmax(0, 1.6fr) 6rem 4.5rem 4rem 5rem;
+    gap: 0.5rem;
+    align-items: center;
+    padding: 0.5rem 0.6rem;
+    border-radius: var(--radius-sm);
+    font-size: 0.75rem;
+    color: var(--on-surface);
+  }
+  .m-row:hover {
+    background: var(--surface-container-low);
+  }
+  .m-header {
+    font-size: 0.6875rem;
+    color: var(--on-surface-variant);
+    text-transform: uppercase;
+    letter-spacing: 0.04em;
+    font-weight: 500;
+    padding-top: 0.65rem;
+    padding-bottom: 0.65rem;
+  }
+  .m-header:hover { background: transparent; }
+  .c-title { font-weight: 500; }
+  .check {
+    width: 0.85rem;
+    height: 0.85rem;
+    border-radius: var(--radius-xs);
+    background: var(--surface-container-low);
+    display: inline-block;
+  }
+  .status-pill {
+    display: inline-block;
+    padding: 0.15rem 0.45rem;
+    border-radius: var(--radius-xs);
+    font-size: 0.6875rem;
+    font-weight: 500;
+    text-transform: capitalize;
+  }
+  .s-todo { background: #e5ebef; color: #4b555a; }
+  .s-progress { background: #e7ddff; color: #4a3a72; }
+  .s-review { background: #fff1d4; color: #6e5414; }
+  .s-blocked { background: #ffe1de; color: #76322c; }
+  .s-done { background: #b2f1c5; color: #215c3b; }
+  .prio {
+    font-size: 0.6875rem;
+    text-transform: capitalize;
+    color: var(--on-surface-variant);
+  }
+  .p-high { color: #76322c; }
+  .p-medium { color: #6e5414; }
+  .p-low { color: var(--on-surface-variant); }
+  .prog-bar {
+    display: inline-block;
+    width: 100%;
+    height: 0.35rem;
+    background: var(--surface-container-low);
+    border-radius: 999px;
+    overflow: hidden;
+  }
+  .prog-fill {
+    display: block;
+    height: 100%;
+    background: linear-gradient(180deg, var(--primary) 0%, var(--primary-dim) 100%);
+  }
+  .is-compact .m-toolbar { padding: 0.6rem 0.75rem; }
+  .is-compact .m-row { grid-template-columns: 1.25rem minmax(0, 1.6fr) 5rem 4rem 3.5rem; padding: 0.4rem 0.5rem; }
+  .is-compact .m-row .c-prog { display: none; }
+  @media (max-width: 720px) {
+    .m-row { grid-template-columns: 1.25rem minmax(0, 1.6fr) 4.5rem 3.5rem; }
+    .c-due, .c-prog { display: none; }
+    .pill-saved { display: none; }
+  }
+</style>

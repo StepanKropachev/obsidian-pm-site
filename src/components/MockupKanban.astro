@@ -1,0 +1,139 @@
+---
+const columns = [
+  { name: 'Todo', count: 3, cards: [
+    { title: 'New homepage copy', priority: 'high', tag: 'content' },
+    { title: 'Migrate blog posts', priority: 'low', tag: 'content' },
+    { title: 'Launch announcement', priority: 'high', tag: 'launch' },
+  ]},
+  { name: 'In progress', count: 1, cards: [
+    { title: 'Audit current site', priority: 'high', tag: 'discovery' },
+  ]},
+  { name: 'In review', count: 1, cards: [
+    { title: 'Components library', priority: 'medium', tag: 'design' },
+  ]},
+  { name: 'Done', count: 1, cards: [
+    { title: 'Project brief', priority: 'medium', tag: 'planning' },
+  ]},
+]
+---
+
+<div class="mockup mockup-kanban" aria-hidden="true">
+  <div class="m-titlebar">
+    <span class="m-dot"></span>
+    <span class="m-dot"></span>
+    <span class="m-dot"></span>
+    <span class="m-titlebar-label">Website Redesign · Kanban</span>
+  </div>
+  <div class="kanban-grid">
+    {columns.map((col) => (
+      <div class="kanban-col">
+        <div class="kanban-head">
+          <span class={`col-name col-${col.name.toLowerCase().replace(' ', '-')}`}>{col.name}</span>
+          <span class="col-count">{col.count}</span>
+        </div>
+        <div class="kanban-cards">
+          {col.cards.map((c) => (
+            <div class="kanban-card">
+              <div class="card-title">{c.title}</div>
+              <div class="card-meta">
+                <span class={`prio p-${c.priority}`}>{c.priority}</span>
+                <span class="tag">#{c.tag}</span>
+              </div>
+            </div>
+          ))}
+        </div>
+      </div>
+    ))}
+  </div>
+</div>
+
+<style>
+  .mockup {
+    background: var(--surface-container-lowest);
+    border-radius: var(--radius-lg);
+    box-shadow: var(--shadow-ambient);
+    overflow: hidden;
+    font-family: var(--font-body);
+    font-size: 0.75rem;
+    color: var(--on-surface-variant);
+  }
+  .m-titlebar {
+    display: flex;
+    align-items: center;
+    gap: 0.4rem;
+    padding: 0.6rem 0.85rem;
+    background: var(--surface-container-low);
+  }
+  .m-dot { width: 0.6rem; height: 0.6rem; border-radius: 50%; background: var(--surface-container-high); }
+  .m-titlebar-label {
+    margin-left: 0.5rem;
+    font-size: 0.75rem;
+    color: var(--on-surface-variant);
+    font-weight: 500;
+  }
+  .kanban-grid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 0.5rem;
+    padding: 0.75rem;
+  }
+  .kanban-col {
+    background: var(--surface);
+    border-radius: var(--radius-md);
+    padding: 0.6rem 0.5rem 0.75rem;
+    min-height: 9rem;
+  }
+  .kanban-head {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 0 0.35rem 0.6rem;
+  }
+  .col-name {
+    font-size: 0.6875rem;
+    font-weight: 500;
+    text-transform: uppercase;
+    letter-spacing: 0.04em;
+    color: var(--on-surface);
+  }
+  .col-todo { color: #4b555a; }
+  .col-in-progress { color: #4a3a72; }
+  .col-in-review { color: #6e5414; }
+  .col-done { color: #215c3b; }
+  .col-count {
+    font-size: 0.6875rem;
+    color: var(--on-surface-variant);
+  }
+  .kanban-cards {
+    display: flex;
+    flex-direction: column;
+    gap: 0.4rem;
+  }
+  .kanban-card {
+    background: var(--surface-container-lowest);
+    border-radius: var(--radius-sm);
+    padding: 0.55rem 0.6rem;
+    box-shadow: 0 1px 2px rgba(43, 52, 56, 0.04);
+  }
+  .card-title {
+    font-size: 0.75rem;
+    color: var(--on-surface);
+    font-weight: 500;
+    margin-bottom: 0.35rem;
+    line-height: 1.3;
+  }
+  .card-meta {
+    display: flex;
+    gap: 0.5rem;
+    align-items: center;
+    font-size: 0.6875rem;
+  }
+  .prio { text-transform: capitalize; }
+  .p-high { color: #76322c; }
+  .p-medium { color: #6e5414; }
+  .p-low { color: var(--on-surface-variant); }
+  .tag { color: var(--on-surface-variant); }
+  @media (max-width: 720px) {
+    .kanban-grid { grid-template-columns: repeat(2, 1fr); }
+  }
+</style>

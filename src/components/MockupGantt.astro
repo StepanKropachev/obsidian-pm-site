@@ -1,0 +1,165 @@
+---
+const weeks = ['W 20', 'W 21', 'W 22', 'W 23', 'W 24', 'W 25']
+const bars = [
+  { title: 'Audit current site', start: 0, span: 1.6, tone: 'progress' },
+  { title: 'New homepage copy', start: 1.4, span: 1.8, tone: 'todo' },
+  { title: 'Components library', start: 1.0, span: 2.6, tone: 'review' },
+  { title: 'Migrate blog posts', start: 2.6, span: 1.4, tone: 'todo' },
+  { title: 'Accessibility audit', start: 3.2, span: 1.2, tone: 'blocked' },
+  { title: 'Launch', start: 4.6, span: 0, tone: 'milestone' },
+]
+---
+
+<div class="mockup mockup-gantt" aria-hidden="true">
+  <div class="m-titlebar">
+    <span class="m-dot"></span>
+    <span class="m-dot"></span>
+    <span class="m-dot"></span>
+    <span class="m-titlebar-label">Website Redesign · Gantt</span>
+  </div>
+  <div class="gantt-grid">
+    <div class="gantt-tasks">
+      {bars.map((b) => (
+        <div class="gantt-task">{b.title}</div>
+      ))}
+    </div>
+    <div class="gantt-timeline">
+      <div class="gantt-weeks">
+        {weeks.map((w) => <div class="gantt-week">{w}</div>)}
+        <div class="today-line"></div>
+      </div>
+      <div class="gantt-rows">
+        {bars.map((b) => (
+          <div class="gantt-row">
+            {b.span > 0 ? (
+              <div class={`gantt-bar t-${b.tone}`} style={`left: ${(b.start / 6) * 100}%; width: ${(b.span / 6) * 100}%;`}></div>
+            ) : (
+              <div class={`gantt-milestone`} style={`left: ${(b.start / 6) * 100}%;`}></div>
+            )}
+          </div>
+        ))}
+      </div>
+    </div>
+  </div>
+</div>
+
+<style>
+  .mockup {
+    background: var(--surface-container-lowest);
+    border-radius: var(--radius-lg);
+    box-shadow: var(--shadow-ambient);
+    overflow: hidden;
+    font-family: var(--font-body);
+    font-size: 0.75rem;
+    color: var(--on-surface-variant);
+  }
+  .m-titlebar {
+    display: flex;
+    align-items: center;
+    gap: 0.4rem;
+    padding: 0.6rem 0.85rem;
+    background: var(--surface-container-low);
+  }
+  .m-dot { width: 0.6rem; height: 0.6rem; border-radius: 50%; background: var(--surface-container-high); }
+  .m-titlebar-label {
+    margin-left: 0.5rem;
+    font-size: 0.75rem;
+    color: var(--on-surface-variant);
+    font-weight: 500;
+  }
+  .gantt-grid {
+    display: grid;
+    grid-template-columns: 11rem 1fr;
+    padding: 0.5rem 0.75rem 1rem;
+  }
+  .gantt-tasks {
+    padding-top: 1.85rem;
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+  }
+  .gantt-task {
+    height: 1.5rem;
+    display: flex;
+    align-items: center;
+    font-size: 0.75rem;
+    color: var(--on-surface);
+    padding-right: 0.75rem;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+  .gantt-timeline {
+    position: relative;
+    border-radius: var(--radius-sm);
+  }
+  .gantt-weeks {
+    display: grid;
+    grid-template-columns: repeat(6, 1fr);
+    height: 1.5rem;
+    border-bottom: 1px dashed rgba(112, 116, 121, 0.2);
+    position: relative;
+  }
+  .gantt-week {
+    display: flex;
+    align-items: center;
+    justify-content: flex-start;
+    font-size: 0.65rem;
+    color: var(--on-surface-variant);
+    padding-left: 0.4rem;
+    border-left: 1px dashed rgba(112, 116, 121, 0.15);
+  }
+  .gantt-week:first-child { border-left: none; }
+  .gantt-rows {
+    position: relative;
+    padding-top: 0.35rem;
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+  }
+  .gantt-row {
+    position: relative;
+    height: 1.5rem;
+  }
+  .gantt-row::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    border-left: 1px dashed rgba(112, 116, 121, 0.1);
+    background-image: linear-gradient(to right, transparent calc(100% / 6 - 1px), rgba(112, 116, 121, 0.1) calc(100% / 6 - 1px), rgba(112, 116, 121, 0.1) calc(100% / 6), transparent calc(100% / 6));
+    background-size: calc(100% / 6) 100%;
+  }
+  .gantt-bar {
+    position: absolute;
+    top: 0.25rem;
+    height: 1rem;
+    border-radius: var(--radius-xs);
+    min-width: 0.5rem;
+  }
+  .t-progress { background: linear-gradient(180deg, var(--primary) 0%, var(--primary-dim) 100%); }
+  .t-todo { background: var(--surface-container-high); }
+  .t-review { background: #fcd87a; }
+  .t-blocked { background: #ffb3ad; }
+  .gantt-milestone {
+    position: absolute;
+    top: 0.35rem;
+    width: 0.85rem;
+    height: 0.85rem;
+    background: var(--secondary);
+    transform: translateX(-50%) rotate(45deg);
+    border-radius: 2px;
+  }
+  .today-line {
+    position: absolute;
+    left: 28%;
+    top: 0;
+    bottom: -100rem;
+    width: 1px;
+    background: rgba(105, 81, 154, 0.4);
+    z-index: 1;
+  }
+  @media (max-width: 720px) {
+    .gantt-grid { grid-template-columns: 7rem 1fr; }
+    .gantt-task { font-size: 0.6875rem; padding-right: 0.4rem; }
+  }
+</style>
