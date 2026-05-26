@@ -1,0 +1,188 @@
+@import url('https://fonts.googleapis.com/css2?family=Manrope:wght@500;600;700&family=Inter:wght@400;500;600&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL@20..40,300,0&display=swap');
+
+.icon {
+  font-family: 'Material Symbols Outlined';
+  font-weight: 300;
+  font-size: 1.25rem;
+  line-height: 1;
+  letter-spacing: normal;
+  font-feature-settings: 'liga';
+  font-variation-settings: 'opsz' 20;
+  -webkit-font-feature-settings: 'liga';
+  -moz-font-feature-settings: 'liga';
+  -webkit-font-smoothing: antialiased;
+  text-rendering: optimizeLegibility;
+  color: var(--on-surface-variant);
+  user-select: none;
+}
+
+:root {
+  --surface: #f8f9fb;
+  --surface-container-low: #f1f4f7;
+  --surface-container: #eaeef2;
+  --surface-container-high: #dbe4ea;
+  --surface-container-highest: #dbe4ea;
+  --surface-container-lowest: #ffffff;
+
+  --on-surface: #2b3438;
+  --on-surface-variant: #586065;
+  --outline: #707479;
+  --outline-variant: #c3c7cc;
+
+  --primary: #69519a;
+  --primary-dim: #5d458d;
+  --on-primary: #ffffff;
+  --primary-container: #e7ddff;
+  --on-primary-container: #251843;
+
+  --secondary: #306a48;
+  --secondary-container: #b2f1c5;
+  --on-secondary-container: #215c3b;
+
+  --shadow-rgb: 43, 52, 56;
+  --shadow-ambient: 0 0 24px rgba(var(--shadow-rgb), 0.06);
+
+  --radius-xs: 0.125rem;
+  --radius-sm: 0.25rem;
+  --radius-md: 0.375rem;
+  --radius-lg: 0.75rem;
+  --radius-xl: 1.25rem;
+
+  --font-display: 'Manrope', system-ui, sans-serif;
+  --font-body: 'Inter', system-ui, sans-serif;
+
+  --content-max: 72rem;
+  --content-narrow: 44rem;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+html, body {
+  margin: 0;
+  padding: 0;
+}
+
+body {
+  font-family: var(--font-body);
+  font-size: 0.875rem;
+  line-height: 1.6;
+  color: var(--on-surface-variant);
+  background: var(--surface);
+  -webkit-font-smoothing: antialiased;
+  text-rendering: optimizeLegibility;
+}
+
+h1, h2, h3, h4 {
+  font-family: var(--font-display);
+  color: var(--on-surface);
+  font-weight: 600;
+  letter-spacing: -0.01em;
+  margin: 0;
+}
+
+h1 { font-size: 3.5rem; line-height: 1.05; letter-spacing: -0.02em; }
+h2 { font-size: 2rem; line-height: 1.15; letter-spacing: -0.015em; }
+h3 { font-family: var(--font-body); font-size: 1.125rem; font-weight: 600; line-height: 1.4; color: var(--on-surface); }
+h4 { font-family: var(--font-body); font-size: 1rem; font-weight: 600; color: var(--on-surface); }
+
+p { margin: 0; }
+
+a {
+  color: var(--primary);
+  text-decoration: none;
+  transition: color 120ms ease;
+}
+a:hover { color: var(--primary-dim); }
+
+button {
+  font-family: inherit;
+  cursor: pointer;
+}
+
+.container {
+  max-width: var(--content-max);
+  margin: 0 auto;
+  padding: 0 1.5rem;
+}
+
+.container-narrow {
+  max-width: var(--content-narrow);
+  margin: 0 auto;
+  padding: 0 1.5rem;
+}
+
+.section {
+  padding: 6rem 0;
+}
+
+.section-tight {
+  padding: 4rem 0;
+}
+
+.eyebrow {
+  font-size: 0.75rem;
+  font-weight: 500;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  color: var(--on-surface-variant);
+}
+
+.btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.75rem 1.25rem;
+  font-size: 0.875rem;
+  font-weight: 500;
+  border-radius: var(--radius-md);
+  border: none;
+  text-decoration: none;
+  transition: transform 120ms ease, background 120ms ease, color 120ms ease;
+}
+
+.btn-primary {
+  background: linear-gradient(180deg, var(--primary) 0%, var(--primary-dim) 100%);
+  color: var(--on-primary);
+}
+.btn-primary:hover {
+  color: var(--on-primary);
+  transform: translateY(-1px);
+}
+
+.btn-secondary {
+  background: transparent;
+  color: var(--primary);
+  padding: 0.75rem 1rem;
+}
+.btn-secondary:hover {
+  background: rgba(105, 81, 154, 0.08);
+  color: var(--primary);
+}
+
+code {
+  font-family: 'JetBrains Mono', 'SF Mono', Menlo, Consolas, monospace;
+  font-size: 0.85em;
+  padding: 0.1em 0.35em;
+  background: var(--surface-container-low);
+  border-radius: var(--radius-xs);
+  color: var(--on-surface);
+}
+
+pre {
+  font-family: 'JetBrains Mono', 'SF Mono', Menlo, Consolas, monospace;
+  background: var(--surface-container-lowest);
+  padding: 1rem 1.25rem;
+  border-radius: var(--radius-md);
+  overflow-x: auto;
+  font-size: 0.8125rem;
+  line-height: 1.55;
+  box-shadow: var(--shadow-ambient);
+}
+pre code {
+  background: none;
+  padding: 0;
+  font-size: inherit;
+}
