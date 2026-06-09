@@ -1,6 +1,6 @@
 # Install
 
-Project Manager is a community plugin. Install it from inside Obsidian — no downloads, no manual file copying.
+Project Manager is a community plugin. Install it from inside Obsidian Community Plugin.
 
 > [Screenshot: hero shot of the plugin's project list view in a clean Obsidian window.]
 
