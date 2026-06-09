@@ -34,14 +34,21 @@ const installSteps = [
 
 <BaseLayout title="Obsidian Project Manager — Project management for Obsidian">
   <section class="hero">
-    <div class="container">
+    <div class="bg-mesh" aria-hidden="true"><span class="mesh-blob"></span></div>
+    <div class="hero-grain bg-grain" aria-hidden="true"></div>
+    <div class="container hero-inner">
       <p class="eyebrow">For Obsidian</p>
-      <h1>Project management <br /><span class="hero-em">for Obsidian.</span></h1>
-      <p class="hero-sub">Tables, Gantt, and kanban — your tasks stored as plain markdown in your vault.</p>
+      <h1 class="hero-title">
+        Project management,<br />
+        <span class="hero-em">finally inside your vault.</span>
+      </h1>
+      <p class="hero-sub">
+        Tables, Gantt, and kanban over tasks stored as plain markdown. No database. No lock-in. Just files you own.
+      </p>
       <div class="hero-ctas">
-        <a class="btn btn-primary" href="https://obsidian.md/plugins?id=obsidian-pm" rel="noopener">
-          <span class="icon">download</span>
+        <a class="btn btn-primary" href="https://community.obsidian.md/plugins/project-manager" rel="noopener">
           Install from Obsidian
+          <span class="icon">arrow_forward</span>
         </a>
         <a class="btn btn-secondary" href="https://github.com/stepankropachev/obsidian-pm" rel="noopener">
           View on GitHub
@@ -57,6 +64,7 @@ const installSteps = [
 
   <section class="pitch">
     <div class="container container-narrow pitch-inner">
+      <p class="eyebrow">The premise</p>
       <h2>Plain markdown. <br />Real project management.</h2>
       <p class="lede">
         Every task is a markdown file with YAML frontmatter. Open them in any editor, version them in git, sync them how you like. No database. No proprietary format. Just files you own.
@@ -108,7 +116,7 @@ const installSteps = [
       </header>
       <div class="feature-grid">
         {features.map((f) => (
-          <div class="feature-card">
+          <div class="card feature-card">
             <span class="icon feature-icon">{f.icon}</span>
             <h4>{f.title}</h4>
             <p>{f.body}</p>
@@ -136,6 +144,7 @@ const installSteps = [
   </section>
 
   <section class="proof">
+    <div class="bg-mesh proof-mesh" aria-hidden="true"></div>
     <div class="container container-narrow proof-inner">
       <h2>Free, open source, MIT licensed.</h2>
       <p class="lede">Star the repo. File an issue. Send a pull request.</p>
@@ -157,7 +166,7 @@ const installSteps = [
       </header>
       <ol class="install-steps">
         {installSteps.map((s) => (
-          <li>
+          <li class="card">
             <span class="step-n">{s.n}</span>
             <p>{s.body}</p>
           </li>
@@ -168,36 +177,52 @@ const installSteps = [
 </BaseLayout>
 
 <style>
+  /* Hero */
   .hero {
+    position: relative;
     background: var(--surface);
-    padding: 4rem 0 0;
+    padding: 6rem 0 0;
     overflow: hidden;
+    isolation: isolate;
   }
-  .hero h1 {
-    margin-top: 1rem;
-    max-width: 32rem;
+  .hero-grain {
+    position: absolute;
+    inset: 0;
+    z-index: 1;
+    pointer-events: none;
+  }
+  .hero-inner {
+    position: relative;
+    z-index: 2;
+  }
+  .hero-title {
+    margin-top: 1.25rem;
+    max-width: 38rem;
   }
   .hero-em {
-    background: linear-gradient(180deg, var(--primary) 0%, var(--primary-dim) 100%);
+    background: linear-gradient(180deg, #ffffff 0%, #b1adff 60%, #7170ff 100%);
     -webkit-background-clip: text;
     background-clip: text;
     color: transparent;
   }
   .hero-sub {
     margin-top: 1.5rem;
-    max-width: 32rem;
-    font-size: 1.0625rem;
+    max-width: 34rem;
+    font-size: 1.125rem;
     line-height: 1.55;
     color: var(--on-surface-variant);
+    letter-spacing: -0.01em;
   }
   .hero-ctas {
-    margin-top: 2rem;
+    margin-top: 2.25rem;
     display: flex;
-    gap: 1rem;
+    gap: 0.75rem;
     flex-wrap: wrap;
   }
   .hero-mockup-wrap {
-    margin-top: 4rem;
+    position: relative;
+    z-index: 2;
+    margin-top: 5rem;
     margin-bottom: -6rem;
     padding-right: 0;
   }
@@ -207,30 +232,45 @@ const installSteps = [
     margin-left: auto;
   }
 
+  /* Pitch */
   .pitch {
-    background: var(--surface-container-low);
+    background: var(--surface);
     padding-top: 11rem;
-    padding-bottom: 6rem;
+    padding-bottom: 7rem;
+    position: relative;
   }
   .pitch-inner {
-    max-width: 38rem;
+    max-width: 40rem;
     margin: 0;
     padding-left: 1.5rem;
   }
+  .pitch h2 { margin-top: 0.75rem; }
   .lede {
     margin-top: 1.5rem;
     font-size: 1.0625rem;
     line-height: 1.7;
     color: var(--on-surface-variant);
+    letter-spacing: -0.005em;
   }
 
+  /* Three-view */
   .three-view {
     background: var(--surface);
-    padding: 6rem 0;
+    padding: 5rem 0 7rem;
+    position: relative;
+  }
+  .three-view::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 1px;
+    background: linear-gradient(90deg, transparent, var(--hairline-strong) 50%, transparent);
   }
   .section-head {
     margin-bottom: 4rem;
-    max-width: 32rem;
+    max-width: 36rem;
   }
   .section-head h2 {
     margin-top: 0.75rem;
@@ -238,9 +278,9 @@ const installSteps = [
   .view-row {
     display: grid;
     grid-template-columns: minmax(0, 1fr) minmax(0, 1.4fr);
-    gap: 3rem;
+    gap: 4rem;
     align-items: center;
-    margin-bottom: 5rem;
+    margin-bottom: 6rem;
   }
   .view-row.reverse {
     grid-template-columns: minmax(0, 1.4fr) minmax(0, 1fr);
@@ -249,60 +289,60 @@ const installSteps = [
   .view-row.reverse .view-mockup { order: 1; }
   .view-row:last-child { margin-bottom: 0; }
   .view-copy h3 {
-    font-family: var(--font-display);
     font-size: 1.75rem;
     font-weight: 600;
+    letter-spacing: -0.028em;
     color: var(--on-surface);
     margin-bottom: 1rem;
   }
   .view-copy p {
-    font-size: 0.9375rem;
-    line-height: 1.65;
-    margin-bottom: 1.25rem;
-    max-width: 28rem;
-  }
-  .link-arrow {
-    display: inline-flex;
-    align-items: center;
-    gap: 0.35rem;
-    font-size: 0.875rem;
-    font-weight: 500;
-  }
-  .link-arrow .icon {
     font-size: 1rem;
-    color: inherit;
-    transition: transform 120ms ease;
-  }
-  .link-arrow:hover .icon {
-    transform: translateX(2px);
+    line-height: 1.65;
+    margin-bottom: 1.5rem;
+    max-width: 28rem;
+    color: var(--on-surface-variant);
   }
 
+  /* Features */
   .features {
-    background: var(--surface-container-low);
-    padding: 6rem 0;
+    background: var(--surface);
+    padding: 7rem 0;
+    position: relative;
+  }
+  .features::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 1px;
+    background: linear-gradient(90deg, transparent, var(--hairline-strong) 50%, transparent);
   }
   .feature-grid {
     display: grid;
     grid-template-columns: repeat(4, 1fr);
-    gap: 1rem;
+    gap: 0.75rem;
   }
-  .feature-card {
-    background: var(--surface-container-lowest);
-    border-radius: var(--radius-lg);
-    padding: 1.5rem;
-  }
+  .feature-card { padding: 1.5rem; }
   .feature-card .feature-icon {
-    font-size: 1.5rem;
-    color: var(--primary);
-    margin-bottom: 1rem;
-    display: block;
+    font-size: 1.25rem;
+    color: var(--primary-bright);
+    margin-bottom: 1.25rem;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 2.25rem;
+    height: 2.25rem;
+    border-radius: var(--radius-md);
+    background: var(--primary-tint);
+    box-shadow: inset 0 0 0 1px rgba(113, 112, 255, 0.18);
   }
   .feature-card h4 {
     margin-bottom: 0.5rem;
     color: var(--on-surface);
   }
   .feature-card p {
-    font-size: 0.8125rem;
+    font-size: 0.875rem;
     line-height: 1.55;
     color: var(--on-surface-variant);
   }
@@ -313,47 +353,97 @@ const installSteps = [
     .feature-grid { grid-template-columns: 1fr; }
   }
 
+  /* Principles */
   .principles {
     background: var(--surface);
-    padding: 6rem 0;
+    padding: 7rem 0;
+    position: relative;
+  }
+  .principles::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 1px;
+    background: linear-gradient(90deg, transparent, var(--hairline-strong) 50%, transparent);
   }
   .principle-grid {
     display: grid;
     grid-template-columns: repeat(2, 1fr);
-    gap: 2.5rem 3rem;
+    gap: 3rem 4rem;
   }
   .principle h4 {
     color: var(--on-surface);
     margin-bottom: 0.5rem;
-    font-size: 1.0625rem;
+    font-size: 1.125rem;
+    letter-spacing: -0.02em;
   }
   .principle p {
     font-size: 0.9375rem;
-    line-height: 1.6;
-    max-width: 26rem;
+    line-height: 1.65;
+    max-width: 28rem;
+    color: var(--on-surface-variant);
   }
   @media (max-width: 720px) {
     .principle-grid { grid-template-columns: 1fr; }
   }
 
+  /* Proof */
   .proof {
-    background: var(--surface-container-low);
-    padding: 6rem 0;
+    position: relative;
+    background: var(--surface);
+    padding: 8rem 0;
+    overflow: hidden;
+    isolation: isolate;
   }
+  .proof::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 1px;
+    background: linear-gradient(90deg, transparent, var(--hairline-strong) 50%, transparent);
+    z-index: 2;
+  }
+  .proof-mesh::before {
+    width: 50rem;
+    height: 50rem;
+    top: -25rem;
+    right: auto;
+    left: 50%;
+    transform: translateX(-50%);
+    opacity: 0.18;
+  }
+  .proof-mesh::after { display: none; }
   .proof-inner {
+    position: relative;
+    z-index: 2;
     text-align: left;
     margin: 0;
   }
   .proof-ctas {
-    margin-top: 2rem;
+    margin-top: 2.25rem;
     display: flex;
-    gap: 1rem;
+    gap: 0.75rem;
     flex-wrap: wrap;
   }
 
+  /* Install */
   .install {
     background: var(--surface);
-    padding: 6rem 0;
+    padding: 7rem 0 9rem;
+    position: relative;
+  }
+  .install::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 1px;
+    background: linear-gradient(90deg, transparent, var(--hairline-strong) 50%, transparent);
   }
   .install-steps {
     list-style: none;
@@ -361,26 +451,25 @@ const installSteps = [
     margin: 0;
     display: grid;
     grid-template-columns: repeat(4, 1fr);
-    gap: 1.5rem;
-    counter-reset: install;
+    gap: 0.75rem;
   }
   .install-steps li {
-    background: var(--surface-container-lowest);
-    border-radius: var(--radius-lg);
     padding: 1.75rem 1.5rem 2rem;
   }
   .step-n {
     display: inline-flex;
     align-items: center;
     justify-content: center;
-    width: 2rem;
-    height: 2rem;
+    width: 1.75rem;
+    height: 1.75rem;
     border-radius: 50%;
-    background: var(--primary-container);
-    color: var(--on-primary-container);
+    background: var(--primary-tint);
+    box-shadow: inset 0 0 0 1px rgba(113, 112, 255, 0.25);
+    color: var(--primary-bright);
     font-family: var(--font-display);
     font-weight: 600;
-    font-size: 0.9375rem;
+    font-size: 0.875rem;
+    letter-spacing: -0.02em;
     margin-bottom: 1.25rem;
   }
   .install-steps p {
@@ -395,6 +484,11 @@ const installSteps = [
     .install-steps { grid-template-columns: 1fr; }
   }
 
+  /* Responsive */
+  @media (max-width: 960px) {
+    .hero { padding-top: 4rem; }
+    .hero-mockup { transform: none; }
+  }
   @media (max-width: 720px) {
     .view-row, .view-row.reverse {
       grid-template-columns: 1fr;
@@ -402,9 +496,11 @@ const installSteps = [
     }
     .view-row.reverse .view-copy { order: 1; }
     .view-row.reverse .view-mockup { order: 2; }
-    .hero h1 { font-size: 2.5rem; }
-    .pitch h2, .three-view h2, .features h2, .principles h2, .install h2, .proof h2 { font-size: 1.625rem; }
+    h1 { font-size: 2.75rem; }
+    h2 { font-size: 1.875rem; }
+    .hero-sub { font-size: 1rem; }
     .hero-mockup-wrap { margin-bottom: -3rem; }
     .pitch { padding-top: 7rem; }
+    .features, .principles, .install, .proof, .three-view { padding: 4rem 0; }
   }
 </style>
