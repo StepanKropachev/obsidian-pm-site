@@ -331,6 +331,54 @@ pre code { background: none; padding: 0; font-size: inherit; }
   transform: translateY(-1px);
 }
 
+/* Mockup frame — Linear-style glow + 1px gradient rim around mockup screenshots */
+.mockup-frame {
+  position: relative;
+  isolation: isolate;
+  border-radius: var(--radius-lg);
+  box-shadow:
+    0 30px 80px -28px rgba(0, 0, 0, 0.7),
+    0 80px 160px -56px rgba(113, 112, 255, 0.35);
+}
+/* Soft radial glow behind — the Linear hero signature */
+.mockup-frame::before {
+  content: '';
+  position: absolute;
+  z-index: -1;
+  inset: -10% -8% -22% -8%;
+  background:
+    radial-gradient(55% 45% at 50% 25%, rgba(113, 112, 255, 0.55), transparent 65%),
+    radial-gradient(40% 35% at 85% 85%, rgba(157, 122, 255, 0.3), transparent 70%),
+    radial-gradient(35% 30% at 10% 90%, rgba(38, 212, 255, 0.18), transparent 75%);
+  filter: blur(60px);
+  opacity: 0.85;
+  pointer-events: none;
+}
+/* 1px gradient rim that hugs the mockup's rounded corners */
+.mockup-frame::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  padding: 1px;
+  background: linear-gradient(180deg, rgba(255, 255, 255, 0.18) 0%, rgba(255, 255, 255, 0.05) 40%, rgba(255, 255, 255, 0.02) 100%);
+  -webkit-mask: linear-gradient(#000 0 0) content-box, linear-gradient(#000 0 0);
+  -webkit-mask-composite: xor;
+          mask-composite: exclude;
+  pointer-events: none;
+  z-index: 2;
+}
+/* Hero variant — more pronounced shadow + glow */
+.mockup-frame.is-hero {
+  box-shadow:
+    0 40px 100px -28px rgba(0, 0, 0, 0.75),
+    0 120px 200px -64px rgba(113, 112, 255, 0.45);
+}
+.mockup-frame.is-hero::before {
+  inset: -12% -10% -30% -10%;
+  opacity: 1;
+}
+
 /* Link with arrow that nudges on hover */
 .link-arrow {
   display: inline-flex;
