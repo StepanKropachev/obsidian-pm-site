@@ -21,10 +21,19 @@ const base = import.meta.env.BASE_URL.replace(/\/$/, '')
     position: sticky;
     top: 0;
     z-index: 50;
-    background: rgba(8, 9, 10, 0.6);
+    background: rgba(8, 9, 10, 0.4);
     backdrop-filter: blur(24px) saturate(160%);
     -webkit-backdrop-filter: blur(24px) saturate(160%);
-    box-shadow: inset 0 -1px 0 var(--hairline);
+  }
+  .site-nav::after {
+    content: '';
+    position: absolute;
+    left: 0;
+    right: 0;
+    top: 100%;
+    height: 1.25rem;
+    background: linear-gradient(180deg, rgba(8, 9, 10, 0.4), transparent);
+    pointer-events: none;
   }
   .nav-inner {
     display: flex;
