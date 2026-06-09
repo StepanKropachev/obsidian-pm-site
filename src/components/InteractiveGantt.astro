@@ -1,0 +1,972 @@
+---
+const TOTAL_DAYS = 28
+const startDate = new Date(2026, 5, 1)
+const dayCells = Array.from({ length: TOTAL_DAYS }, (_, i) => {
+  const d = new Date(startDate)
+  d.setDate(d.getDate() + i)
+  return {
+    day: d.getDate(),
+    month: d.toLocaleDateString('en-US', { month: 'short' }).toUpperCase(),
+    weekend: d.getDay() === 0 || d.getDay() === 6,
+    isMonthStart: d.getDate() === 1,
+  }
+})
+const monthSpans: { label: string; start: number; span: number }[] = []
+dayCells.forEach((c, i) => {
+  const last = monthSpans[monthSpans.length - 1]
+  if (!last || last.label !== c.month) monthSpans.push({ label: c.month, start: i, span: 1 })
+  else last.span += 1
+})
+---
+
+<div class="igantt" data-igantt>
+  <!-- Project top bar -->
+  <div class="ig-topbar">
+    <div class="ig-topbar-left">
+      <span class="ig-project-glyph"></span>
+      <span class="ig-project-name">Obsidian-PM</span>
+    </div>
+    <div class="ig-topbar-right">
+      <div class="ig-view-group">
+        <button class="ig-view-btn" title="Table"><span class="icon">view_list</span></button>
+        <button class="ig-view-btn is-active" title="Gantt"><span class="icon">view_timeline</span></button>
+        <button class="ig-view-btn" title="Kanban"><span class="icon">view_kanban</span></button>
+      </div>
+      <button class="ig-pill ig-pill-primary" data-action="add">
+        <span class="icon">add</span> add task
+      </button>
+      <button class="ig-pill" data-action="add-milestone">
+        <span class="icon">add</span> milestone
+      </button>
+      <button class="ig-icon-btn" title="Settings"><span class="icon">settings</span></button>
+    </div>
+  </div>
+
+  <!-- Filter bar -->
+  <div class="ig-filterbar">
+    <div class="ig-search">
+      <span class="icon">search</span>
+      <span class="ig-search-placeholder">Search tasks...</span>
+    </div>
+    <div class="ig-filter-right">
+      <button class="ig-chip is-active">All</button>
+      <button class="ig-chip">obsidian cleanup</button>
+      <button class="ig-chip">user request</button>
+      <button class="ig-chip">landing page</button>
+      <button class="ig-pill ig-pill-ghost">
+        <span class="icon">filter_list</span> Filter
+      </button>
+    </div>
+  </div>
+
+  <!-- Granularity bar -->
+  <div class="ig-zoombar">
+    <div class="ig-zoom-group">
+      <button class="ig-zoom is-active">Day</button>
+      <button class="ig-zoom">Week</button>
+      <button class="ig-zoom">Month</button>
+      <button class="ig-zoom">Quarter</button>
+    </div>
+    <div class="ig-zoom-right">
+      <button class="ig-textbtn" data-action="reset">Today</button>
+      <button class="ig-textbtn">Expand all</button>
+      <button class="ig-textbtn">Collapse all</button>
+    </div>
+  </div>
+
+  <!-- Body -->
+  <div class="ig-body">
+    <div class="ig-left">
+      <div class="ig-left-header">TASK</div>
+      <div class="ig-left-rows" data-tasks></div>
+    </div>
+    <div class="ig-right" data-timeline>
+      <div class="ig-header">
+        <div class="ig-header-months">
+          {monthSpans.map((m) => (
+            <div
+              class="ig-header-month"
+              style={`left:${(m.start / TOTAL_DAYS) * 100}%; width:${(m.span / TOTAL_DAYS) * 100}%;`}
+            >{m.label}</div>
+          ))}
+        </div>
+        <div class="ig-header-days">
+          {dayCells.map((c) => (
+            <div class={`ig-header-day${c.weekend ? ' is-weekend' : ''}`}>{c.day}</div>
+          ))}
+        </div>
+      </div>
+      <div class="ig-canvas" data-canvas>
+        <div class="ig-gridlines" aria-hidden="true">
+          {dayCells.map((c, i) => (
+            <div
+              class={`ig-gridline${c.weekend ? ' is-weekend' : ''}${c.isMonthStart ? ' is-month' : ''}`}
+              style={`left:${(i / TOTAL_DAYS) * 100}%; width:${100 / TOTAL_DAYS}%;`}
+            ></div>
+          ))}
+        </div>
+        <div class="ig-rows" data-rows></div>
+        <div class="ig-today-line" data-today aria-hidden="true"></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script>
+  type StatusId = 'todo' | 'in-progress' | 'review' | 'blocked' | 'done'
+  type Task = {
+    id: string
+    title: string
+    start: number
+    duration: number
+    status: StatusId | 'milestone'
+    progress?: number
+  }
+
+  const TOTAL_DAYS = 28
+  const TODAY_DAY = 9
+
+  const STATUS_COLORS: Record<string, string> = {
+    'todo': '#8a94a0',
+    'in-progress': '#8b72be',
+    'review': '#b8a06b',
+    'blocked': '#c47070',
+    'done': '#79b58d',
+    'milestone': '#8b72be',
+  }
+  const STATUS_LABELS: Record<string, string> = {
+    'todo': 'To Do',
+    'in-progress': 'In Progress',
+    'review': 'In Review',
+    'blocked': 'Blocked',
+    'done': 'Done',
+    'milestone': 'Milestone',
+  }
+  const STATUS_CYCLE: StatusId[] = ['todo', 'in-progress', 'review', 'blocked', 'done']
+
+  const INITIAL: Task[] = [
+    { id: 't1', title: 'Paste screenshots from clipboard in task modal', start: 0, duration: 7, status: 'done', progress: 100 },
+    { id: 't2', title: 'TaskNotes integration — one task file, two views', start: 4, duration: 6, status: 'in-progress', progress: 60 },
+    { id: 't3', title: 'Resizable table columns', start: 7, duration: 4, status: 'review' },
+    { id: 't4', title: 'Highlight active task type in task modal', start: 9, duration: 3, status: 'in-progress' },
+    { id: 't5', title: 'Bulk task creation', start: 11, duration: 5, status: 'todo' },
+    { id: 't6', title: 'Per-project status configuration', start: 12, duration: 3, status: 'todo' },
+    { id: 't7', title: 'Rework task timing: duration, end date, work c…', start: 14, duration: 6, status: 'in-progress' },
+    { id: 't8', title: 'Rename project files and tasks folder…', start: 16, duration: 5, status: 'review' },
+    { id: 't9', title: 'Avatar initials from first and second word', start: 5, duration: 8, status: 'in-progress', progress: 100 },
+    { id: 't10', title: 'Milestone doesn\u2019t appear on Gantt chart', start: 18, duration: 4, status: 'blocked', progress: 30 },
+    { id: 't11', title: 'Public launch', start: 25, duration: 0, status: 'milestone' },
+  ]
+
+  function init(root: HTMLElement) {
+    let tasks: Task[] = INITIAL.map((t) => ({ ...t }))
+    let nextId = 100
+
+    const tasksEl = root.querySelector<HTMLElement>('[data-tasks]')!
+    const rowsEl = root.querySelector<HTMLElement>('[data-rows]')!
+    const canvasEl = root.querySelector<HTMLElement>('[data-canvas]')!
+    const todayEl = root.querySelector<HTMLElement>('[data-today]')!
+
+    function dayPx(): number {
+      return canvasEl.getBoundingClientRect().width / TOTAL_DAYS
+    }
+
+    function render() {
+      tasksEl.innerHTML = ''
+      rowsEl.innerHTML = ''
+      tasks.forEach((task) => {
+        tasksEl.appendChild(renderLabelRow(task))
+        rowsEl.appendChild(renderBarRow(task))
+      })
+      todayEl.style.left = `${((TODAY_DAY + 0.5) / TOTAL_DAYS) * 100}%`
+    }
+
+    function renderLabelRow(task: Task): HTMLElement {
+      const row = document.createElement('div')
+      row.className = 'ig-label-row'
+      row.dataset.id = task.id
+
+      const spacer = document.createElement('span')
+      spacer.className = 'ig-label-spacer'
+      spacer.innerHTML = '<span class="icon">drag_indicator</span>'
+
+      const dot = document.createElement('button')
+      dot.className = 'ig-label-dot'
+      dot.style.background = STATUS_COLORS[task.status]
+      if (task.status === 'milestone') {
+        dot.style.transform = 'rotate(45deg)'
+        dot.style.borderRadius = '2px'
+      }
+      dot.title = `Status: ${STATUS_LABELS[task.status]} (click to cycle)`
+      dot.addEventListener('click', () => cycleStatus(task.id))
+
+      const title = document.createElement('span')
+      title.className = 'ig-label-title'
+      title.textContent = task.title
+      title.title = 'Double-click to edit'
+      title.addEventListener('dblclick', () => editTitle(task.id, title))
+
+      const right = document.createElement('span')
+      right.className = 'ig-label-right'
+      if (task.progress !== undefined) {
+        const prog = document.createElement('span')
+        prog.className = 'ig-label-progress'
+        prog.textContent = `${task.progress}%`
+        right.appendChild(prog)
+      }
+      const del = document.createElement('button')
+      del.className = 'ig-label-del'
+      del.title = 'Delete task'
+      del.innerHTML = '<span class="icon">close</span>'
+      del.addEventListener('click', () => deleteTask(task.id))
+      right.appendChild(del)
+
+      row.appendChild(spacer)
+      row.appendChild(dot)
+      row.appendChild(title)
+      row.appendChild(right)
+      return row
+    }
+
+    function renderBarRow(task: Task): HTMLElement {
+      const row = document.createElement('div')
+      row.className = 'ig-row'
+      row.dataset.id = task.id
+
+      if (task.status === 'milestone') {
+        const m = document.createElement('div')
+        m.className = 'ig-milestone'
+        m.style.left = `${((task.start + 0.5) / TOTAL_DAYS) * 100}%`
+        m.style.background = STATUS_COLORS['milestone']
+        attachDrag(m, task.id, 'move')
+        row.appendChild(m)
+        return row
+      }
+
+      const bar = document.createElement('div')
+      bar.className = 'ig-bar'
+      bar.style.left = `${(task.start / TOTAL_DAYS) * 100}%`
+      bar.style.width = `${(task.duration / TOTAL_DAYS) * 100}%`
+      bar.style.background = STATUS_COLORS[task.status]
+
+      if (task.progress !== undefined && task.progress > 0 && task.progress < 100) {
+        const prog = document.createElement('div')
+        prog.className = 'ig-bar-progress'
+        prog.style.width = `${task.progress}%`
+        prog.style.background = STATUS_COLORS[task.status]
+        bar.appendChild(prog)
+      }
+
+      const label = document.createElement('span')
+      label.className = 'ig-bar-label'
+      label.textContent = task.title
+      bar.appendChild(label)
+
+      const handleL = document.createElement('div')
+      handleL.className = 'ig-handle ig-handle-l'
+      const handleR = document.createElement('div')
+      handleR.className = 'ig-handle ig-handle-r'
+      bar.appendChild(handleL)
+      bar.appendChild(handleR)
+
+      attachDrag(bar, task.id, 'move')
+      attachDrag(handleL, task.id, 'resize-l')
+      attachDrag(handleR, task.id, 'resize-r')
+      row.appendChild(bar)
+      return row
+    }
+
+    function attachDrag(el: HTMLElement, id: string, mode: 'move' | 'resize-l' | 'resize-r') {
+      el.addEventListener('pointerdown', (e) => {
+        e.preventDefault()
+        e.stopPropagation()
+        const task = tasks.find((t) => t.id === id)
+        if (!task) return
+        const startX = e.clientX
+        const startStart = task.start
+        const startDur = task.duration
+        const px = dayPx()
+        if (px <= 0) return
+
+        const bar = el.classList.contains('ig-bar') || el.classList.contains('ig-milestone')
+          ? el
+          : (el.parentElement as HTMLElement)
+        bar.classList.add('is-dragging')
+        el.setPointerCapture(e.pointerId)
+
+        const onMove = (ev: PointerEvent) => {
+          const dDays = (ev.clientX - startX) / px
+          if (mode === 'move') {
+            const maxStart = TOTAL_DAYS - (task.status === 'milestone' ? 0 : startDur)
+            task.start = clamp(startStart + dDays, 0, maxStart)
+          } else if (mode === 'resize-r') {
+            task.duration = clamp(startDur + dDays, 1, TOTAL_DAYS - task.start)
+          } else if (mode === 'resize-l') {
+            const newStart = clamp(startStart + dDays, 0, startStart + startDur - 1)
+            task.start = newStart
+            task.duration = startDur - (newStart - startStart)
+          }
+          applyBarStyles(task)
+        }
+
+        const onUp = () => {
+          task.start = Math.round(task.start)
+          task.duration = Math.round(task.duration)
+          if (task.status !== 'milestone' && task.duration < 1) task.duration = 1
+          const maxStart = TOTAL_DAYS - (task.status === 'milestone' ? 0 : task.duration)
+          task.start = clamp(task.start, 0, maxStart)
+          bar.classList.remove('is-dragging')
+          el.removeEventListener('pointermove', onMove)
+          el.removeEventListener('pointerup', onUp)
+          el.removeEventListener('pointercancel', onUp)
+          render()
+        }
+
+        el.addEventListener('pointermove', onMove)
+        el.addEventListener('pointerup', onUp)
+        el.addEventListener('pointercancel', onUp)
+      })
+    }
+
+    function applyBarStyles(task: Task) {
+      const row = rowsEl.querySelector<HTMLElement>(`.ig-row[data-id="${task.id}"]`)
+      if (!row) return
+      if (task.status === 'milestone') {
+        const m = row.querySelector<HTMLElement>('.ig-milestone')
+        if (m) m.style.left = `${((task.start + 0.5) / TOTAL_DAYS) * 100}%`
+        return
+      }
+      const bar = row.querySelector<HTMLElement>('.ig-bar')
+      if (!bar) return
+      bar.style.left = `${(task.start / TOTAL_DAYS) * 100}%`
+      bar.style.width = `${(task.duration / TOTAL_DAYS) * 100}%`
+    }
+
+    function cycleStatus(id: string) {
+      const task = tasks.find((t) => t.id === id)
+      if (!task || task.status === 'milestone') return
+      const idx = STATUS_CYCLE.indexOf(task.status as StatusId)
+      task.status = STATUS_CYCLE[(idx + 1) % STATUS_CYCLE.length]
+      render()
+    }
+
+    function editTitle(id: string, el: HTMLElement) {
+      const task = tasks.find((t) => t.id === id)
+      if (!task) return
+      el.contentEditable = 'true'
+      el.classList.add('is-editing')
+      el.focus()
+      const sel = window.getSelection()
+      const range = document.createRange()
+      range.selectNodeContents(el)
+      sel?.removeAllRanges()
+      sel?.addRange(range)
+
+      const finish = () => {
+        el.contentEditable = 'false'
+        el.classList.remove('is-editing')
+        const next = (el.textContent || '').trim()
+        if (next.length > 0) task.title = next.slice(0, 80)
+        el.textContent = task.title
+        el.removeEventListener('blur', finish)
+        el.removeEventListener('keydown', onKey)
+        render()
+      }
+      const onKey = (ev: KeyboardEvent) => {
+        if (ev.key === 'Enter') { ev.preventDefault(); el.blur() }
+        else if (ev.key === 'Escape') { ev.preventDefault(); el.textContent = task.title; el.blur() }
+      }
+      el.addEventListener('blur', finish)
+      el.addEventListener('keydown', onKey)
+    }
+
+    function deleteTask(id: string) {
+      tasks = tasks.filter((t) => t.id !== id)
+      render()
+    }
+
+    function addTask() {
+      tasks.push({
+        id: `n${nextId++}`, title: 'New task', start: TODAY_DAY, duration: 4, status: 'todo'
+      })
+      render()
+    }
+
+    function addMilestone() {
+      tasks.push({
+        id: `n${nextId++}`, title: 'New milestone', start: TODAY_DAY + 7, duration: 0, status: 'milestone'
+      })
+      render()
+    }
+
+    function resetAll() {
+      tasks = INITIAL.map((t) => ({ ...t }))
+      nextId = 100
+      render()
+    }
+
+    function clamp(n: number, min: number, max: number) {
+      return Math.max(min, Math.min(max, n))
+    }
+
+    root.querySelector('[data-action="add"]')?.addEventListener('click', addTask)
+    root.querySelector('[data-action="add-milestone"]')?.addEventListener('click', addMilestone)
+    root.querySelector('[data-action="reset"]')?.addEventListener('click', resetAll)
+
+    render()
+
+    const ro = new ResizeObserver(() => tasks.forEach(applyBarStyles))
+    ro.observe(canvasEl)
+  }
+
+  document.querySelectorAll<HTMLElement>('[data-igantt]').forEach(init)
+</script>
+
+<style is:global>
+  /* Plugin-faithful palette — mirror the Obsidian dark theme.
+     Block is `is:global` because dynamically created rows/bars (via JS) don't
+     carry Astro's scope attribute. All rules are namespaced under .igantt. */
+  .igantt {
+    --pm-bg: #16171a;
+    --pm-bg2: #1a1b1e;
+    --pm-bg3: #232428;
+    --pm-surface-raised: #16171a;
+    --pm-text: #e6e7e9;
+    --pm-text-muted: #8a8f98;
+    --pm-text-faint: #62666d;
+    --pm-border: rgba(255, 255, 255, 0.08);
+    --pm-border-strong: rgba(255, 255, 255, 0.14);
+    --pm-accent: #8b72be;
+    --pm-today: rgba(196, 112, 112, 0.7);
+
+    background: var(--pm-bg);
+    border-radius: var(--radius-lg);
+    overflow: hidden;
+    font-family: var(--font-body);
+    font-size: 13px;
+    color: var(--pm-text);
+    user-select: none;
+    line-height: 1.4;
+  }
+
+  /* ── Top project bar ────────────────────────────────────────────────────── */
+  .ig-topbar {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 10px 14px;
+    background: var(--pm-bg);
+    border-bottom: 1px solid var(--pm-border);
+    gap: 12px;
+  }
+  .ig-topbar-left {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    min-width: 0;
+  }
+  .ig-project-glyph {
+    width: 18px;
+    height: 18px;
+    border-radius: 4px;
+    background: linear-gradient(135deg, #8b72be 0%, #6a5293 100%);
+    box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.15);
+    flex-shrink: 0;
+  }
+  .ig-project-name {
+    font-size: 15px;
+    font-weight: 600;
+    color: var(--pm-text);
+    letter-spacing: -0.005em;
+  }
+  .ig-topbar-right {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    flex-shrink: 0;
+  }
+  .ig-view-group {
+    display: inline-flex;
+    background: var(--pm-bg2);
+    border-radius: 5px;
+    padding: 2px;
+    box-shadow: inset 0 0 0 1px var(--pm-border);
+  }
+  .ig-view-btn {
+    border: none;
+    background: transparent;
+    color: var(--pm-text-muted);
+    padding: 4px 8px;
+    border-radius: 3px;
+    cursor: pointer;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    transition: background 140ms ease, color 140ms ease;
+  }
+  .ig-view-btn .icon { font-size: 16px; color: inherit; }
+  .ig-view-btn:hover { color: var(--pm-text); }
+  .ig-view-btn.is-active {
+    background: var(--pm-bg3);
+    color: var(--pm-text);
+  }
+  .ig-pill {
+    display: inline-flex;
+    align-items: center;
+    gap: 4px;
+    border: 1px solid var(--pm-border-strong);
+    background: var(--pm-bg2);
+    color: var(--pm-text);
+    border-radius: 5px;
+    padding: 5px 10px;
+    font-size: 12px;
+    font-weight: 500;
+    cursor: pointer;
+    transition: background 140ms ease, border-color 140ms ease, transform 100ms ease;
+  }
+  .ig-pill:hover { background: var(--pm-bg3); border-color: var(--pm-border-strong); }
+  .ig-pill:active { transform: translateY(1px); }
+  .ig-pill .icon { font-size: 14px; color: inherit; }
+  .ig-pill-primary {
+    background: var(--pm-accent);
+    border-color: var(--pm-accent);
+    color: #fff;
+  }
+  .ig-pill-primary:hover {
+    background: #9a82cd;
+    border-color: #9a82cd;
+  }
+  .ig-pill-ghost {
+    background: transparent;
+    border-color: var(--pm-border-strong);
+  }
+  .ig-icon-btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    border: none;
+    background: transparent;
+    color: var(--pm-text-muted);
+    padding: 5px;
+    border-radius: 4px;
+    cursor: pointer;
+    transition: background 140ms ease, color 140ms ease;
+  }
+  .ig-icon-btn:hover { background: var(--pm-bg3); color: var(--pm-text); }
+  .ig-icon-btn .icon { font-size: 16px; color: inherit; }
+
+  /* ── Filter bar ─────────────────────────────────────────────────────────── */
+  .ig-filterbar {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 8px 14px;
+    border-bottom: 1px solid var(--pm-border);
+  }
+  .ig-search {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    background: var(--pm-bg2);
+    border: 1px solid var(--pm-border);
+    border-radius: 5px;
+    padding: 5px 10px;
+    min-width: 240px;
+    flex-shrink: 0;
+  }
+  .ig-search .icon {
+    font-size: 14px;
+    color: var(--pm-text-muted);
+  }
+  .ig-search-placeholder {
+    color: var(--pm-text-muted);
+    font-size: 12px;
+  }
+  .ig-filter-right {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    margin-left: auto;
+    flex-wrap: wrap;
+    justify-content: flex-end;
+  }
+  .ig-chip {
+    border: 1px solid var(--pm-border-strong);
+    background: var(--pm-bg2);
+    color: var(--pm-text-muted);
+    padding: 3px 9px;
+    font-size: 11.5px;
+    border-radius: 999px;
+    cursor: pointer;
+    transition: color 140ms ease, background 140ms ease;
+  }
+  .ig-chip:hover { color: var(--pm-text); background: var(--pm-bg3); }
+  .ig-chip.is-active {
+    background: var(--pm-bg3);
+    color: var(--pm-text);
+    border-color: var(--pm-border-strong);
+  }
+
+  /* ── Zoom bar ───────────────────────────────────────────────────────────── */
+  .ig-zoombar {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 8px 14px;
+    border-bottom: 1px solid var(--pm-border);
+    background: var(--pm-bg);
+  }
+  .ig-zoom-group {
+    display: inline-flex;
+    gap: 4px;
+  }
+  .ig-zoom {
+    padding: 4px 12px;
+    border: 1px solid var(--pm-border-strong);
+    border-radius: 4px;
+    background: transparent;
+    color: var(--pm-text-muted);
+    cursor: pointer;
+    font-size: 12px;
+    font-weight: 500;
+    transition: background 140ms ease, color 140ms ease;
+  }
+  .ig-zoom:hover { background: var(--pm-bg3); color: var(--pm-text); }
+  .ig-zoom.is-active {
+    background: var(--pm-accent);
+    border-color: var(--pm-accent);
+    color: #fff;
+  }
+  .ig-zoom-right {
+    display: inline-flex;
+    gap: 4px;
+  }
+  .ig-textbtn {
+    background: transparent;
+    border: none;
+    color: var(--pm-text-muted);
+    padding: 4px 8px;
+    font-size: 12px;
+    border-radius: 4px;
+    cursor: pointer;
+    transition: background 140ms ease, color 140ms ease;
+  }
+  .ig-textbtn:hover { background: var(--pm-bg3); color: var(--pm-text); }
+
+  /* ── Body grid ──────────────────────────────────────────────────────────── */
+  .ig-body {
+    display: grid;
+    grid-template-columns: 290px 1fr;
+    background: var(--pm-bg);
+  }
+  .ig-left {
+    background: var(--pm-surface-raised);
+    border-right: 1px solid var(--pm-border);
+    overflow: hidden;
+  }
+  .ig-left-header {
+    height: 50px;
+    display: flex;
+    align-items: flex-end;
+    padding: 0 14px 10px;
+    font-size: 11px;
+    font-weight: 600;
+    color: var(--pm-text-muted);
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+    box-shadow: inset 0 -2px 0 var(--pm-border);
+    box-sizing: border-box;
+  }
+  .ig-left-rows {
+    display: flex;
+    flex-direction: column;
+  }
+  .ig-label-row {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    height: 36px;
+    padding: 0 8px 0 6px;
+    box-shadow: inset 0 -1px 0 var(--pm-border);
+    transition: background 140ms ease;
+    box-sizing: border-box;
+  }
+  .ig-label-row:hover { background: var(--pm-bg3); }
+  .ig-label-spacer {
+    width: 16px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    color: var(--pm-text-faint);
+    flex-shrink: 0;
+    cursor: grab;
+  }
+  .ig-label-spacer .icon { font-size: 14px; color: inherit; }
+  .ig-label-dot {
+    width: 9px;
+    height: 9px;
+    border-radius: 50%;
+    border: none;
+    padding: 0;
+    cursor: pointer;
+    flex-shrink: 0;
+    transition: transform 120ms ease, box-shadow 120ms ease;
+  }
+  .ig-label-dot:hover {
+    transform: scale(1.25);
+    box-shadow: 0 0 0 3px rgba(139, 114, 190, 0.15);
+  }
+  .ig-label-title {
+    flex: 1;
+    font-size: 13px;
+    color: var(--pm-text);
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    cursor: text;
+    padding: 2px 4px;
+    margin: 0 -4px;
+    border-radius: 3px;
+    outline: none;
+    min-width: 0;
+  }
+  .ig-label-title.is-editing {
+    background: var(--pm-bg);
+    box-shadow: inset 0 0 0 1px var(--pm-accent);
+    overflow: visible;
+    white-space: normal;
+  }
+  .ig-label-right {
+    display: inline-flex;
+    align-items: center;
+    gap: 4px;
+    flex-shrink: 0;
+  }
+  .ig-label-progress {
+    font-size: 11px;
+    color: var(--pm-text-muted);
+  }
+  .ig-label-del {
+    border: none;
+    background: transparent;
+    color: var(--pm-text-faint);
+    padding: 2px;
+    border-radius: 3px;
+    cursor: pointer;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    opacity: 0;
+    transition: opacity 140ms ease, color 140ms ease, background 140ms ease;
+  }
+  .ig-label-del .icon { font-size: 14px; color: inherit; }
+  .ig-label-row:hover .ig-label-del { opacity: 1; }
+  .ig-label-del:hover {
+    color: var(--pm-text);
+    background: var(--pm-bg2);
+  }
+
+  /* ── Right: timeline ────────────────────────────────────────────────────── */
+  .ig-right {
+    position: relative;
+    overflow: hidden;
+  }
+  .ig-header {
+    height: 50px;
+    background: var(--pm-bg);
+    box-shadow: inset 0 -2px 0 var(--pm-border);
+    position: relative;
+    box-sizing: border-box;
+  }
+  .ig-header-months {
+    position: relative;
+    height: 22px;
+    border-bottom: 1px solid var(--pm-border);
+  }
+  .ig-header-month {
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 10px;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    color: var(--pm-text-muted);
+    border-left: 1px solid var(--pm-border);
+  }
+  .ig-header-month:first-child { border-left: none; }
+  .ig-header-days {
+    display: grid;
+    grid-template-columns: repeat(28, 1fr);
+    height: 28px;
+  }
+  .ig-header-day {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 11px;
+    color: var(--pm-text-muted);
+    font-variant-numeric: tabular-nums;
+  }
+  .ig-header-day.is-weekend { color: var(--pm-text-faint); }
+
+  .ig-canvas {
+    position: relative;
+    overflow: hidden;
+  }
+
+  .ig-gridlines {
+    position: absolute;
+    inset: 0;
+    pointer-events: none;
+    z-index: 0;
+  }
+  .ig-gridline {
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    border-left: 1px dashed rgba(255, 255, 255, 0.06);
+  }
+  .ig-gridline:first-child { border-left: none; }
+  .ig-gridline.is-weekend {
+    background: rgba(255, 255, 255, 0.018);
+  }
+  .ig-gridline.is-month {
+    border-left: 1px solid rgba(255, 255, 255, 0.12);
+  }
+
+  .ig-rows {
+    position: relative;
+    z-index: 1;
+  }
+  .ig-row {
+    position: relative;
+    height: 36px;
+    box-shadow: inset 0 -1px 0 var(--pm-border);
+  }
+  .ig-row:hover { background: rgba(139, 114, 190, 0.025); }
+
+  .ig-bar {
+    position: absolute;
+    top: 6px;
+    height: 24px;
+    border-radius: 5px;
+    cursor: grab;
+    opacity: 0.78;
+    display: flex;
+    align-items: center;
+    padding: 0 8px;
+    overflow: hidden;
+    transition: opacity 120ms ease, filter 120ms ease;
+    min-width: 8px;
+  }
+  .ig-bar:hover { opacity: 0.92; }
+  .ig-bar.is-dragging {
+    opacity: 1;
+    cursor: grabbing;
+    filter: brightness(1.08);
+    z-index: 3;
+    box-shadow: 0 6px 20px rgba(0, 0, 0, 0.35), 0 0 0 1px rgba(255, 255, 255, 0.15);
+  }
+  .ig-bar-progress {
+    position: absolute;
+    inset: 0 auto 0 0;
+    opacity: 0.55;
+    pointer-events: none;
+    border-radius: inherit;
+  }
+  .ig-bar-label {
+    font-size: 10px;
+    font-weight: 600;
+    color: rgba(255, 255, 255, 0.92);
+    text-transform: uppercase;
+    letter-spacing: 0.04em;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    pointer-events: none;
+    position: relative;
+    z-index: 1;
+  }
+
+  .ig-handle {
+    position: absolute;
+    top: -2px;
+    bottom: -2px;
+    width: 8px;
+    cursor: ew-resize;
+    z-index: 2;
+  }
+  .ig-handle-l { left: -4px; }
+  .ig-handle-r { right: -4px; }
+  .ig-handle::after {
+    content: '';
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: 2px;
+    height: 14px;
+    background: rgba(255, 255, 255, 0.7);
+    border-radius: 1px;
+    opacity: 0;
+    transition: opacity 120ms ease;
+  }
+  .ig-bar:hover .ig-handle::after,
+  .ig-bar.is-dragging .ig-handle::after { opacity: 1; }
+
+  .ig-milestone {
+    position: absolute;
+    top: 8px;
+    width: 20px;
+    height: 20px;
+    transform: translateX(-50%) rotate(45deg);
+    border-radius: 3px;
+    cursor: grab;
+    opacity: 0.85;
+    box-shadow: 0 0 0 1px rgba(255, 255, 255, 0.1);
+    transition: opacity 120ms ease, filter 120ms ease;
+  }
+  .ig-milestone:hover { opacity: 1; }
+  .ig-milestone.is-dragging { opacity: 1; cursor: grabbing; filter: brightness(1.1); }
+
+  .ig-today-line {
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    width: 1.5px;
+    background-image: linear-gradient(180deg, var(--pm-today) 50%, transparent 50%);
+    background-size: 100% 8px;
+    z-index: 2;
+    pointer-events: none;
+  }
+  .ig-today-line::before {
+    content: '';
+    position: absolute;
+    top: -4px;
+    left: -3.5px;
+    width: 8px;
+    height: 8px;
+    background: var(--pm-today);
+    border-radius: 50%;
+  }
+
+  /* ── Responsive ─────────────────────────────────────────────────────────── */
+  @media (max-width: 900px) {
+    .igantt { font-size: 12px; }
+    .ig-body { grid-template-columns: 220px 1fr; }
+    .ig-project-name { font-size: 13px; }
+    .ig-filterbar { display: none; }
+    .ig-pill { padding: 4px 8px; font-size: 11px; }
+    .ig-bar-label { font-size: 9px; }
+  }
+  @media (max-width: 640px) {
+    .ig-body { grid-template-columns: 150px 1fr; }
+    .ig-label-progress { display: none; }
+    .ig-zoom-right .ig-textbtn:not([data-action]) { display: none; }
+    .ig-header-month { font-size: 9px; }
+  }
+</style>

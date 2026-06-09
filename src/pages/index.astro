@@ -3,6 +3,7 @@ import BaseLayout from '../layouts/BaseLayout.astro'
 import MockupTable from '../components/MockupTable.astro'
 import MockupGantt from '../components/MockupGantt.astro'
 import MockupKanban from '../components/MockupKanban.astro'
+import InteractiveGantt from '../components/InteractiveGantt.astro'
 
 const base = import.meta.env.BASE_URL.replace(/\/$/, '')
 
@@ -37,13 +38,12 @@ const installSteps = [
     <div class="bg-mesh" aria-hidden="true"><span class="mesh-blob"></span></div>
     <div class="hero-grain bg-grain" aria-hidden="true"></div>
     <div class="container hero-inner">
-      <p class="eyebrow">For Obsidian</p>
       <h1 class="hero-title">
         Project management,<br />
-        <span class="hero-em">finally inside your vault.</span>
+        <span class="hero-em">finally inside your vault</span>
       </h1>
       <p class="hero-sub">
-        Tables, Gantt, and kanban over tasks stored as plain markdown. No database. No lock-in. Just files you own.
+        Tables, Gantt, and kanban over tasks stored as plain markdown. No database. No lock-in. Just files you own in your Obsidian vault.
       </p>
       <div class="hero-ctas">
         <a class="btn btn-primary" href="https://community.obsidian.md/plugins/project-manager" rel="noopener">
@@ -57,8 +57,8 @@ const installSteps = [
     </div>
     <div class="container hero-mockup-wrap">
       <div class="hero-mockup">
-        <div class="mockup-frame is-hero">
-          <MockupTable />
+        <div class="mockup-frame is-hero is-interactive">
+          <InteractiveGantt />
         </div>
       </div>
     </div>
@@ -67,7 +67,7 @@ const installSteps = [
   <section class="pitch">
     <div class="container container-narrow pitch-inner">
       <p class="eyebrow">The premise</p>
-      <h2>Plain markdown. <br />Real project management.</h2>
+      <h2>Plain markdown<br />Real project management</h2>
       <p class="lede">
         Every task is a markdown file with YAML frontmatter. Open them in any editor, version them in git, sync them how you like. No database. No proprietary format. Just files you own.
       </p>
@@ -78,7 +78,7 @@ const installSteps = [
     <div class="container">
       <header class="section-head">
         <p class="eyebrow">One project. Three views.</p>
-        <h2>Three ways to see the same data.</h2>
+        <h2>Three ways to see the same data</h2>
       </header>
 
       <div class="view-row">
@@ -114,7 +114,7 @@ const installSteps = [
     <div class="container">
       <header class="section-head">
         <p class="eyebrow">Features</p>
-        <h2>Everything you need to run a project.</h2>
+        <h2>Everything you need to run a project</h2>
       </header>
       <div class="feature-grid">
         {features.map((f) => (
@@ -132,7 +132,7 @@ const installSteps = [
     <div class="container">
       <header class="section-head">
         <p class="eyebrow">Principles</p>
-        <h2>Built on principles.</h2>
+        <h2>Built on principles</h2>
       </header>
       <div class="principle-grid">
         {principles.map((p) => (
@@ -148,7 +148,7 @@ const installSteps = [
   <section class="proof">
     <div class="bg-mesh proof-mesh" aria-hidden="true"></div>
     <div class="container container-narrow proof-inner">
-      <h2>Free, open source, MIT licensed.</h2>
+      <h2>Free, open source, MIT licensed</h2>
       <p class="lede">Star the repo. File an issue. Send a pull request.</p>
       <div class="proof-ctas">
         <a class="btn btn-primary" href="https://github.com/stepankropachev/obsidian-pm" rel="noopener">
@@ -164,7 +164,7 @@ const installSteps = [
     <div class="container">
       <header class="section-head">
         <p class="eyebrow">Install</p>
-        <h2>Install in 30 seconds.</h2>
+        <h2>Install in 30 seconds</h2>
       </header>
       <ol class="install-steps">
         {installSteps.map((s) => (
@@ -179,7 +179,9 @@ const installSteps = [
 </BaseLayout>
 
 <style>
-  /* Hero */
+  /* Hero — relies on natural content height. The mockup is tall enough to
+     extend below the fold on initial load (Linear pattern); scrolling
+     reveals the rest. No flex/auto-margin tricks. */
   .hero {
     position: relative;
     background: var(--surface);
@@ -224,31 +226,49 @@ const installSteps = [
   .hero-mockup-wrap {
     position: relative;
     z-index: 2;
-    margin-top: 5rem;
-    margin-bottom: -6rem;
+    margin-top: 4rem;
+    margin-bottom: 0;
     padding-right: 0;
   }
-  .hero-mockup-wrap::after {
+  /* Soft Linear-style ambient halo under the interactive mockup */
+  .hero-mockup-wrap::before {
     content: '';
     position: absolute;
-    left: 0;
-    right: 0;
-    bottom: -1px;
-    height: 8rem;
-    background: linear-gradient(180deg, transparent, var(--surface) 85%);
+    left: 50%;
+    bottom: -8rem;
+    transform: translateX(-50%);
+    width: 70rem;
+    height: 24rem;
+    background:
+      radial-gradient(60% 50% at 50% 0%, rgba(113, 112, 255, 0.28), transparent 70%),
+      radial-gradient(40% 50% at 30% 30%, rgba(157, 122, 255, 0.18), transparent 70%),
+      radial-gradient(40% 50% at 70% 30%, rgba(38, 212, 255, 0.12), transparent 70%);
+    filter: blur(40px);
     pointer-events: none;
-    z-index: 3;
+    z-index: 0;
   }
   .hero-mockup {
-    transform: translateX(2%);
     max-width: 64rem;
-    margin-left: auto;
+    margin: 0 auto;
+    position: relative;
+    z-index: 2;
+  }
+  /* When the mockup is interactive, give it a deeper Linear-style shadow */
+  .mockup-frame.is-interactive {
+    box-shadow:
+      0 50px 120px -28px rgba(0, 0, 0, 0.85),
+      0 140px 220px -64px rgba(113, 112, 255, 0.5),
+      0 0 0 1px rgba(255, 255, 255, 0.04);
+  }
+  .mockup-frame.is-interactive::before {
+    inset: -10% -8% -38% -8%;
+    opacity: 1;
   }
 
   /* Pitch */
   .pitch {
     background: var(--surface);
-    padding-top: 11rem;
+    padding-top: 7rem;
     padding-bottom: 7rem;
     position: relative;
   }
@@ -512,8 +532,7 @@ const installSteps = [
     h1 { font-size: 2.75rem; }
     h2 { font-size: 1.875rem; }
     .hero-sub { font-size: 1rem; }
-    .hero-mockup-wrap { margin-bottom: -3rem; }
-    .pitch { padding-top: 7rem; }
+    .pitch { padding-top: 5rem; padding-bottom: 5rem; }
     .features, .principles, .install, .proof, .three-view { padding: 4rem 0; }
   }
 </style>
