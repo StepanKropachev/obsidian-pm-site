@@ -5,12 +5,12 @@ interface Props {
 const { compact = false } = Astro.props
 
 const rows = [
-  { title: 'Audit current site', status: 'in progress', statusKey: 'progress', priority: 'high', due: 'May 30', progress: 40 },
-  { title: 'New homepage copy', status: 'todo', statusKey: 'todo', priority: 'high', due: 'Jun 04', progress: 0 },
-  { title: 'Reusable components library', status: 'in review', statusKey: 'review', priority: 'medium', due: 'Jun 11', progress: 75 },
-  { title: 'Migrate blog posts', status: 'todo', statusKey: 'todo', priority: 'low', due: 'Jun 18', progress: 0 },
-  { title: 'Accessibility audit', status: 'blocked', statusKey: 'blocked', priority: 'medium', due: 'Jun 21', progress: 15 },
-  { title: 'Launch announcement', status: 'todo', statusKey: 'todo', priority: 'high', due: 'Jul 02', progress: 0 },
+  { title: 'Audit current site', tags: ['research'], status: 'in progress', statusKey: 'progress', priority: 'high', due: 'May 30', progress: 40 },
+  { title: 'New homepage copy', tags: ['copy'], status: 'todo', statusKey: 'todo', priority: 'high', due: 'Jun 04', progress: 0 },
+  { title: 'Reusable components library', tags: [], status: 'in review', statusKey: 'review', priority: 'medium', due: 'Jun 11', progress: 75 },
+  { title: 'Migrate blog posts', tags: ['content'], status: 'todo', statusKey: 'todo', priority: 'low', due: 'Jun 18', progress: 0 },
+  { title: 'Accessibility audit', tags: [], status: 'blocked', statusKey: 'blocked', priority: 'medium', due: 'Jun 21', progress: 15 },
+  { title: 'Launch announcement', tags: ['marketing'], status: 'todo', statusKey: 'todo', priority: 'high', due: 'Jul 02', progress: 0 },
 ]
 ---
 
@@ -40,7 +40,10 @@ const rows = [
     {rows.map((row) => (
       <div class="m-row">
         <div class="c-check"><span class="check"></span></div>
-        <div class="c-title">{row.title}</div>
+        <div class="c-title">
+          {row.title}
+          {row.tags.map((t) => <span class="tag-chip">{t}</span>)}
+        </div>
         <div class="c-status"><span class={`status-pill s-${row.statusKey}`}>{row.status}</span></div>
         <div class="c-prio"><span class={`prio p-${row.priority}`}>{row.priority}</span></div>
         <div class="c-due">{row.due}</div>
@@ -140,7 +143,26 @@ const rows = [
     padding-bottom: 0.65rem;
   }
   .m-header:hover { background: transparent; }
-  .c-title { font-weight: 500; }
+  .c-title {
+    font-weight: 500;
+    display: flex;
+    align-items: center;
+    gap: 0.4rem;
+    min-width: 0;
+    white-space: nowrap;
+    overflow: hidden;
+  }
+  .tag-chip {
+    flex-shrink: 0;
+    padding: 0.1rem 0.4rem;
+    border-radius: 999px;
+    background: var(--surface-container-low);
+    box-shadow: inset 0 0 0 1px var(--hairline);
+    color: var(--on-surface-variant);
+    font-size: 0.625rem;
+    font-weight: 400;
+    line-height: 1.4;
+  }
   .check {
     width: 0.85rem;
     height: 0.85rem;
@@ -152,9 +174,10 @@ const rows = [
     display: inline-block;
     padding: 0.15rem 0.45rem;
     border-radius: var(--radius-xs);
-    font-size: 0.6875rem;
+    font-size: 0.625rem;
     font-weight: 500;
-    text-transform: capitalize;
+    text-transform: uppercase;
+    letter-spacing: 0.03em;
   }
   .s-todo { background: #1f2226; color: #b0b5bd; }
   .s-progress { background: #241c3a; color: #b9a8ff; }
@@ -162,8 +185,10 @@ const rows = [
   .s-blocked { background: #2e1a17; color: #e89086; }
   .s-done { background: #152920; color: #7dd9a2; }
   .prio {
-    font-size: 0.6875rem;
-    text-transform: capitalize;
+    font-size: 0.625rem;
+    font-weight: 500;
+    text-transform: uppercase;
+    letter-spacing: 0.03em;
     color: var(--on-surface-variant);
   }
   .p-high { color: #e89086; }
