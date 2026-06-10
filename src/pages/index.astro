@@ -69,19 +69,21 @@ const installSteps = [
   </section>
 
   <section class="pitch">
-    <div class="container container-narrow pitch-inner">
+    <div class="container pitch-inner">
       <p class="eyebrow">The premise</p>
-      <h2 class="pitch-title">Plain markdown. <span class="pitch-dim">Real project management.</span></h2>
-      <p class="lede">
-        Every task is a markdown file with YAML frontmatter. Open them in any editor, version them in git, sync them how you like. No database. No proprietary format. Just files you own.
-      </p>
+      <div class="pitch-grid">
+        <h2 class="pitch-title">Plain markdown. <span class="pitch-dim">Real project management.</span></h2>
+        <p class="lede pitch-lede">
+          Every task is a markdown file with YAML frontmatter. Open them in any editor, version them in git, sync them how you like. No database. No proprietary format. Just files you own.
+        </p>
+      </div>
     </div>
   </section>
 
   <section class="three-view">
     <div class="container">
       <header class="section-head">
-        <p class="eyebrow">One project. Three views.</p>
+        <p class="eyebrow">The views</p>
         <h2>Three ways to see the same data</h2>
       </header>
 
@@ -297,22 +299,25 @@ const installSteps = [
   .pitch {
     background: var(--surface);
     padding-top: 7rem;
-    padding-bottom: 7rem;
+    padding-bottom: 6rem;
     position: relative;
   }
-  .pitch-inner {
-    max-width: 56rem;
-    margin: 0 auto;
-    text-align: center;
-  }
-  .pitch-inner .lede {
-    margin-left: auto;
-    margin-right: auto;
-    max-width: 42rem;
+  .pitch-grid {
+    display: grid;
+    grid-template-columns: minmax(0, 1.25fr) minmax(0, 1fr);
+    gap: 1.5rem 5rem;
+    align-items: end;
+    margin-top: 1.25rem;
   }
   .pitch-title {
-    margin-top: 0.75rem;
+    font-size: 3.25rem;
+    line-height: 1.05;
+    letter-spacing: -0.038em;
     text-wrap: balance;
+  }
+  .pitch-lede {
+    margin-top: 0;
+    max-width: 28rem;
   }
   .pitch-dim {
     color: var(--on-surface-muted);
@@ -576,6 +581,8 @@ const installSteps = [
     h2 { font-size: 1.875rem; }
     .hero-sub { font-size: 1rem; }
     .pitch { padding-top: 5rem; padding-bottom: 5rem; }
+    .pitch-grid { grid-template-columns: 1fr; gap: 1.25rem; }
+    .pitch-title { font-size: 2.25rem; }
     .features, .principles, .install, .proof, .three-view { padding: 4rem 0; }
   }
 </style>
