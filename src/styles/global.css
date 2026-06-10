@@ -1,4 +1,4 @@
-@import url('https://fonts.googleapis.com/css2?family=Inter+Tight:wght@500;600;700&family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap');
 @import url('https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL@20..40,300,0&display=swap');
 
 :root {
@@ -57,7 +57,7 @@
   --radius-xl: 1rem;
 
   /* Type */
-  --font-display: 'Inter Tight', 'Inter', system-ui, sans-serif;
+  --font-display: 'Inter', system-ui, sans-serif;
   --font-body: 'Inter', system-ui, sans-serif;
   --font-mono: 'JetBrains Mono', 'SF Mono', Menlo, Consolas, monospace;
 
@@ -340,6 +340,14 @@ pre code { background: none; padding: 0; font-size: inherit; }
   box-shadow:
     0 30px 80px -28px rgba(0, 0, 0, 0.7),
     0 60px 130px -48px rgba(113, 112, 255, 0.2);
+}
+.mockup-frame img {
+  display: block;
+  width: 100%;
+  height: auto;
+  border-radius: inherit;
+  position: relative;
+  z-index: 0;
 }
 /* Tight light bloom hugging the frame — the Linear hero signature:
    a soft white halo right behind the app, not a wide colored wash */

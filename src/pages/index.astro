@@ -1,9 +1,13 @@
 ---
 import BaseLayout from '../layouts/BaseLayout.astro'
-import MockupTable from '../components/MockupTable.astro'
-import MockupGantt from '../components/MockupGantt.astro'
-import MockupKanban from '../components/MockupKanban.astro'
+import { Image } from 'astro:assets'
 import InteractiveGantt from '../components/InteractiveGantt.astro'
+import tableShot from '../assets/screenshots/table.png'
+import ganttShot from '../assets/screenshots/gantt.png'
+import kanbanShot from '../assets/screenshots/kanban.png'
+import tableCloseup from '../assets/screenshots/table-closeup.png'
+import ganttCloseup from '../assets/screenshots/gantt-closeup.png'
+import taskModal from '../assets/screenshots/task-modal.png'
 
 const base = import.meta.env.BASE_URL.replace(/\/$/, '')
 
@@ -56,8 +60,11 @@ const installSteps = [
     </div>
     <div class="container hero-mockup-wrap">
       <div class="hero-mockup">
-        <div class="mockup-frame is-hero is-interactive">
+        <div class="mockup-frame is-hero is-interactive hero-interactive">
           <InteractiveGantt />
+        </div>
+        <div class="mockup-frame is-hero hero-static">
+          <Image src={ganttShot} alt="Gantt view of an Obsidian PM project" sizes="100vw" />
         </div>
       </div>
     </div>
@@ -66,7 +73,7 @@ const installSteps = [
   <section class="pitch">
     <div class="container pitch-inner">
       <div class="pitch-grid">
-        <h2 class="pitch-title">Plain markdown. <span class="pitch-dim">Real project management.</span></h2>
+        <h2 class="pitch-title">Every task is an .md file you own</h2>
         <p class="lede pitch-lede">
           Every task is a markdown file with YAML frontmatter. Open them in any editor, version them in git, sync them how you like. No database. No proprietary format. Just files you own.
         </p>
@@ -82,7 +89,10 @@ const installSteps = [
           <p>Filter, sort, and edit thousands of tasks at the speed of a spreadsheet. Inline-edit status, priority, due date, progress. Multi-select for bulk changes.</p>
           <a href={`${base}/docs/table-view`} class="link-arrow">Read the docs <span class="icon">arrow_forward</span></a>
         </div>
-        <div class="view-mockup"><div class="mockup-frame"><MockupTable /></div></div>
+        <div class="view-mockup view-stage">
+          <div class="mockup-frame"><Image src={tableShot} alt="Table view of an Obsidian PM project" sizes="(max-width: 720px) 100vw, 56vw" /></div>
+          <div class="float-frag frag-wide"><Image src={tableCloseup} alt="Editing tasks inline in the table" sizes="(max-width: 720px) 0px, 36vw" /></div>
+        </div>
       </div>
 
       <div class="view-row reverse">
@@ -91,7 +101,10 @@ const installSteps = [
           <p>Plan timelines visually. Drag bars to reschedule, resize to change duration, switch granularity from day to quarter. Dependencies render as lines.</p>
           <a href={`${base}/docs/gantt-view`} class="link-arrow">Read the docs <span class="icon">arrow_forward</span></a>
         </div>
-        <div class="view-mockup"><div class="mockup-frame"><MockupGantt /></div></div>
+        <div class="view-mockup view-stage">
+          <div class="mockup-frame"><Image src={ganttShot} alt="Gantt view of an Obsidian PM project" sizes="(max-width: 720px) 100vw, 56vw" /></div>
+          <div class="float-frag frag-wide"><Image src={ganttCloseup} alt="Dependency bars on the gantt timeline" sizes="(max-width: 720px) 0px, 36vw" /></div>
+        </div>
       </div>
 
       <div class="view-row">
@@ -100,7 +113,10 @@ const installSteps = [
           <p>Move work across statuses with a single drag. Quick-add at the bottom of any column. Filters shared with the table.</p>
           <a href={`${base}/docs/kanban-view`} class="link-arrow">Read the docs <span class="icon">arrow_forward</span></a>
         </div>
-        <div class="view-mockup"><div class="mockup-frame"><MockupKanban /></div></div>
+        <div class="view-mockup view-stage">
+          <div class="mockup-frame"><Image src={kanbanShot} alt="Kanban view of an Obsidian PM project" sizes="(max-width: 720px) 100vw, 56vw" /></div>
+          <div class="float-frag frag-modal"><Image src={taskModal} alt="Task detail with custom fields and time tracking" sizes="(max-width: 720px) 0px, 20vw" /></div>
+        </div>
       </div>
     </div>
   </section>
@@ -245,6 +261,9 @@ const installSteps = [
     position: relative;
     z-index: 2;
   }
+  /* Hero shows the live interactive gantt on desktop, a static screenshot
+     on mobile where drag interactions don't translate to touch. */
+  .hero-static { display: none; }
   /* When the mockup is interactive, give it a deeper Linear-style shadow */
   .mockup-frame.is-interactive {
     box-shadow:
@@ -276,9 +295,6 @@ const installSteps = [
   .pitch-lede {
     margin-top: 0;
     max-width: 28rem;
-  }
-  .pitch-dim {
-    color: var(--on-surface-muted);
   }
   .lede {
     margin-top: 1.5rem;
@@ -338,6 +354,52 @@ const installSteps = [
     max-width: 28rem;
     color: var(--on-surface-variant);
   }
+
+  /* Linear-style layering: the main view sits framed, a tighter UI fragment
+     floats over a corner and hangs into the gutter toward the copy. Depth
+     comes from stacked shadows + a gradient rim, not a hard border. */
+  .view-stage {
+    position: relative;
+    isolation: isolate;
+  }
+  .float-frag {
+    position: absolute;
+    z-index: 3;
+    bottom: -2.25rem;
+    left: -2.75rem;
+    border-radius: var(--radius-md);
+    overflow: hidden;
+    background: var(--surface-container-lowest);
+    box-shadow:
+      0 28px 64px -22px rgba(0, 0, 0, 0.6),
+      0 44px 96px -48px rgba(113, 112, 255, 0.32);
+  }
+  /* Reverse rows put the mockup on the left, so hang the fragment off the right */
+  .view-row.reverse .float-frag {
+    left: auto;
+    right: -2.75rem;
+  }
+  .float-frag img {
+    display: block;
+    width: 100%;
+    height: auto;
+    border-radius: inherit;
+  }
+  /* 1px gradient rim hugging the fragment's corners */
+  .float-frag::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    border-radius: inherit;
+    padding: 1px;
+    background: linear-gradient(180deg, rgba(255, 255, 255, 0.22) 0%, rgba(255, 255, 255, 0.06) 45%, rgba(255, 255, 255, 0.02) 100%);
+    -webkit-mask: linear-gradient(#000 0 0) content-box, linear-gradient(#000 0 0);
+    -webkit-mask-composite: xor;
+            mask-composite: exclude;
+    pointer-events: none;
+  }
+  .frag-wide { width: 60%; }
+  .frag-modal { width: 30%; bottom: -1.5rem; }
 
   /* Features */
   .features {
@@ -535,6 +597,9 @@ const installSteps = [
     }
     .view-row.reverse .view-copy { order: 1; }
     .view-row.reverse .view-mockup { order: 2; }
+    .float-frag { display: none; }
+    .hero-interactive { display: none; }
+    .hero-static { display: block; }
     h1 { font-size: 2.75rem; }
     h2 { font-size: 1.875rem; }
     .hero-sub { font-size: 1rem; }
