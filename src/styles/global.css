@@ -383,17 +383,19 @@ pre code { background: none; padding: 0; font-size: inherit; }
   pointer-events: none;
   z-index: 2;
 }
-/* Hero variant — slightly stronger bloom, still tight to the frame */
+/* Hero variant — slightly stronger bloom, still tight to the frame.
+   The lower radial spills past the sharp bottom edge so the panel
+   silhouettes against light instead of fading out. */
 .mockup-frame.is-hero {
   box-shadow:
     0 40px 100px -28px rgba(0, 0, 0, 0.75),
     0 80px 160px -56px rgba(113, 112, 255, 0.25);
 }
 .mockup-frame.is-hero::before {
-  inset: -4% -3% -8% -3%;
+  inset: -4% -3% -9% -3%;
   background:
     radial-gradient(70% 55% at 50% 15%, rgba(255, 255, 255, 0.2), transparent 68%),
-    radial-gradient(55% 45% at 50% 75%, rgba(177, 173, 255, 0.16), transparent 72%);
+    radial-gradient(60% 42% at 50% 100%, rgba(177, 173, 255, 0.18), transparent 72%);
   filter: blur(32px);
 }
 
