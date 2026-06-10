@@ -39,27 +39,29 @@ const installSteps = [
 
 <BaseLayout title="Obsidian Project Manager — Project management for Obsidian">
   <section class="hero">
-    <div class="bg-mesh" aria-hidden="true"><span class="mesh-blob"></span></div>
+    <div class="bg-glow" aria-hidden="true"></div>
     <div class="hero-grain bg-grain" aria-hidden="true"></div>
     <div class="container hero-inner">
       <h1 class="hero-title">
         Project management <span class="hero-em">in your Obsidian</span>
       </h1>
-      <p class="hero-sub">
-        Tables, Gantt, and kanban over tasks stored as plain markdown. No database. No lock-in. Just files you own in your Obsidian vault.
-      </p>
-      <div class="hero-ctas">
-        <a class="btn btn-primary" href="https://community.obsidian.md/plugins/project-manager" rel="noopener">
-          Install from Obsidian
-          <span class="icon">arrow_forward</span>
-        </a>
-        <a class="btn btn-secondary" href="https://github.com/stepankropachev/obsidian-pm" rel="noopener">
-          View on GitHub
-        </a>
+      <div class="hero-aside">
+        <p class="hero-sub">
+          Tables, Gantt, and kanban over tasks stored as plain markdown. No database. No lock-in. Just files you own in your Obsidian vault.
+        </p>
+        <div class="hero-ctas">
+          <a class="btn btn-primary" href="https://community.obsidian.md/plugins/project-manager" rel="noopener">
+            Install from Obsidian
+            <span class="icon">arrow_forward</span>
+          </a>
+          <a class="btn btn-secondary" href="https://github.com/stepankropachev/obsidian-pm" rel="noopener">
+            View on GitHub
+          </a>
+        </div>
       </div>
     </div>
-    <div class="container hero-mockup-wrap">
-      <div class="hero-mockup">
+    <div class="container-wide hero-stage">
+      <div class="hero-mockup fade-soft">
         <div class="mockup-frame is-hero is-interactive hero-interactive">
           <InteractiveGantt />
         </div>
@@ -81,42 +83,52 @@ const installSteps = [
     </div>
   </section>
 
-  <section class="three-view">
-    <div class="container">
-      <div class="view-row">
-        <div class="view-copy">
-          <h3>Table</h3>
+  <section class="views">
+    <div class="view-block">
+      <div class="container view-head">
+        <h2>Table</h2>
+        <div class="view-head-copy">
           <p>Filter, sort, and edit thousands of tasks at the speed of a spreadsheet. Inline-edit status, priority, due date, progress. Multi-select for bulk changes.</p>
           <a href={`${base}/docs/table-view`} class="link-arrow">Read the docs <span class="icon">arrow_forward</span></a>
         </div>
-        <div class="view-mockup view-stage">
-          <div class="mockup-frame"><Image src={tableShot} alt="Table view of an Obsidian PM project" sizes="(max-width: 720px) 100vw, 56vw" /></div>
-          <div class="float-frag frag-wide"><Image src={tableCloseup} alt="Editing tasks inline in the table" sizes="(max-width: 720px) 0px, 36vw" /></div>
-        </div>
       </div>
+      <div class="container-wide view-stage">
+        <div class="stage-main fade-deep">
+          <div class="mockup-frame"><Image src={tableShot} alt="Table view of an Obsidian PM project" sizes="(max-width: 720px) 100vw, 94vw" /></div>
+        </div>
+        <div class="float-frag frag-wide frag-left"><Image src={tableCloseup} alt="Editing tasks inline in the table" sizes="(max-width: 720px) 0px, 48vw" /></div>
+      </div>
+    </div>
 
-      <div class="view-row reverse">
-        <div class="view-copy">
-          <h3>Gantt</h3>
+    <div class="view-block">
+      <div class="container view-head">
+        <h2>Gantt</h2>
+        <div class="view-head-copy">
           <p>Plan timelines visually. Drag bars to reschedule, resize to change duration, switch granularity from day to quarter. Dependencies render as lines.</p>
           <a href={`${base}/docs/gantt-view`} class="link-arrow">Read the docs <span class="icon">arrow_forward</span></a>
         </div>
-        <div class="view-mockup view-stage">
-          <div class="mockup-frame"><Image src={ganttShot} alt="Gantt view of an Obsidian PM project" sizes="(max-width: 720px) 100vw, 56vw" /></div>
-          <div class="float-frag frag-wide"><Image src={ganttCloseup} alt="Dependency bars on the gantt timeline" sizes="(max-width: 720px) 0px, 36vw" /></div>
-        </div>
       </div>
+      <div class="container-wide view-stage">
+        <div class="stage-main fade-deep">
+          <div class="mockup-frame"><Image src={ganttShot} alt="Gantt view of an Obsidian PM project" sizes="(max-width: 720px) 100vw, 94vw" /></div>
+        </div>
+        <div class="float-frag frag-wide frag-right"><Image src={ganttCloseup} alt="Dependency bars on the gantt timeline" sizes="(max-width: 720px) 0px, 48vw" /></div>
+      </div>
+    </div>
 
-      <div class="view-row">
-        <div class="view-copy">
-          <h3>Kanban</h3>
+    <div class="view-block">
+      <div class="container view-head">
+        <h2>Kanban</h2>
+        <div class="view-head-copy">
           <p>Move work across statuses with a single drag. Quick-add at the bottom of any column. Filters shared with the table.</p>
           <a href={`${base}/docs/kanban-view`} class="link-arrow">Read the docs <span class="icon">arrow_forward</span></a>
         </div>
-        <div class="view-mockup view-stage">
-          <div class="mockup-frame"><Image src={kanbanShot} alt="Kanban view of an Obsidian PM project" sizes="(max-width: 720px) 100vw, 56vw" /></div>
-          <div class="float-frag frag-modal"><Image src={taskModal} alt="Task detail with custom fields and time tracking" sizes="(max-width: 720px) 0px, 20vw" /></div>
+      </div>
+      <div class="container-wide view-stage">
+        <div class="stage-main fade-deep">
+          <div class="mockup-frame"><Image src={kanbanShot} alt="Kanban view of an Obsidian PM project" sizes="(max-width: 720px) 100vw, 94vw" /></div>
         </div>
+        <div class="float-frag frag-modal frag-right"><Image src={taskModal} alt="Task detail with custom fields and time tracking" sizes="(max-width: 720px) 0px, 24vw" /></div>
       </div>
     </div>
   </section>
@@ -155,7 +167,7 @@ const installSteps = [
   </section>
 
   <section class="proof">
-    <div class="bg-mesh proof-mesh" aria-hidden="true"></div>
+    <div class="bg-glow" aria-hidden="true"></div>
     <div class="container container-narrow proof-inner">
       <h2>Free, open source, MIT licensed</h2>
       <p class="lede">Star the repo. File an issue. Send a pull request.</p>
@@ -187,13 +199,13 @@ const installSteps = [
 </BaseLayout>
 
 <style>
-  /* Hero — relies on natural content height. The mockup is tall enough to
-     extend below the fold on initial load (Linear pattern); scrolling
-     reveals the rest. No flex/auto-margin tricks. */
+  /* Hero — Linear pattern: split header (statement left, support right),
+     then the app emerges below at near full viewport width, its lower
+     edge fading into the page instead of ending in a box. */
   .hero {
     position: relative;
     background: var(--surface);
-    padding: 6rem 0 7rem;
+    padding: 7rem 0 3rem;
     overflow: hidden;
     isolation: isolate;
   }
@@ -206,76 +218,69 @@ const installSteps = [
   .hero-inner {
     position: relative;
     z-index: 2;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    text-align: center;
+    display: grid;
+    grid-template-columns: minmax(0, 1.2fr) minmax(0, 1fr);
+    gap: 2.5rem 5rem;
+    align-items: end;
   }
   .hero-title {
-    max-width: 50rem;
+    font-size: clamp(2.75rem, 4.6vw, 4.25rem);
+    max-width: 44rem;
+    text-wrap: balance;
   }
   .hero-em {
     color: #ffffff;
   }
   .hero-sub {
-    margin-top: 1.5rem;
-    max-width: 36rem;
-    font-size: 1.125rem;
-    line-height: 1.55;
+    max-width: 30rem;
+    font-size: 1.0625rem;
+    line-height: 1.6;
     color: var(--on-surface-variant);
     letter-spacing: -0.01em;
   }
   .hero-ctas {
-    margin-top: 2.25rem;
+    margin-top: 1.75rem;
     display: flex;
     gap: 0.75rem;
     flex-wrap: wrap;
-    justify-content: center;
   }
-  .hero-mockup-wrap {
+  .hero-stage {
     position: relative;
     z-index: 2;
-    margin-top: 4rem;
-    margin-bottom: 0;
-    padding-right: 0;
+    margin-top: 5rem;
   }
-  /* Soft Linear-style ambient halo under the interactive mockup */
-  .hero-mockup-wrap::before {
+  /* Faint pool of light directly under the app — the only glow in the hero */
+  .hero-stage::before {
     content: '';
     position: absolute;
     left: 50%;
-    bottom: -6rem;
+    top: -4rem;
     transform: translateX(-50%);
-    width: 64rem;
-    height: 20rem;
-    background:
-      radial-gradient(60% 50% at 50% 0%, rgba(113, 112, 255, 0.11), transparent 70%),
-      radial-gradient(40% 50% at 50% 30%, rgba(157, 122, 255, 0.065), transparent 70%);
-    filter: blur(40px);
+    width: min(85vw, 80rem);
+    height: 24rem;
+    background: radial-gradient(55% 60% at 50% 20%, rgba(177, 173, 255, 0.09), transparent 70%);
+    filter: blur(48px);
     pointer-events: none;
     z-index: 0;
   }
   .hero-mockup {
-    max-width: 64rem;
-    margin: 0 auto;
     position: relative;
     z-index: 2;
   }
   /* Hero shows the live interactive gantt on desktop, a static screenshot
      on mobile where drag interactions don't translate to touch. */
   .hero-static { display: none; }
-  /* When the mockup is interactive, give it a deeper Linear-style shadow */
   .mockup-frame.is-interactive {
     box-shadow:
       0 50px 120px -28px rgba(0, 0, 0, 0.85),
-      0 90px 180px -64px rgba(113, 112, 255, 0.3),
+      0 90px 180px -64px rgba(113, 112, 255, 0.22),
       0 0 0 1px rgba(255, 255, 255, 0.04);
   }
 
   /* Pitch */
   .pitch {
     background: var(--surface);
-    padding-top: 7rem;
+    padding-top: 6rem;
     padding-bottom: 6rem;
     position: relative;
   }
@@ -284,7 +289,6 @@ const installSteps = [
     grid-template-columns: minmax(0, 1.25fr) minmax(0, 1fr);
     gap: 1.5rem 5rem;
     align-items: end;
-    margin-top: 1.25rem;
   }
   .pitch-title {
     font-size: 3.25rem;
@@ -294,7 +298,7 @@ const installSteps = [
   }
   .pitch-lede {
     margin-top: 0;
-    max-width: 28rem;
+    max-width: 30rem;
   }
   .lede {
     margin-top: 1.5rem;
@@ -304,13 +308,16 @@ const installSteps = [
     letter-spacing: -0.005em;
   }
 
-  /* Three-view */
-  .three-view {
+  /* Views — each block is a full-width stage. Heading and copy share a
+     split header; the screenshot below takes the whole stage width and
+     dissolves into the dark page at the bottom, with a crisp closeup
+     fragment floating over the faded zone. */
+  .views {
     background: var(--surface);
-    padding: 5rem 0 7rem;
+    padding: 5rem 0 3rem;
     position: relative;
   }
-  .three-view::before {
+  .views::before {
     content: '';
     position: absolute;
     top: 0;
@@ -319,65 +326,45 @@ const installSteps = [
     height: 1px;
     background: linear-gradient(90deg, transparent, var(--hairline-strong) 50%, transparent);
   }
-  .section-head {
-    margin: 0 auto 4rem;
-    max-width: 36rem;
-    text-align: center;
+  .view-block {
+    padding: 3rem 0 4rem;
   }
-  .section-head h2 {
-    margin-top: 0.75rem;
-  }
-  .view-row {
+  .view-head {
     display: grid;
-    grid-template-columns: minmax(0, 1fr) minmax(0, 1.4fr);
-    gap: 4rem;
-    align-items: center;
-    margin-bottom: 6rem;
+    grid-template-columns: minmax(0, 1fr) minmax(0, 1.2fr);
+    gap: 1.5rem 6rem;
+    align-items: end;
+    margin-bottom: 3.5rem;
   }
-  .view-row.reverse {
-    grid-template-columns: minmax(0, 1.4fr) minmax(0, 1fr);
+  .view-head h2 {
+    font-size: 2.75rem;
+    letter-spacing: -0.034em;
   }
-  .view-row.reverse .view-copy { order: 2; }
-  .view-row.reverse .view-mockup { order: 1; }
-  .view-row:last-child { margin-bottom: 0; }
-  .view-copy h3 {
-    font-size: 1.75rem;
-    font-weight: 600;
-    letter-spacing: -0.028em;
-    color: var(--on-surface);
-    margin-bottom: 1rem;
-  }
-  .view-copy p {
-    font-size: 1rem;
+  .view-head-copy p {
+    font-size: 1.0625rem;
     line-height: 1.65;
-    margin-bottom: 1.5rem;
-    max-width: 28rem;
     color: var(--on-surface-variant);
+    max-width: 34rem;
+    margin-bottom: 1.25rem;
   }
-
-  /* Linear-style layering: the main view sits framed, a tighter UI fragment
-     floats over a corner and hangs into the gutter toward the copy. Depth
-     comes from stacked shadows + a gradient rim, not a hard border. */
   .view-stage {
     position: relative;
     isolation: isolate;
   }
+  .stage-main {
+    position: relative;
+    z-index: 1;
+  }
   .float-frag {
     position: absolute;
     z-index: 3;
-    bottom: -2.25rem;
-    left: -2.75rem;
-    border-radius: var(--radius-md);
+    bottom: 0;
+    border-radius: var(--radius-lg);
     overflow: hidden;
     background: var(--surface-container-lowest);
     box-shadow:
-      0 28px 64px -22px rgba(0, 0, 0, 0.6),
-      0 44px 96px -48px rgba(113, 112, 255, 0.32);
-  }
-  /* Reverse rows put the mockup on the left, so hang the fragment off the right */
-  .view-row.reverse .float-frag {
-    left: auto;
-    right: -2.75rem;
+      0 32px 80px -24px rgba(0, 0, 0, 0.75),
+      0 52px 120px -56px rgba(113, 112, 255, 0.28);
   }
   .float-frag img {
     display: block;
@@ -398,8 +385,16 @@ const installSteps = [
             mask-composite: exclude;
     pointer-events: none;
   }
-  .frag-wide { width: 60%; }
-  .frag-modal { width: 30%; bottom: -1.5rem; }
+  .frag-wide { width: 52%; }
+  .frag-modal { width: 24%; }
+  .frag-left { left: clamp(0.5rem, 4vw, 4rem); }
+  .frag-right { right: clamp(0.5rem, 4vw, 4rem); }
+
+  /* Section headers — left axis, like everything else on the page */
+  .section-head {
+    margin-bottom: 3rem;
+    max-width: 40rem;
+  }
 
   /* Features */
   .features {
@@ -470,8 +465,7 @@ const installSteps = [
     display: grid;
     grid-template-columns: repeat(2, 1fr);
     gap: 3rem 4rem;
-    max-width: 56rem;
-    margin: 0 auto;
+    max-width: 64rem;
   }
   .principle h4 {
     color: var(--on-surface);
@@ -507,16 +501,6 @@ const installSteps = [
     background: linear-gradient(90deg, transparent, var(--hairline-strong) 50%, transparent);
     z-index: 2;
   }
-  .proof-mesh::before {
-    width: 50rem;
-    height: 50rem;
-    top: -25rem;
-    right: auto;
-    left: 50%;
-    transform: translateX(-50%);
-    opacity: 0.18;
-  }
-  .proof-mesh::after { display: none; }
   .proof-inner {
     position: relative;
     z-index: 2;
@@ -587,25 +571,30 @@ const installSteps = [
 
   /* Responsive */
   @media (max-width: 960px) {
-    .hero { padding-top: 4rem; }
-    .hero-mockup { transform: none; }
-  }
-  @media (max-width: 720px) {
-    .view-row, .view-row.reverse {
+    .hero { padding-top: 4.5rem; }
+    .hero-inner {
       grid-template-columns: 1fr;
       gap: 1.5rem;
     }
-    .view-row.reverse .view-copy { order: 1; }
-    .view-row.reverse .view-mockup { order: 2; }
+    .hero-stage { margin-top: 3.5rem; }
+  }
+  @media (max-width: 720px) {
+    .view-head {
+      grid-template-columns: 1fr;
+      gap: 1rem;
+      margin-bottom: 2rem;
+    }
+    .view-head h2 { font-size: 2rem; }
+    .view-block { padding: 2.5rem 0; }
     .float-frag { display: none; }
     .hero-interactive { display: none; }
     .hero-static { display: block; }
-    h1 { font-size: 2.75rem; }
     h2 { font-size: 1.875rem; }
     .hero-sub { font-size: 1rem; }
     .pitch { padding-top: 5rem; padding-bottom: 5rem; }
     .pitch-grid { grid-template-columns: 1fr; gap: 1.25rem; }
     .pitch-title { font-size: 2.25rem; }
-    .features, .principles, .install, .proof, .three-view { padding: 4rem 0; }
+    .features, .principles, .install, .proof { padding: 4rem 0; }
+    .views { padding: 3rem 0 1rem; }
   }
 </style>
