@@ -285,6 +285,19 @@ const installSteps = [
     position: relative;
     z-index: 2;
   }
+  /* Dissolve the bottom of the dashboard into the page background —
+     Linear's hero fade — instead of cutting it with a hard edge */
+  .hero-mockup::after {
+    content: '';
+    position: absolute;
+    left: -3rem;
+    right: -3rem;
+    bottom: -1px;
+    height: 12rem;
+    background: linear-gradient(180deg, transparent 0%, var(--surface) 92%);
+    z-index: 3;
+    pointer-events: none;
+  }
   /* When the mockup is interactive, give it a deeper Linear-style shadow */
   .mockup-frame.is-interactive {
     box-shadow:
