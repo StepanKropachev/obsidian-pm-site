@@ -22,5 +22,8 @@
       "esbuild",
       "sharp"
     ]
+  },
+  "devDependencies": {
+    "sharp": "0.34.5"
   }
 }
