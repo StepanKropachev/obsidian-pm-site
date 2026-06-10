@@ -4,13 +4,13 @@
 :root {
   color-scheme: dark;
 
-  /* Surface stack — near-black with cool undertone */
-  --surface: #08090a;
-  --surface-container-low: #0f1011;
-  --surface-container: #141517;
-  --surface-container-high: #1a1b1e;
-  --surface-container-highest: #232428;
-  --surface-container-lowest: #16171a;
+  /* Surface stack — graphite with cool undertone */
+  --surface: #16181b;
+  --surface-container-low: #1c1e22;
+  --surface-container: #212327;
+  --surface-container-high: #27292e;
+  --surface-container-highest: #303339;
+  --surface-container-lowest: #232529;
 
   /* Text */
   --on-surface: #f7f8f8;
@@ -272,7 +272,7 @@ pre code { background: none; padding: 0; font-size: inherit; }
   background: radial-gradient(circle, var(--accent-violet) 0%, transparent 60%);
   top: -22rem;
   right: -16rem;
-  opacity: 0.32;
+  opacity: 0.24;
 }
 .bg-mesh::after {
   width: 50rem;
