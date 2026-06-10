@@ -63,7 +63,7 @@
 
   /* Layout */
   --content-max: 80rem;
-  --content-wide: 100rem;
+  --content-wide: 94rem;
   --content-narrow: 44rem;
 }
 
@@ -150,7 +150,7 @@ button {
 .container-wide {
   max-width: var(--content-wide);
   margin: 0 auto;
-  padding: 0 clamp(1rem, 3vw, 3rem);
+  padding: 0 clamp(1.5rem, 5vw, 5rem);
 }
 
 .section { padding: 7rem 0; }
