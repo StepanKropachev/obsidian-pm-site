@@ -38,13 +38,8 @@ const installSteps = [
     <div class="bg-mesh" aria-hidden="true"><span class="mesh-blob"></span></div>
     <div class="hero-grain bg-grain" aria-hidden="true"></div>
     <div class="container hero-inner">
-      <a class="hero-badge" href="https://github.com/stepankropachev/obsidian-pm" rel="noopener">
-        Free &amp; open source
-        <span class="icon">arrow_forward</span>
-      </a>
       <h1 class="hero-title">
-        Project management,<br />
-        <span class="hero-em">finally inside your vault</span>
+        Project management <span class="hero-em">in your Obsidian</span>
       </h1>
       <p class="hero-sub">
         Tables, Gantt, and kanban over tasks stored as plain markdown. No database. No lock-in. Just files you own in your Obsidian vault.
@@ -70,7 +65,6 @@ const installSteps = [
 
   <section class="pitch">
     <div class="container pitch-inner">
-      <p class="eyebrow">The premise</p>
       <div class="pitch-grid">
         <h2 class="pitch-title">Plain markdown. <span class="pitch-dim">Real project management.</span></h2>
         <p class="lede pitch-lede">
@@ -82,11 +76,6 @@ const installSteps = [
 
   <section class="three-view">
     <div class="container">
-      <header class="section-head">
-        <p class="eyebrow">The views</p>
-        <h2>Three ways to see the same data</h2>
-      </header>
-
       <div class="view-row">
         <div class="view-copy">
           <h3>Table</h3>
@@ -119,7 +108,6 @@ const installSteps = [
   <section class="features">
     <div class="container">
       <header class="section-head">
-        <p class="eyebrow">Features</p>
         <h2>Everything you need to run a project</h2>
       </header>
       <div class="feature-grid">
@@ -137,7 +125,6 @@ const installSteps = [
   <section class="principles">
     <div class="container">
       <header class="section-head">
-        <p class="eyebrow">Principles</p>
         <h2>Built on principles</h2>
       </header>
       <div class="principle-grid">
@@ -169,7 +156,6 @@ const installSteps = [
   <section class="install">
     <div class="container">
       <header class="section-head">
-        <p class="eyebrow">Install</p>
         <h2>Install in 30 seconds</h2>
       </header>
       <ol class="install-steps">
@@ -209,39 +195,11 @@ const installSteps = [
     align-items: center;
     text-align: center;
   }
-  .hero-badge {
-    display: inline-flex;
-    align-items: center;
-    gap: 0.4rem;
-    padding: 0.3rem 0.85rem;
-    border-radius: 999px;
-    background: var(--surface-container-low);
-    box-shadow: inset 0 0 0 1px var(--hairline-strong);
-    color: var(--on-surface-variant);
-    font-size: 0.8125rem;
-    font-weight: 500;
-    letter-spacing: -0.005em;
-    transition: color 140ms ease, box-shadow 200ms ease;
-  }
-  .hero-badge .icon {
-    font-size: 0.9375rem;
-    color: inherit;
-    transition: transform 160ms ease;
-  }
-  .hero-badge:hover {
-    color: var(--on-surface);
-    box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.16);
-  }
-  .hero-badge:hover .icon { transform: translateX(2px); }
   .hero-title {
-    margin-top: 1.5rem;
     max-width: 50rem;
   }
   .hero-em {
-    background: linear-gradient(180deg, #ffffff 0%, #b1adff 60%, #7170ff 100%);
-    -webkit-background-clip: text;
-    background-clip: text;
-    color: transparent;
+    color: #ffffff;
   }
   .hero-sub {
     margin-top: 1.5rem;
@@ -275,8 +233,8 @@ const installSteps = [
     width: 64rem;
     height: 20rem;
     background:
-      radial-gradient(60% 50% at 50% 0%, rgba(113, 112, 255, 0.14), transparent 70%),
-      radial-gradient(40% 50% at 50% 30%, rgba(157, 122, 255, 0.08), transparent 70%);
+      radial-gradient(60% 50% at 50% 0%, rgba(113, 112, 255, 0.11), transparent 70%),
+      radial-gradient(40% 50% at 50% 30%, rgba(157, 122, 255, 0.065), transparent 70%);
     filter: blur(40px);
     pointer-events: none;
     z-index: 0;
