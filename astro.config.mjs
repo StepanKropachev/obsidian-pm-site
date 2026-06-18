@@ -15,7 +15,7 @@ export default defineConfig({
       transformPlaceholders,
     ],
     shikiConfig: {
-      theme: 'github-light',
+      theme: 'github-dark-default',
       wrap: true,
     },
   },

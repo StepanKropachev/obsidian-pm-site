@@ -238,6 +238,9 @@ pre {
   line-height: 1.55;
   box-shadow: inset 0 0 0 1px var(--hairline);
 }
+/* Shiki injects an inline background-color on .astro-code; override it
+   so code blocks match the site's panel surface instead. */
+pre.astro-code { background: var(--surface-container-lowest) !important; }
 pre code { background: none; padding: 0; font-size: inherit; }
 
 /* Icon */
