@@ -23,10 +23,45 @@ const base = import.meta.env.BASE_URL.replace(/\/$/, '')
     <meta property="og:title" content={title} />
     <meta property="og:description" content={description} />
     <meta property="og:type" content="website" />
+    <script is:inline>
+      // Enable reveal styles before first paint so content only starts
+      // hidden when JS is present to bring it back. No JS → fully visible.
+      document.documentElement.classList.add('motion')
+    </script>
   </head>
   <body>
     <Nav />
     <slot />
     <Footer />
+
+    <script>
+      // Quiet scroll-reveal: flip .is-in as each element enters the
+      // viewport, then stop observing it. A [data-reveal-stagger] block
+      // cascades its children on a short timer instead of all at once.
+      // Reduced-motion or no IO → reveal everything immediately.
+      const reveal = (el: Element) => {
+        if (el.hasAttribute('data-reveal-stagger')) {
+          Array.from(el.children).forEach((child, i) => {
+            window.setTimeout(() => child.classList.add('is-in'), i * 65)
+          })
+        } else {
+          el.classList.add('is-in')
+        }
+      }
+      const targets = document.querySelectorAll('[data-reveal], [data-reveal-stagger]')
+      const wantsMotion = matchMedia('(prefers-reduced-motion: no-preference)').matches
+      if (wantsMotion && 'IntersectionObserver' in window) {
+        const io = new IntersectionObserver((entries) => {
+          for (const entry of entries) {
+            if (!entry.isIntersecting) continue
+            reveal(entry.target)
+            io.unobserve(entry.target)
+          }
+        }, { rootMargin: '0px 0px -12% 0px', threshold: 0.12 })
+        targets.forEach((el) => io.observe(el))
+      } else {
+        targets.forEach(reveal)
+      }
+    </script>
   </body>
 </html>

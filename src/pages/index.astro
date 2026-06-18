@@ -42,10 +42,10 @@ const installSteps = [
     <div class="bg-glow" aria-hidden="true"></div>
     <div class="hero-grain bg-grain" aria-hidden="true"></div>
     <div class="container-wide hero-inner">
-      <h1 class="hero-title">
+      <h1 class="hero-title" data-reveal>
         Project management <span class="hero-em">in your Obsidian</span>
       </h1>
-      <div class="hero-aside">
+      <div class="hero-aside" data-reveal style="--reveal-delay: 90ms">
         <p class="hero-sub">
           Tables, Gantt, and kanban over tasks stored as plain markdown. No database. No lock-in. Just files you own in your Obsidian vault.
         </p>
@@ -60,7 +60,7 @@ const installSteps = [
         </div>
       </div>
     </div>
-    <div class="container-wide hero-stage">
+    <div class="container-wide hero-stage" data-reveal style="--reveal-delay: 180ms">
       <div class="hero-mockup">
         <div class="mockup-frame is-hero is-interactive hero-interactive">
           <InteractiveGantt />
@@ -82,7 +82,7 @@ const installSteps = [
 
   <section class="views">
     <div class="view-block">
-      <div class="container-wide view-head">
+      <div class="container-wide view-head" data-reveal>
         <p class="eyebrow">Table</p>
         <h2>Work through tasks at spreadsheet speed</h2>
         <div class="view-head-copy">
@@ -90,7 +90,7 @@ const installSteps = [
           <a href={`${base}/docs/table-view`} class="link-arrow">Read the docs <span class="icon">arrow_forward</span></a>
         </div>
       </div>
-      <div class="container-wide view-stage">
+      <div class="container-wide view-stage" data-reveal style="--reveal-delay: 90ms">
         <div class="stage-main fade-deep">
           <div class="mockup-frame"><Image src={tableShot} alt="Table view of an Obsidian PM project" sizes="(max-width: 720px) 100vw, 94vw" /></div>
         </div>
@@ -99,7 +99,7 @@ const installSteps = [
     </div>
 
     <div class="view-block">
-      <div class="container-wide view-head">
+      <div class="container-wide view-head" data-reveal>
         <p class="eyebrow">Gantt</p>
         <h2>Plan the timeline by dragging it</h2>
         <div class="view-head-copy">
@@ -107,7 +107,7 @@ const installSteps = [
           <a href={`${base}/docs/gantt-view`} class="link-arrow">Read the docs <span class="icon">arrow_forward</span></a>
         </div>
       </div>
-      <div class="container-wide view-stage">
+      <div class="container-wide view-stage" data-reveal style="--reveal-delay: 90ms">
         <div class="stage-main fade-deep">
           <div class="mockup-frame"><Image src={ganttShot} alt="Gantt view of an Obsidian PM project" sizes="(max-width: 720px) 100vw, 94vw" /></div>
         </div>
@@ -116,7 +116,7 @@ const installSteps = [
     </div>
 
     <div class="view-block">
-      <div class="container-wide view-head">
+      <div class="container-wide view-head" data-reveal>
         <p class="eyebrow">Kanban</p>
         <h2>Move work across statuses in one drag</h2>
         <div class="view-head-copy">
@@ -124,7 +124,7 @@ const installSteps = [
           <a href={`${base}/docs/kanban-view`} class="link-arrow">Read the docs <span class="icon">arrow_forward</span></a>
         </div>
       </div>
-      <div class="container-wide view-stage">
+      <div class="container-wide view-stage" data-reveal style="--reveal-delay: 90ms">
         <div class="stage-main fade-deep">
           <div class="mockup-frame"><Image src={kanbanShot} alt="Kanban view of an Obsidian PM project" sizes="(max-width: 720px) 100vw, 94vw" /></div>
         </div>
@@ -135,10 +135,10 @@ const installSteps = [
 
   <section class="features">
     <div class="container-wide">
-      <header class="section-head">
+      <header class="section-head" data-reveal>
         <h2>Everything you need to run a project</h2>
       </header>
-      <div class="feature-grid">
+      <div class="feature-grid" data-reveal-stagger>
         {features.map((f) => (
           <div class="card feature-card">
             <span class="icon feature-icon">{f.icon}</span>
@@ -152,10 +152,10 @@ const installSteps = [
 
   <section class="principles">
     <div class="container-wide">
-      <header class="section-head">
+      <header class="section-head" data-reveal>
         <h2>Built on principles</h2>
       </header>
-      <div class="principle-grid">
+      <div class="principle-grid" data-reveal-stagger>
         {principles.map((p) => (
           <div class="principle">
             <h4>{p.title}</h4>
@@ -168,7 +168,7 @@ const installSteps = [
 
   <section class="proof">
     <div class="bg-glow" aria-hidden="true"></div>
-    <div class="container container-narrow proof-inner">
+    <div class="container container-narrow proof-inner" data-reveal>
       <h2>Free, open source, MIT licensed</h2>
       <p class="lede">Star the repo. File an issue. Send a pull request.</p>
       <div class="proof-ctas">
@@ -183,10 +183,10 @@ const installSteps = [
 
   <section class="install">
     <div class="container-wide">
-      <header class="section-head">
+      <header class="section-head" data-reveal>
         <h2>Install in 30 seconds</h2>
       </header>
-      <ol class="install-steps">
+      <ol class="install-steps" data-reveal-stagger>
         {installSteps.map((s) => (
           <li class="card">
             <span class="step-n">{s.n}</span>
