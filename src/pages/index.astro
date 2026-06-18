@@ -74,12 +74,9 @@ const installSteps = [
 
   <section class="pitch">
     <div class="container-wide pitch-inner">
-      <div class="pitch-grid">
-        <h2 class="pitch-title">Every task is an .md file you own</h2>
-        <p class="lede pitch-lede">
-          Every task is a markdown file with YAML frontmatter. Open them in any editor, version them in git, sync them how you like. No database. No proprietary format. Just files you own.
-        </p>
-      </div>
+      <h2 class="pitch-statement">
+        <span class="pitch-lead">Every task is a file you own.</span> <span class="pitch-tail">Plain markdown, versioned in git, synced however you like. No database, no lock-in — just files that outlive any app.</span>
+      </h2>
     </div>
   </section>
 
@@ -289,21 +286,39 @@ const installSteps = [
     padding-bottom: 6rem;
     position: relative;
   }
-  .pitch-grid {
-    display: grid;
-    grid-template-columns: minmax(0, 1.25fr) minmax(0, 1fr);
-    gap: 1.5rem 5rem;
-    align-items: end;
+  .pitch-statement {
+    max-width: 64rem;
+    margin: 0;
+    font-family: var(--font-display);
+    font-weight: 600;
+    font-size: 2.5rem;
+    line-height: 1.25;
+    letter-spacing: -0.02em;
+    color: var(--on-surface-variant);
+    text-wrap: pretty;
   }
-  .pitch-title {
-    font-size: 3.25rem;
-    line-height: 1.05;
-    letter-spacing: -0.038em;
-    text-wrap: balance;
+  .pitch-lead {
+    color: var(--on-surface);
   }
-  .pitch-lede {
-    margin-top: 0;
-    max-width: 30rem;
+  .pitch-word {
+    color: var(--pitch-dim, #44474d);
+  }
+  @media (prefers-reduced-motion: no-preference) {
+    @supports (animation-timeline: view()) {
+      .pitch-word {
+        animation: pitch-brighten linear both;
+        animation-timeline: view();
+      }
+    }
+  }
+  @keyframes pitch-brighten {
+    to { color: var(--on-surface-variant); }
+  }
+  @supports not (animation-timeline: view()) {
+    .pitch-word { color: var(--on-surface-variant); }
+  }
+  @media (prefers-reduced-motion: reduce) {
+    .pitch-word { color: var(--on-surface-variant); }
   }
   .lede {
     margin-top: 1.5rem;
@@ -626,9 +641,30 @@ const installSteps = [
     h2 { font-size: 1.875rem; }
     .hero-sub { font-size: 1rem; }
     .pitch { padding-top: 5rem; padding-bottom: 5rem; }
-    .pitch-grid { grid-template-columns: 1fr; gap: 1.25rem; }
-    .pitch-title { font-size: 2.25rem; }
+    .pitch-statement { font-size: 1.5rem; line-height: 1.35; }
     .features, .principles, .install, .proof { padding: 4rem 0; }
     .views { padding: 3rem 0 1rem; }
   }
 </style>
+
+<script>
+  // Split the muted tail into words and scrub each one's brighten across the
+  // section's scroll-into-view progress, Linear-style.
+  const tail = document.querySelector('.pitch-tail')
+  if (tail && tail.textContent) {
+    const words = tail.textContent.trim().split(/\s+/)
+    tail.textContent = ''
+    words.forEach((word, i) => {
+      const span = document.createElement('span')
+      span.className = 'pitch-word'
+      span.textContent = word
+      // Stagger each word across the cover phase so they light up in sequence.
+      const start = 12 + (i / words.length) * 58
+      const end = start + (58 / words.length) * 2.4
+      span.style.animationRangeStart = `cover ${start}%`
+      span.style.animationRangeEnd = `cover ${Math.min(end, 88)}%`
+      tail.appendChild(span)
+      if (i < words.length - 1) tail.appendChild(document.createTextNode(' '))
+    })
+  }
+</script>
