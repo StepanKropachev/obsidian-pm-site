@@ -71,4 +71,8 @@ export const docsByFilename = new Map(
   docsNav.flatMap((g) => g.items.map((it) => [it.filename, it] as const))
 )
 
+export const docsGroupBySlug = new Map(
+  docsNav.flatMap((g) => g.items.map((it) => [it.slug, g.title] as const))
+)
+
 export const allDocItems = docsNav.flatMap((g) => g.items)

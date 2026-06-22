@@ -3,13 +3,23 @@ import BaseLayout from './BaseLayout.astro'
 import DocsSidebar from '../components/DocsSidebar.astro'
 import { allDocItems } from '../lib/docs-nav'
 
+interface Heading {
+  depth: number
+  slug: string
+  text: string
+}
+
 interface Props {
   title: string
   slug: string
+  group?: string
+  headings?: Heading[]
 }
 
-const { title, slug } = Astro.props
+const { title, slug, group, headings = [] } = Astro.props
 const base = import.meta.env.BASE_URL.replace(/\/$/, '')
+
+const toc = headings.filter((h) => h.depth === 2 || h.depth === 3)
 
 const idx = allDocItems.findIndex((d) => d.slug === slug)
 const prev = idx > 0 ? allDocItems[idx - 1] : null
@@ -21,6 +31,15 @@ const next = idx >= 0 && idx < allDocItems.length - 1 ? allDocItems[idx + 1] : n
     <div class="docs-grid">
       <DocsSidebar currentSlug={slug} />
       <article class="doc-content">
+        <nav class="doc-breadcrumb" aria-label="Breadcrumb">
+          <a href={`${base}/docs`}>Docs</a>
+          {group && (
+            <Fragment>
+              <span class="crumb-sep">/</span>
+              <span class="crumb-current">{group}</span>
+            </Fragment>
+          )}
+        </nav>
         <slot />
         <nav class="doc-pager">
           {prev ? (
@@ -37,8 +56,52 @@ const next = idx >= 0 && idx < allDocItems.length - 1 ? allDocItems[idx + 1] : n
           ) : <span></span>}
         </nav>
       </article>
+      <aside class="doc-toc">
+        {toc.length > 0 && (
+          <div class="toc-inner">
+            <p class="toc-title">On this page</p>
+            <ul>
+              {toc.map((h) => (
+                <li class={h.depth === 3 ? 'toc-sub' : ''}>
+                  <a href={`#${h.slug}`}>{h.text}</a>
+                </li>
+              ))}
+            </ul>
+          </div>
+        )}
+      </aside>
     </div>
   </div>
+
+  <script>
+    // Scroll-spy: highlight the current section in the "On this page" list.
+    const tocLinks = Array.from(document.querySelectorAll<HTMLAnchorElement>('.doc-toc a'))
+    if (tocLinks.length) {
+      const byId = new Map<string, HTMLAnchorElement>()
+      for (const a of tocLinks) byId.set((a.getAttribute('href') || '').slice(1), a)
+      const heads = Array.from(
+        document.querySelectorAll<HTMLElement>('.doc-content h2[id], .doc-content h3[id]')
+      ).filter((h) => byId.has(h.id))
+
+      let active: string | null = null
+      const setActive = (id: string | null) => {
+        if (id === active) return
+        if (active) byId.get(active)?.classList.remove('is-active')
+        active = id
+        if (id) byId.get(id)?.classList.add('is-active')
+      }
+      const onScroll = () => {
+        let current = heads[0]?.id ?? null
+        for (const h of heads) {
+          if (h.getBoundingClientRect().top <= 120) current = h.id
+          else break
+        }
+        setActive(current)
+      }
+      onScroll()
+      window.addEventListener('scroll', onScroll, { passive: true })
+    }
+  </script>
 </BaseLayout>
 
 <style is:global>
@@ -46,6 +109,30 @@ const next = idx >= 0 && idx < allDocItems.length - 1 ? allDocItems[idx + 1] : n
     color: var(--on-surface-variant);
     line-height: 1.7;
     max-width: 44rem;
+    min-width: 0;
+  }
+  .doc-breadcrumb {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    margin-bottom: 1.5rem;
+    font-size: 0.8125rem;
+    color: var(--on-surface-muted);
+  }
+  .doc-breadcrumb a {
+    color: var(--on-surface-variant);
+  }
+  .doc-breadcrumb a:hover {
+    color: var(--on-surface);
+  }
+  .doc-breadcrumb .crumb-sep {
+    color: var(--on-surface-muted);
+  }
+  .doc-breadcrumb .crumb-current {
+    color: var(--on-surface);
+  }
+  .doc-content :is(h1, h2, h3, h4)[id] {
+    scroll-margin-top: 6rem;
   }
   .doc-content h1 {
     font-size: 2.5rem;
@@ -123,6 +210,32 @@ const next = idx >= 0 && idx < allDocItems.length - 1 ? allDocItems[idx + 1] : n
   }
   .doc-placeholder-desc {
     font-size: 0.875rem;
+    color: var(--on-surface-variant);
+    font-style: italic;
+  }
+
+  .doc-content img,
+  .doc-content video {
+    display: block;
+    max-width: 100%;
+    max-height: 32rem;
+    width: auto;
+    height: auto;
+    margin: 1.5rem auto;
+    border-radius: var(--radius-md);
+    background: var(--surface-container-lowest);
+    box-shadow: var(--shadow-ambient);
+  }
+  .doc-content figure {
+    margin: 1.5rem 0;
+  }
+  .doc-content figure img,
+  .doc-content figure video {
+    margin: 0;
+  }
+  .doc-content figcaption {
+    margin-top: 0.6rem;
+    font-size: 0.8125rem;
     color: var(--on-surface-variant);
     font-style: italic;
   }
@@ -219,14 +332,66 @@ const next = idx >= 0 && idx < allDocItems.length - 1 ? allDocItems[idx + 1] : n
 <style>
   .docs-shell {
     padding: 3rem 1.5rem 4rem;
-    max-width: 80rem;
+    max-width: 84rem;
     margin: 0 auto;
   }
   .docs-grid {
     display: grid;
-    grid-template-columns: 16rem 1fr;
+    grid-template-columns: 15rem minmax(0, 1fr) 13rem;
     gap: 3rem;
     align-items: start;
+  }
+  .doc-toc {
+    position: sticky;
+    top: 5rem;
+    max-height: calc(100vh - 6rem);
+    overflow-y: auto;
+    align-self: start;
+  }
+  .toc-title {
+    margin: 0 0 0.75rem;
+    font-size: 0.6875rem;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    color: var(--on-surface-variant);
+  }
+  .doc-toc ul {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    display: flex;
+    flex-direction: column;
+    gap: 0.1rem;
+  }
+  .doc-toc li.toc-sub a {
+    padding-left: 1.5rem;
+    font-size: 0.75rem;
+  }
+  .doc-toc a {
+    display: block;
+    padding: 0.3rem 0.6rem;
+    font-size: 0.8125rem;
+    line-height: 1.4;
+    color: var(--on-surface-muted);
+    border-left: 2px solid transparent;
+    border-radius: 0 var(--radius-sm) var(--radius-sm) 0;
+    transition: color 0.12s ease, border-color 0.12s ease;
+  }
+  .doc-toc a:hover {
+    color: var(--on-surface);
+  }
+  .doc-toc a.is-active {
+    color: var(--on-surface);
+    border-left-color: var(--primary);
+  }
+  @media (max-width: 1180px) {
+    .docs-grid {
+      grid-template-columns: 15rem minmax(0, 1fr);
+    }
+    .doc-toc {
+      display: none;
+    }
   }
   @media (max-width: 960px) {
     .docs-grid {
