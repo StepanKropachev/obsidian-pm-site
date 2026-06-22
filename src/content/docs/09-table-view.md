@@ -2,6 +2,8 @@
 
 The table is where most of the work happens. Filter, sort, edit inline, multi-select for bulk changes, and open the task modal in a click.
 
+![The table view — filter bar, saved views, and one row per task with inline-editable status, priority, due date, and progress](../../assets/screenshots/table.png)
+
 > [Video, 30–60s: empty project → add three tasks → inline edit → add filter → sort → open modal → add custom field → save view.]
 
 ## Anatomy
@@ -21,6 +23,8 @@ Click **+ add task** below the table, or run **Create new task** from the comman
 For status, priority, due date, progress, or title tweaks on tasks that already exist, [inline editing](#inline-editing) is faster than reopening the modal.
 
 ## Inline editing
+
+![Close-up of table rows with status and priority badges, assignees, due dates, and progress bars](../../assets/screenshots/table-closeup.png)
 
 Click any editable cell to edit in place:
 

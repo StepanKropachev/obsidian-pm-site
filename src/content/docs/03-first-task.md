@@ -8,6 +8,8 @@ A task is a single unit of work. It lives in its own markdown file inside the pr
 
 ### Task modal
 
+![The task modal — title, description, and the status / priority / type / dates / assignees / tags fields, with save and archive actions](../../assets/screenshots/task-modal.png)
+
 1. Click **+ new task** from the toolbar, or run **Create new task** from the command palette.
 2. Fill in any fields you need:
    - **Title** (required).
@@ -21,6 +23,8 @@ A task is a single unit of work. It lives in its own markdown file inside the pr
 3. Save: click **Save**, or press **Shift+Enter** anywhere in the modal.
 
 ### Inline edit
+
+![Adding a task inline in the table — the new-task row at the bottom of the list](../../assets/screenshots/inline-add-task.png)
 
 In the table view, click any editable cell (status, priority, dates, title) to edit in place. Press **Enter** to commit, **Escape** to cancel.
 

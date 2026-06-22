@@ -2,7 +2,7 @@
 
 Log hours against tasks. Set an estimate, compare actual vs. planned, and see totals in the table view's **time** column.
 
-> [Screenshot: task modal with the time tracking panel open, showing an estimate, a progress bar, and a few log entries.]
+![The time tracking panel — an estimate, the logged-vs-estimate bar, and a log entry with date, hours, and note](../../assets/screenshots/time-tracking.png)
 
 ## The time tracking panel
 
@@ -50,6 +50,8 @@ Adding or editing entries by hand is fine — the plugin re-reads on file change
 ## Totals in the table view
 
 The **time** column in the table view shows the sum of `hours` across the task's `timeLogs`. It's display-only; not currently sortable.
+
+![A table row with the time column showing logged-over-estimate hours](../../assets/screenshots/time-tracking2.png)
 
 ## Where to go next
 

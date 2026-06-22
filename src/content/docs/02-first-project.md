@@ -10,7 +10,11 @@ Click the **Project manager** ribbon icon, or run **Open projects pane** from th
 
 If you have no projects yet, the list is empty with a single **+ new project** button.
 
+![The empty project list — "No projects yet" with a + new project button](../../assets/screenshots/project-list-empty.png)
+
 ## Create a project
+
+![The new-project modal — title, color, description, team members, and custom fields](../../assets/screenshots/create-project.png)
 
 1. Click **+ new project** (or run **Create new project** from the command palette).
 2. In the modal, enter a **title**.

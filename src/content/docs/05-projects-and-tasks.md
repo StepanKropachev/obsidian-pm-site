@@ -4,7 +4,7 @@ The plugin's data model is small: a project is a container, a task is a unit of 
 
 If you've already followed the onboarding ([Create your first project](02-first-project.md), [Create your first task](03-first-task.md)), this is the *why* behind what you saw on disk.
 
-> [Screenshot: side-by-side — a project file open in the editor, alongside two task files in its tasks folder.]
+![A project file open in the editor alongside a task file, both showing their YAML properties](../../assets/screenshots/project-and-task-files.png)
 
 ## What a project is
 

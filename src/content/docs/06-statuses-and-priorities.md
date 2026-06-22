@@ -2,7 +2,7 @@
 
 Statuses are fully customizable per vault. Priorities are a fixed set. Both are used everywhere — filters, sort order, kanban columns, the gantt left panel.
 
-> [Screenshot: settings tab showing the status list with drag handles, color swatches, and the "done" toggle.]
+![The settings tab with the status list — color swatches and per-status controls](../../assets/screenshots/status-settings.png)
 
 ## Default statuses
 

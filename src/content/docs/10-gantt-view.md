@@ -2,6 +2,8 @@
 
 The gantt view is for *planning*. See start and due dates as bars on a timeline. Drag to reschedule. Watch dependencies as arrows between bars. Switch zoom levels from day to quarter.
 
+![The gantt view — a task list on the left, a timeline of bars on the right, with day / week / month / quarter zoom controls](../../assets/screenshots/gantt.png)
+
 > [Video, 30–60s: open populated gantt → drag a bar to move → resize a bar → switch day / week / month / quarter → show a dependency line → click a bar to open modal.]
 
 ## Anatomy
@@ -55,6 +57,8 @@ Tasks with `type: milestone` render as diamonds on a single date (the due date).
 Create a milestone via the task modal — set type to **milestone**.
 
 ## Dependency arrows
+
+![Close-up of the timeline with task bars, indented subtasks, and the draggable left panel](../../assets/screenshots/gantt-closeup.png)
 
 If a task depends on another (set via the task modal's dependencies field), the gantt draws an arrow from the predecessor to the dependent. Arrows skip archived predecessors and are hidden when either end of the link isn't visible in the current viewport.
 

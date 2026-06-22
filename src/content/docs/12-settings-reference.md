@@ -2,7 +2,7 @@
 
 Every setting in **Settings** → **Project Manager**, in the order it appears. The defaults below match a fresh install.
 
-> [Screenshot strip: each settings section in order — general, due date notifications, scheduling, team members, statuses.]
+![The Project Manager settings tab — general, default view, gantt granularity, board, and save options](../../assets/screenshots/settings-sections.png)
 
 ## General
 
