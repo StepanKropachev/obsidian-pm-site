@@ -2,8 +2,6 @@
 
 A saved view is a named bundle of *filter + sort + view mode*. Switch between them in one click. Each project has its own.
 
-> [GIF: set filters and sort → save view → name it → switch between two saved views.]
-
 ## What gets saved
 
 A saved view captures three things:

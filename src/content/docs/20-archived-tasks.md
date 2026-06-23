@@ -2,8 +2,6 @@
 
 Archiving moves a task out of your active views without deleting it. Use it for finished work you want out of the way but not gone — or for tasks you've cancelled and might want to revisit later.
 
-> [GIF: right-click task → archive → row disappears → toggle "show archived" → it reappears greyed out.]
-
 ## Archive vs. delete
 
 | | Archive | Delete |

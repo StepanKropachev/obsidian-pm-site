@@ -2,8 +2,6 @@
 
 Select multiple tasks in the table view to act on all of them at once.
 
-> [GIF: shift-click to select range → bulk action bar appears → set status → all rows update.]
-
 ## Selecting tasks
 
 In the table view:

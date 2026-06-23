@@ -2,8 +2,6 @@
 
 Some work repeats on a schedule — weekly reviews, monthly invoices, quarterly planning. Project Manager lets you mark a task as **recurring** so it's visible at a glance as a repeating commitment, with an interval and an optional end date.
 
-> [GIF: open task modal → click "+ set recurrence" → choose every 2 weeks → save → "R" badge appears on the task in table/kanban.]
-
 ## Setting a recurrence
 
 1. Open a task (click its row, or right-click → **Edit task**).

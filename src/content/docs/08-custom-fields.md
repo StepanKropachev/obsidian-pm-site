@@ -4,8 +4,6 @@ Custom fields let you attach typed extra data to tasks: contract value, repo URL
 
 Custom fields are defined **per project**. A field added to "Website Redesign" doesn't appear on tasks in other projects.
 
-> [GIF: project settings → add custom field → choose type → field appears on task modal and as a table column.]
-
 ## The field types
 
 | Type | Stores | Editor in the modal |

@@ -2,8 +2,6 @@
 
 Two ways to link tasks. **Subtasks** are about breakdown — a parent contains children. **Dependencies** are about order — one task is blocked by another.
 
-> [GIF: open task modal → subtasks panel → add a subtask → save → table shows the parent expanded with a child row.]
-
 ## Subtasks
 
 Open any task and use the **subtasks** panel in the modal to add children. Nesting can go any depth — subtasks of subtasks of subtasks. There's no "subtask" type internally; a subtask is just a task whose `parentId` points at another task.
