@@ -112,8 +112,13 @@ const next = idx >= 0 && idx < allDocItems.length - 1 ? allDocItems[idx + 1] : n
       overlay.setAttribute('role', 'dialog')
       overlay.setAttribute('aria-modal', 'true')
       overlay.hidden = true
+      const closeBtn = document.createElement('button')
+      closeBtn.type = 'button'
+      closeBtn.className = 'doc-lightbox-close'
+      closeBtn.setAttribute('aria-label', 'Close')
+      closeBtn.innerHTML = '<span class="icon">close</span>'
       const full = document.createElement('img')
-      overlay.appendChild(full)
+      overlay.append(closeBtn, full)
       document.body.appendChild(overlay)
 
       const open = (src: string, alt: string) => {
@@ -281,6 +286,33 @@ const next = idx >= 0 && idx < allDocItems.length - 1 ? allDocItems[idx + 1] : n
   }
   .doc-lightbox[hidden] {
     display: none;
+  }
+  .doc-lightbox-close {
+    position: absolute;
+    top: 1.25rem;
+    right: 1.25rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 2.5rem;
+    height: 2.5rem;
+    padding: 0;
+    cursor: pointer;
+    color: var(--on-surface);
+    background: color-mix(in srgb, var(--surface-container-lowest) 85%, transparent);
+    backdrop-filter: blur(20px);
+    -webkit-backdrop-filter: blur(20px);
+    border: none;
+    border-radius: var(--radius-md);
+    box-shadow: var(--shadow-ambient);
+    transition: background 0.12s ease;
+  }
+  .doc-lightbox-close:hover {
+    background: var(--surface-container-lowest);
+  }
+  .doc-lightbox-close .icon {
+    color: inherit;
+    font-size: 1.375rem;
   }
   .doc-lightbox img {
     max-width: min(100%, 80rem);
