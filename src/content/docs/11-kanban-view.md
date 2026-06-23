@@ -2,9 +2,7 @@
 
 The kanban view is for *moving work*. One column per status, one card per task. Drag a card across to change its status.
 
-![The kanban board — one column per status with task cards, a shared filter bar above, and per-column quick-add](../../assets/screenshots/kanban.png)
-
-> [Video, 30–60s: open kanban → drag a card from todo to in-progress → quick-add at the bottom of a column → toggle "show subtasks" → drag a subtask card.]
+> [Video: A kanban walkthrough — dragging a card from to-do to in-progress, quick-adding at the bottom of a column, toggling show subtasks, and dragging a subtask card | kanban-walkthrough.mp4]
 
 ## Anatomy
 

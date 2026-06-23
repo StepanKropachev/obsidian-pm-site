@@ -2,7 +2,7 @@
 
 A project is a container for tasks, custom fields, saved views, and the team members assigned to that work. Each project is a single markdown file in your vault.
 
-> [GIF: ribbon icon → project list → "+ new project" → modal → file appears in the file explorer.]
+> [Video: Creating a new project — ribbon icon, project list, the new-project modal, then the file appearing in the explorer | new-project.mp4]
 
 ## Open the project list
 

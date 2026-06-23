@@ -2,7 +2,7 @@
 
 A task is a single unit of work. It lives in its own markdown file inside the project's `_tasks/` folder.
 
-> [GIF: quick-add bar → type title → enter → row appears → click to open modal.]
+> [Video: Quick-adding a task — type a title in the quick-add bar, press enter, the row appears, then click to open the task modal | quick-add-task.mp4]
 
 ## How to add a task
 

@@ -2,9 +2,7 @@
 
 The table is where most of the work happens. Filter, sort, edit inline, multi-select for bulk changes, and open the task modal in a click.
 
-![The table view — filter bar, saved views, and one row per task with inline-editable status, priority, due date, and progress](../../assets/screenshots/table.png)
-
-> [Video, 30–60s: empty project → add three tasks → inline edit → add filter → sort → open modal → add custom field → save view.]
+> [Video: A table walkthrough — adding tasks, inline editing, filtering, sorting, opening the modal, adding a custom field, and saving a view | table-walkthrough.mp4]
 
 ## Anatomy
 

@@ -2,7 +2,7 @@
 
 You don't have to start fresh. If your vault already has notes that represent work — meeting actions, follow-ups, drafts, project briefs — you can pull them into Project Manager as tasks (or convert a note into a project) without losing any content.
 
-> [GIF: command palette → import notes as tasks → select files → import options → tasks appear in the project.]
+> [Video: Importing notes as tasks — running the command, selecting files, choosing import options, then the tasks appearing in the project | import-notes.mp4]
 
 ## Import notes as tasks
 

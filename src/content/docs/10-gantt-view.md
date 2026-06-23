@@ -2,9 +2,7 @@
 
 The gantt view is for *planning*. See start and due dates as bars on a timeline. Drag to reschedule. Watch dependencies as arrows between bars. Switch zoom levels from day to quarter.
 
-![The gantt view — a task list on the left, a timeline of bars on the right, with day / week / month / quarter zoom controls](../../assets/screenshots/gantt.png)
-
-> [Video, 30–60s: open populated gantt → drag a bar to move → resize a bar → switch day / week / month / quarter → show a dependency line → click a bar to open modal.]
+> [Video: A gantt walkthrough — dragging a bar to reschedule, resizing it, switching day / week / month / quarter zoom, a dependency arrow, and opening a task from a bar | gantt-walkthrough.mp4]
 
 ## Anatomy
 
