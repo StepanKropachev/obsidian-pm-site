@@ -102,6 +102,42 @@ const next = idx >= 0 && idx < allDocItems.length - 1 ? allDocItems[idx + 1] : n
       window.addEventListener('scroll', onScroll, { passive: true })
     }
   </script>
+
+  <script>
+    // Lightbox: click a doc image to view it full-size; Esc or click to close.
+    const imgs = Array.from(document.querySelectorAll<HTMLImageElement>('.doc-content img'))
+    if (imgs.length) {
+      const overlay = document.createElement('div')
+      overlay.className = 'doc-lightbox'
+      overlay.setAttribute('role', 'dialog')
+      overlay.setAttribute('aria-modal', 'true')
+      overlay.hidden = true
+      const full = document.createElement('img')
+      overlay.appendChild(full)
+      document.body.appendChild(overlay)
+
+      const open = (src: string, alt: string) => {
+        full.src = src
+        full.alt = alt
+        overlay.hidden = false
+        document.body.classList.add('doc-lightbox-open')
+      }
+      const close = () => {
+        overlay.hidden = true
+        document.body.classList.remove('doc-lightbox-open')
+        full.removeAttribute('src')
+      }
+
+      for (const img of imgs) {
+        img.classList.add('is-zoomable')
+        img.addEventListener('click', () => open(img.currentSrc || img.src, img.alt))
+      }
+      overlay.addEventListener('click', close)
+      document.addEventListener('keydown', (e) => {
+        if (e.key === 'Escape' && !overlay.hidden) close()
+      })
+    }
+  </script>
 </BaseLayout>
 
 <style is:global>
@@ -226,6 +262,40 @@ const next = idx >= 0 && idx < allDocItems.length - 1 ? allDocItems[idx + 1] : n
     background: var(--surface-container-lowest);
     box-shadow: var(--shadow-ambient);
   }
+  .doc-content img.is-zoomable {
+    cursor: zoom-in;
+  }
+
+  .doc-lightbox {
+    position: fixed;
+    inset: 0;
+    z-index: 100;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 2rem;
+    cursor: zoom-out;
+    background: color-mix(in srgb, var(--on-surface) 60%, transparent);
+    backdrop-filter: blur(8px);
+    -webkit-backdrop-filter: blur(8px);
+  }
+  .doc-lightbox[hidden] {
+    display: none;
+  }
+  .doc-lightbox img {
+    max-width: min(100%, 80rem);
+    max-height: 100%;
+    width: auto;
+    height: auto;
+    margin: 0;
+    border-radius: var(--radius-md);
+    background: var(--surface-container-lowest);
+    box-shadow: var(--shadow-ambient);
+  }
+  body.doc-lightbox-open {
+    overflow: hidden;
+  }
+
   .doc-content figure {
     margin: 1.5rem 0;
   }
