@@ -12,7 +12,7 @@ export default defineConfig({
   markdown: {
     remarkPlugins: [
       [rewriteDocsLinks, { base }],
-      transformPlaceholders,
+      [transformPlaceholders, { base }],
     ],
     shikiConfig: {
       theme: 'github-dark-default',

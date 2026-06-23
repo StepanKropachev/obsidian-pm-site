@@ -13,7 +13,8 @@ export function rewriteDocsLinks({ base = '' } = {}) {
   }
 }
 
-export function transformPlaceholders() {
+export function transformPlaceholders({ base = '' } = {}) {
+  const prefix = base.replace(/\/$/, '')
   return (tree) => {
     visit(tree, 'blockquote', (node, index, parent) => {
       if (!parent || index === undefined) return
@@ -27,6 +28,21 @@ export function transformPlaceholders() {
       const detail = (m[2] || '').replace(/^[:,]\s*/, '').trim()
       const labelMap = { screenshot: 'Screenshot', video: 'Video', gif: 'GIF', diagram: 'Diagram' }
       const label = labelMap[kind] || m[1]
+
+      // If the detail ends in a media filename (optionally "alt | file.ext"),
+      // render the real asset from /demos instead of a placeholder.
+      const fileMatch = detail.match(/^(?:(.*?)\s*\|\s*)?([\w./-]+\.(?:mp4|webm|gif|png|jpe?g|webp))$/i)
+      if (fileMatch) {
+        const alt = (fileMatch[1] || label).trim()
+        const file = fileMatch[2]
+        const src = /^https?:|^\//.test(file) ? file : `${prefix}/demos/${file}`
+        const isVideo = /\.(mp4|webm)$/i.test(file)
+        const media = isVideo
+          ? `<video src="${escapeHtml(src)}" autoplay muted loop playsinline aria-label="${escapeHtml(alt)}"></video>`
+          : `<img src="${escapeHtml(src)}" alt="${escapeHtml(alt)}" loading="lazy" />`
+        parent.children.splice(index, 1, { type: 'html', value: media })
+        return
+      }
 
       const html = `<div class="doc-placeholder" data-kind="${kind}"><span class="doc-placeholder-label">${escapeHtml(label)}</span><span class="doc-placeholder-desc">${escapeHtml(detail || 'Visual asset placeholder.')}</span></div>`
       parent.children.splice(index, 1, { type: 'html', value: html })
