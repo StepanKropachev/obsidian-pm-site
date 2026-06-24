@@ -190,6 +190,10 @@ button {
   transition: transform 120ms ease, background 140ms ease, color 140ms ease, box-shadow 200ms ease;
 }
 
+.btn .icon {
+  color: currentColor;
+}
+
 .btn-primary {
   background: linear-gradient(180deg, var(--primary) 0%, var(--primary-dim) 100%);
   color: var(--on-primary);
