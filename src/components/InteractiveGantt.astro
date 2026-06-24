@@ -28,17 +28,17 @@ dayCells.forEach((c, i) => {
     </div>
     <div class="ig-topbar-right">
       <div class="ig-view-group">
-        <button class="ig-view-btn" title="Table"><span class="icon">view_list</span></button>
-        <button class="ig-view-btn is-active" title="Gantt"><span class="icon">view_timeline</span></button>
-        <button class="ig-view-btn" title="Kanban"><span class="icon">view_kanban</span></button>
+        <button class="ig-view-btn" title="Table" data-gc-event="demo-view-table"><span class="icon">view_list</span></button>
+        <button class="ig-view-btn is-active" title="Gantt" data-gc-event="demo-view-gantt"><span class="icon">view_timeline</span></button>
+        <button class="ig-view-btn" title="Kanban" data-gc-event="demo-view-kanban"><span class="icon">view_kanban</span></button>
       </div>
-      <button class="ig-pill ig-pill-primary" data-action="add">
+      <button class="ig-pill ig-pill-primary" data-action="add" data-gc-event="demo-add-task">
         <span class="icon">add</span> add task
       </button>
-      <button class="ig-pill" data-action="add-milestone">
+      <button class="ig-pill" data-action="add-milestone" data-gc-event="demo-add-milestone">
         <span class="icon">add</span> milestone
       </button>
-      <button class="ig-icon-btn" title="Settings"><span class="icon">settings</span></button>
+      <button class="ig-icon-btn" title="Settings" data-gc-event="demo-settings"><span class="icon">settings</span></button>
     </div>
   </div>
 
@@ -49,11 +49,11 @@ dayCells.forEach((c, i) => {
       <span class="ig-search-placeholder">Search tasks...</span>
     </div>
     <div class="ig-filter-right">
-      <button class="ig-chip is-active">All</button>
-      <button class="ig-chip">obsidian cleanup</button>
-      <button class="ig-chip">user request</button>
-      <button class="ig-chip">landing page</button>
-      <button class="ig-pill ig-pill-ghost">
+      <button class="ig-chip is-active" data-gc-event="demo-filter-all">All</button>
+      <button class="ig-chip" data-gc-event="demo-filter-cleanup">obsidian cleanup</button>
+      <button class="ig-chip" data-gc-event="demo-filter-user-request">user request</button>
+      <button class="ig-chip" data-gc-event="demo-filter-landing">landing page</button>
+      <button class="ig-pill ig-pill-ghost" data-gc-event="demo-filter">
         <span class="icon">filter_list</span> Filter
       </button>
     </div>
@@ -62,15 +62,15 @@ dayCells.forEach((c, i) => {
   <!-- Granularity bar -->
   <div class="ig-zoombar">
     <div class="ig-zoom-group">
-      <button class="ig-zoom is-active">Day</button>
-      <button class="ig-zoom">Week</button>
-      <button class="ig-zoom">Month</button>
-      <button class="ig-zoom">Quarter</button>
+      <button class="ig-zoom is-active" data-gc-event="demo-zoom-day">Day</button>
+      <button class="ig-zoom" data-gc-event="demo-zoom-week">Week</button>
+      <button class="ig-zoom" data-gc-event="demo-zoom-month">Month</button>
+      <button class="ig-zoom" data-gc-event="demo-zoom-quarter">Quarter</button>
     </div>
     <div class="ig-zoom-right">
-      <button class="ig-textbtn" data-action="reset">Today</button>
-      <button class="ig-textbtn">Expand all</button>
-      <button class="ig-textbtn">Collapse all</button>
+      <button class="ig-textbtn" data-action="reset" data-gc-event="demo-today">Today</button>
+      <button class="ig-textbtn" data-gc-event="demo-expand-all">Expand all</button>
+      <button class="ig-textbtn" data-gc-event="demo-collapse-all">Collapse all</button>
     </div>
   </div>
 
@@ -143,6 +143,22 @@ dayCells.forEach((c, i) => {
     'milestone': 'Milestone',
   }
   const STATUS_CYCLE: StatusId[] = ['todo', 'in-progress', 'review', 'blocked', 'done']
+
+  // Analytics: report demo interactions to GoatCounter (prod only — the global
+  // is undefined otherwise). Static chrome buttons are tracked declaratively via
+  // data-gc-event; these calls cover the dynamic interactions (status, drag,
+  // edit, delete) that aren't plain button clicks. demoEngage fires once so we
+  // can measure how many visitors touch the demo at all.
+  function gcCount(name: string) {
+    ;(window as unknown as { goatcounter?: { count: (o: object) => void } }).goatcounter
+      ?.count({ path: `event-${name}`, title: name, event: true })
+  }
+  let demoEngaged = false
+  function demoEngage() {
+    if (demoEngaged) return
+    demoEngaged = true
+    gcCount('demo-engaged')
+  }
 
   const INITIAL: Task[] = [
     { id: 't1', title: 'Paste screenshots from clipboard in task modal', start: 0, duration: 7, status: 'done', progress: 100 },
@@ -293,8 +309,10 @@ dayCells.forEach((c, i) => {
           : (el.parentElement as HTMLElement)
         bar.classList.add('is-dragging')
         el.setPointerCapture(e.pointerId)
+        let moved = false
 
         const onMove = (ev: PointerEvent) => {
+          moved = true
           const dDays = (ev.clientX - startX) / px
           if (mode === 'move') {
             const maxStart = TOTAL_DAYS - (task.status === 'milestone' ? 0 : startDur)
@@ -316,6 +334,10 @@ dayCells.forEach((c, i) => {
           const maxStart = TOTAL_DAYS - (task.status === 'milestone' ? 0 : task.duration)
           task.start = clamp(task.start, 0, maxStart)
           bar.classList.remove('is-dragging')
+          if (moved) {
+            demoEngage()
+            gcCount(mode === 'move' ? 'demo-drag-move' : 'demo-drag-resize')
+          }
           el.removeEventListener('pointermove', onMove)
           el.removeEventListener('pointerup', onUp)
           el.removeEventListener('pointercancel', onUp)
@@ -347,12 +369,16 @@ dayCells.forEach((c, i) => {
       if (!task || task.status === 'milestone') return
       const idx = STATUS_CYCLE.indexOf(task.status as StatusId)
       task.status = STATUS_CYCLE[(idx + 1) % STATUS_CYCLE.length]
+      demoEngage()
+      gcCount('demo-status-cycle')
       render()
     }
 
     function editTitle(id: string, el: HTMLElement) {
       const task = tasks.find((t) => t.id === id)
       if (!task) return
+      demoEngage()
+      gcCount('demo-edit-title')
       el.contentEditable = 'true'
       el.classList.add('is-editing')
       el.focus()
@@ -381,11 +407,14 @@ dayCells.forEach((c, i) => {
     }
 
     function deleteTask(id: string) {
+      demoEngage()
+      gcCount('demo-delete-task')
       tasks = tasks.filter((t) => t.id !== id)
       render()
     }
 
     function addTask() {
+      demoEngage()
       tasks.push({
         id: `n${nextId++}`, title: 'New task', start: TODAY_DAY, duration: 4, status: 'todo'
       })
@@ -393,6 +422,7 @@ dayCells.forEach((c, i) => {
     }
 
     function addMilestone() {
+      demoEngage()
       tasks.push({
         id: `n${nextId++}`, title: 'New milestone', start: TODAY_DAY + 7, duration: 0, status: 'milestone'
       })
@@ -400,6 +430,7 @@ dayCells.forEach((c, i) => {
     }
 
     function resetAll() {
+      demoEngage()
       tasks = INITIAL.map((t) => ({ ...t }))
       nextId = 100
       render()

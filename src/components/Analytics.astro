@@ -8,10 +8,23 @@ const enabled = import.meta.env.PROD && code
 ---
 
 {enabled && (
-  <script
-    is:inline
-    data-goatcounter={`https://${code}.goatcounter.com/count`}
-    async
-    src="//gc.zgo.at/count.js"
-  ></script>
+  <Fragment>
+    <script
+      is:inline
+      data-goatcounter={`https://${code}.goatcounter.com/count`}
+      async
+      src="//gc.zgo.at/count.js"
+    ></script>
+    <script is:inline>
+      // Fire a GoatCounter event for any clicked element tagged with
+      // data-gc-event, e.g. <a data-gc-event="cta-install">. The event name
+      // is the attribute value; path is prefixed so events sort together.
+      document.addEventListener('click', (e) => {
+        const el = e.target.closest('[data-gc-event]')
+        if (!el || !window.goatcounter) return
+        const name = el.dataset.gcEvent
+        window.goatcounter.count({ path: `event-${name}`, title: name, event: true })
+      })
+    </script>
+  </Fragment>
 )}

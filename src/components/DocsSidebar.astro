@@ -12,7 +12,7 @@ const currentGroup = docsGroupBySlug.get(currentSlug)
 ---
 
 <aside class="docs-sidebar">
-  <button class="sb-toggle" aria-expanded="false" aria-controls="docs-nav">
+  <button class="sb-toggle" aria-expanded="false" aria-controls="docs-nav" data-gc-event="docs-sidebar-toggle">
     <span class="sb-toggle-label">
       {currentGroup && <span class="sb-toggle-group">{currentGroup}</span>}
       <span class="sb-toggle-current">{currentTitle}</span>
