@@ -1,0 +1,17 @@
+---
+// GoatCounter — cookieless, privacy-friendly page analytics.
+// Register the site code at https://www.goatcounter.com/ and set it here
+// (or via the PUBLIC_GOATCOUNTER env var). Only loads in production builds so
+// local dev traffic never hits the counter.
+const code = import.meta.env.PUBLIC_GOATCOUNTER ?? 'obsidian-pm'
+const enabled = import.meta.env.PROD && code
+---
+
+{enabled && (
+  <script
+    is:inline
+    data-goatcounter={`https://${code}.goatcounter.com/count`}
+    async
+    src="//gc.zgo.at/count.js"
+  ></script>
+)}
