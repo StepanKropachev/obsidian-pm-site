@@ -1,0 +1,4 @@
+User-agent: *
+Allow: /
+
+Sitemap: https://stepankropachev.github.io/obsidian-pm-site/sitemap-index.xml

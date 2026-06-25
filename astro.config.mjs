@@ -1,5 +1,6 @@
 // @ts-check
 import { defineConfig } from 'astro/config'
+import sitemap from '@astrojs/sitemap'
 import { rewriteDocsLinks, transformPlaceholders } from './src/lib/remark-docs.mjs'
 
 const base = '/obsidian-pm-site'
@@ -9,6 +10,7 @@ export default defineConfig({
   site: 'https://stepankropachev.github.io',
   base,
   trailingSlash: 'ignore',
+  integrations: [sitemap()],
   markdown: {
     remarkPlugins: [
       [rewriteDocsLinks, { base }],
