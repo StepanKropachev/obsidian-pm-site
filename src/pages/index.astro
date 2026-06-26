@@ -35,9 +35,28 @@ const installSteps = [
   { n: 3, body: 'Install, then enable.' },
   { n: 4, body: 'Click the new ribbon icon to open your first project.' },
 ]
+
+const siteUrl = new URL(base, Astro.site).href
+const structuredData = {
+  '@context': 'https://schema.org',
+  '@type': 'SoftwareApplication',
+  name: 'Obsidian Project Manager',
+  description: 'Project management inside Obsidian. Tables, Gantt charts, and kanban boards over tasks stored as plain markdown in your vault.',
+  applicationCategory: 'BrowserApplication',
+  operatingSystem: 'Windows, macOS, Linux',
+  url: siteUrl,
+  downloadUrl: 'https://github.com/stepankropachev/obsidian-pm',
+  license: 'https://github.com/stepankropachev/obsidian-pm/blob/main/LICENSE',
+  offers: {
+    '@type': 'Offer',
+    price: 0,
+    priceCurrency: 'USD',
+  },
+}
 ---
 
 <BaseLayout title="Obsidian Project Manager — Project management for Obsidian">
+  <script type="application/ld+json" set:html={JSON.stringify(structuredData)} is:inline />
   <section class="hero">
     <div class="bg-glow" aria-hidden="true"></div>
     <div class="hero-grain bg-grain" aria-hidden="true"></div>
