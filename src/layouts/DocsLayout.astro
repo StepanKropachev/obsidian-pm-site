@@ -14,9 +14,10 @@ interface Props {
   slug: string
   group?: string
   headings?: Heading[]
+  description?: string
 }
 
-const { title, slug, group, headings = [] } = Astro.props
+const { title, slug, group, headings = [], description } = Astro.props
 const base = import.meta.env.BASE_URL.replace(/\/$/, '')
 
 const toc = headings.filter((h) => h.depth === 2 || h.depth === 3)
@@ -26,7 +27,7 @@ const prev = idx > 0 ? allDocItems[idx - 1] : null
 const next = idx >= 0 && idx < allDocItems.length - 1 ? allDocItems[idx + 1] : null
 ---
 
-<BaseLayout title={`${title} — Obsidian Project Manager`}>
+<BaseLayout title={`${title} — Obsidian Project Manager`} description={description}>
   <div class="docs-shell">
     <div class="docs-grid">
       <DocsSidebar currentSlug={slug} />

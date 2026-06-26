@@ -2,6 +2,7 @@
 import { getCollection, render } from 'astro:content'
 import DocsLayout from '../../layouts/DocsLayout.astro'
 import { docsByFilename, docsGroupBySlug } from '../../lib/docs-nav'
+import { descriptionFromBody } from '../../lib/doc-description'
 
 export async function getStaticPaths() {
   const docs = await getCollection('docs')
@@ -20,8 +21,9 @@ export async function getStaticPaths() {
 const { doc, meta } = Astro.props
 const { Content, headings } = await render(doc)
 const group = docsGroupBySlug.get(meta.slug)
+const description = descriptionFromBody(doc.body ?? '') || undefined
 ---
 
-<DocsLayout title={meta.title} slug={meta.slug} group={group} headings={headings}>
+<DocsLayout title={meta.title} slug={meta.slug} group={group} headings={headings} description={description}>
   <Content />
 </DocsLayout>
