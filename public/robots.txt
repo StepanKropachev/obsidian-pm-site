@@ -1,4 +1,26 @@
+# Default: allow everyone, including AI crawlers. This is a marketing/docs
+# site — being read and cited by AI systems is a goal, not a risk.
 User-agent: *
 Allow: /
 
+# Explicit allow for AI search + training crawlers (they drive citations).
+User-agent: GPTBot
+Allow: /
+
+User-agent: OAI-SearchBot
+Allow: /
+
+User-agent: ClaudeBot
+Allow: /
+
+User-agent: PerplexityBot
+Allow: /
+
+User-agent: Google-Extended
+Allow: /
+
+User-agent: Applebot-Extended
+Allow: /
+
+# AI discovery files: /obsidian-pm-site/llms.txt and /obsidian-pm-site/llms-full.txt
 Sitemap: https://stepankropachev.github.io/obsidian-pm-site/sitemap-index.xml
