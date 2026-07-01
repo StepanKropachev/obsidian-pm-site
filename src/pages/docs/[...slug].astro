@@ -4,6 +4,7 @@ import DocsLayout from '../../layouts/DocsLayout.astro'
 import { docsByFilename, docsGroupBySlug } from '../../lib/docs-nav'
 import { descriptionFromBody } from '../../lib/doc-description'
 import { faqPageJsonLd } from '../../lib/faq-jsonld'
+import { techArticleJsonLd, breadcrumbJsonLd } from '../../lib/docs-jsonld'
 
 export async function getStaticPaths() {
   const docs = await getCollection('docs')
@@ -23,7 +24,16 @@ const { doc, meta } = Astro.props
 const { Content, headings } = await render(doc)
 const group = docsGroupBySlug.get(meta.slug)
 const description = descriptionFromBody(doc.body ?? '') || undefined
-const jsonLd = meta.slug === 'faq' ? faqPageJsonLd(doc.body ?? '') : null
+
+const siteHome = new URL(import.meta.env.BASE_URL.replace(/\/$/, ''), Astro.site).href
+const url = new URL(Astro.url.pathname.replace(/\/$/, ''), Astro.site).href
+const docInput = { title: meta.title, description, url, siteHome }
+
+const jsonLd: object[] = [techArticleJsonLd(docInput), breadcrumbJsonLd(docInput)]
+if (meta.slug === 'faq') {
+  const faq = faqPageJsonLd(doc.body ?? '')
+  if (faq) jsonLd.push(faq)
+}
 ---
 
 <DocsLayout title={meta.title} slug={meta.slug} group={group} headings={headings} description={description} jsonLd={jsonLd}>

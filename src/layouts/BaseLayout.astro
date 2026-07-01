@@ -13,6 +13,22 @@ const { title, description = 'Project management for Obsidian. Tables, Gantt, an
 const base = import.meta.env.BASE_URL.replace(/\/$/, '')
 const canonical = new URL(Astro.url.pathname.replace(/\/$/, ''), Astro.site)
 const ogImage = new URL(`${base}/og.png`, Astro.site)
+
+// Sitewide entity: establishes the site and its author so search and AI
+// systems can attribute pages to a single, consistent source.
+const siteJsonLd = {
+  '@context': 'https://schema.org',
+  '@type': 'WebSite',
+  name: 'Obsidian Project Manager',
+  url: new URL(base, Astro.site).href,
+  description: 'Project management for Obsidian. Tables, Gantt, and kanban — your tasks stored as plain markdown in your vault.',
+  inLanguage: 'en',
+  publisher: {
+    '@type': 'Person',
+    name: 'Stepan Kropachev',
+    url: 'https://github.com/StepanKropachev',
+  },
+}
 ---
 
 <html lang="en">
@@ -39,6 +55,7 @@ const ogImage = new URL(`${base}/og.png`, Astro.site)
     <meta name="twitter:title" content={title} />
     <meta name="twitter:description" content={description} />
     <meta name="twitter:image" content={ogImage} />
+    <script type="application/ld+json" set:html={JSON.stringify(siteJsonLd)} is:inline />
     <Analytics />
     <script is:inline>
       // Enable reveal styles before first paint so content only starts

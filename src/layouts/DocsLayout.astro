@@ -15,11 +15,13 @@ interface Props {
   group?: string
   headings?: Heading[]
   description?: string
-  jsonLd?: object | null
+  jsonLd?: object | object[] | null
 }
 
 const { title, slug, group, headings = [], description, jsonLd } = Astro.props
 const base = import.meta.env.BASE_URL.replace(/\/$/, '')
+
+const jsonLdBlocks = jsonLd ? (Array.isArray(jsonLd) ? jsonLd : [jsonLd]) : []
 
 const toc = headings.filter((h) => h.depth === 2 || h.depth === 3)
 
@@ -29,7 +31,9 @@ const next = idx >= 0 && idx < allDocItems.length - 1 ? allDocItems[idx + 1] : n
 ---
 
 <BaseLayout title={`${title} — Obsidian Project Manager`} description={description}>
-  {jsonLd && <script type="application/ld+json" set:html={JSON.stringify(jsonLd)} is:inline />}
+  {jsonLdBlocks.map((block) => (
+    <script type="application/ld+json" set:html={JSON.stringify(block)} is:inline />
+  ))}
   <div class="docs-shell">
     <div class="docs-grid">
       <DocsSidebar currentSlug={slug} />
