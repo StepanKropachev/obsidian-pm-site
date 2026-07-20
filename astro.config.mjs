@@ -5,15 +5,19 @@ import { rewriteDocsLinks, transformPlaceholders } from './src/lib/remark-docs.m
 
 const base = '/obsidian-pm-site'
 
-// `/docs/` is a redirect stub to `/docs/install` — keep redirects out of the
+// `/docs` is a redirect stub to `/docs/install` — keep redirects out of the
 // sitemap so Search Console doesn't flag them as "Page with redirect".
-const docsIndex = `https://stepankropachev.github.io${base}/docs/`
+const docsIndex = `https://stepankropachev.github.io${base}/docs`
 
 // https://docs.astro.build/en/reference/configuration-reference/
 export default defineConfig({
   site: 'https://stepankropachev.github.io',
   base,
-  trailingSlash: 'ignore',
+  trailingSlash: 'never',
+  // Emit `docs/install.html` (not `docs/install/index.html`) so GitHub Pages
+  // serves the slash-less canonical URLs at 200 instead of 301-redirecting
+  // them to a trailing-slash variant.
+  build: { format: 'file' },
   integrations: [
     sitemap({
       filter: (page) => page !== docsIndex,
