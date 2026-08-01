@@ -1,6 +1,5 @@
 # build output
 dist/
-redirect-dist/
 .wrangler/
 # generated types
 .astro/
