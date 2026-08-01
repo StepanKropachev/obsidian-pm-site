@@ -14,7 +14,7 @@ export interface DocsJsonLdInput {
   description?: string
   // Absolute canonical URL of this doc page.
   url: string
-  // Absolute site origin + base (…/obsidian-pm-site), no trailing slash.
+  // Absolute site origin, no trailing slash.
   siteHome: string
 }
 

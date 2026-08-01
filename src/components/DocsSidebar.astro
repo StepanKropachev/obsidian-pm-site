@@ -6,7 +6,6 @@ interface Props {
 }
 
 const { currentSlug } = Astro.props
-const base = import.meta.env.BASE_URL.replace(/\/$/, '')
 const currentTitle = docsBySlug.get(currentSlug)?.title ?? 'Documentation'
 const currentGroup = docsGroupBySlug.get(currentSlug)
 ---
@@ -29,7 +28,7 @@ const currentGroup = docsGroupBySlug.get(currentSlug)
           {group.items.map((item) => (
             <li>
               <a
-                href={`${base}/docs/${item.slug}`}
+                href={`/docs/${item.slug}`}
                 class={item.slug === currentSlug ? 'is-active' : ''}
               >{item.title}</a>
             </li>

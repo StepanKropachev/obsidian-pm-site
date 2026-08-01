@@ -19,7 +19,6 @@ interface Props {
 }
 
 const { title, slug, group, headings = [], description, jsonLd } = Astro.props
-const base = import.meta.env.BASE_URL.replace(/\/$/, '')
 
 const jsonLdBlocks = jsonLd ? (Array.isArray(jsonLd) ? jsonLd : [jsonLd]) : []
 
@@ -39,7 +38,7 @@ const next = idx >= 0 && idx < allDocItems.length - 1 ? allDocItems[idx + 1] : n
       <DocsSidebar currentSlug={slug} />
       <article class="doc-content">
         <nav class="doc-breadcrumb" aria-label="Breadcrumb">
-          <a href={`${base}/docs`}>Docs</a>
+          <a href="/docs">Docs</a>
           {group && (
             <Fragment>
               <span class="crumb-sep">/</span>
@@ -50,13 +49,13 @@ const next = idx >= 0 && idx < allDocItems.length - 1 ? allDocItems[idx + 1] : n
         <slot />
         <nav class="doc-pager">
           {prev ? (
-            <a class="pager-link prev" href={`${base}/docs/${prev.slug}`}>
+            <a class="pager-link prev" href={`/docs/${prev.slug}`}>
               <span class="pager-dir">Previous</span>
               <span class="pager-title">{prev.title}</span>
             </a>
           ) : <span></span>}
           {next ? (
-            <a class="pager-link next" href={`${base}/docs/${next.slug}`}>
+            <a class="pager-link next" href={`/docs/${next.slug}`}>
               <span class="pager-dir">Next</span>
               <span class="pager-title">{next.title}</span>
             </a>

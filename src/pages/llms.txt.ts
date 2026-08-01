@@ -5,10 +5,10 @@ import { descriptionFromBody } from '../lib/doc-description'
 
 // llms.txt — a curated, machine-readable map of the site for AI systems.
 // Generated from docsNav at build time so it never drifts from the real
-// docs. Served at /obsidian-pm-site/llms.txt.
+// docs. Served at /llms.txt.
 // Convention: https://llmstxt.org / answer.ai's original proposal.
 
-const SITE = 'https://stepankropachev.github.io/obsidian-pm-site'
+const SITE = 'https://dotpm.pm'
 
 export const GET: APIRoute = async () => {
   const docs = await getCollection('docs')

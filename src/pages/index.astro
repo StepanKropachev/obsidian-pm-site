@@ -9,7 +9,6 @@ import tableCloseup from '../assets/screenshots/table-closeup.png'
 import ganttCloseup from '../assets/screenshots/gantt-closeup.png'
 import taskModal from '../assets/screenshots/task-modal-detail.png'
 
-const base = import.meta.env.BASE_URL.replace(/\/$/, '')
 
 const features = [
   { icon: 'tune', title: 'Custom fields', body: 'Typed fields per project — text, number, date, select, multi-select, person, checkbox, URL.' },
@@ -36,7 +35,7 @@ const installSteps = [
   { n: 4, body: 'Click the new ribbon icon to open your first project.' },
 ]
 
-const siteUrl = new URL(base, Astro.site).href
+const siteUrl = Astro.site!.href.replace(/\/$/, '')
 const structuredData = {
   '@context': 'https://schema.org',
   '@type': 'SoftwareApplication',
@@ -112,7 +111,7 @@ const structuredData = {
         <h2>Work through tasks at spreadsheet speed</h2>
         <div class="view-head-copy">
           <p>Inline-edit status, priority, due date, and progress without opening a file. Filter and sort by any field, including your own. Multi-select for bulk changes across hundreds of tasks.</p>
-          <a href={`${base}/docs/table-view`} class="link-arrow">Read the docs <span class="icon">arrow_forward</span></a>
+          <a href="/docs/table-view" class="link-arrow">Read the docs <span class="icon">arrow_forward</span></a>
         </div>
       </div>
       <div class="container-wide view-stage" data-reveal style="--reveal-delay: 90ms">
@@ -129,7 +128,7 @@ const structuredData = {
         <h2>Plan the timeline on a Gantt chart</h2>
         <div class="view-head-copy">
           <p>Drag bars to reschedule, resize to change duration, switch granularity from day to quarter. Dependencies render as lines, and auto-schedule shifts dependents when a predecessor moves.</p>
-          <a href={`${base}/docs/gantt-view`} class="link-arrow">Read the docs <span class="icon">arrow_forward</span></a>
+          <a href="/docs/gantt-view" class="link-arrow">Read the docs <span class="icon">arrow_forward</span></a>
         </div>
       </div>
       <div class="container-wide view-stage" data-reveal style="--reveal-delay: 90ms">
@@ -146,7 +145,7 @@ const structuredData = {
         <h2>Move work across a kanban board</h2>
         <div class="view-head-copy">
           <p>Cards grouped by status, quick-add at the bottom of any column. Filters and saved views carry over from the table, so every view shows the same work from a different angle.</p>
-          <a href={`${base}/docs/kanban-view`} class="link-arrow">Read the docs <span class="icon">arrow_forward</span></a>
+          <a href="/docs/kanban-view" class="link-arrow">Read the docs <span class="icon">arrow_forward</span></a>
         </div>
       </div>
       <div class="container-wide view-stage" data-reveal style="--reveal-delay: 90ms">
@@ -201,7 +200,7 @@ const structuredData = {
           <span class="icon">star</span>
           Star on GitHub
         </a>
-        <a class="btn btn-secondary" href={`${base}/docs/install`} data-gc-event="cta-read-docs">Read the docs</a>
+        <a class="btn btn-secondary" href="/docs/install" data-gc-event="cta-read-docs">Read the docs</a>
       </div>
     </div>
   </section>

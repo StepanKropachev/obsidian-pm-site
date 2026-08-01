@@ -6,9 +6,9 @@ import { docsNav } from '../lib/docs-nav'
 // markdown file so an AI system can ingest all of it in a single fetch.
 // Generated from docsNav at build time, in nav order. The full set is well
 // within a single context window (~16K tokens). Served at
-// /obsidian-pm-site/llms-full.txt.
+// /llms-full.txt.
 
-const SITE = 'https://stepankropachev.github.io/obsidian-pm-site'
+const SITE = 'https://dotpm.pm'
 
 export const GET: APIRoute = async () => {
   const docs = await getCollection('docs')

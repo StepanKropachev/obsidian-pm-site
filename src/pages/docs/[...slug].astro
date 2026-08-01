@@ -25,7 +25,7 @@ const { Content, headings } = await render(doc)
 const group = docsGroupBySlug.get(meta.slug)
 const description = descriptionFromBody(doc.body ?? '') || undefined
 
-const siteHome = new URL(import.meta.env.BASE_URL.replace(/\/$/, ''), Astro.site).href
+const siteHome = Astro.site!.href.replace(/\/$/, '')
 const url = new URL(Astro.url.pathname.replace(/\.html$/, '').replace(/\/$/, ''), Astro.site).href
 const docInput = { title: meta.title, description, url, siteHome }
 

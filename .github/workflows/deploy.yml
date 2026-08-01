@@ -1,4 +1,8 @@
-name: Deploy to GitHub Pages
+name: Deploy GitHub Pages redirects
+
+# The site itself is hosted on Cloudflare Workers and deployed by Workers
+# Builds. This workflow keeps the retired GitHub Pages host alive serving only
+# redirect stubs, so URLs indexed under the old origin forward to dotpm.pm.
 
 on:
   push:
@@ -20,10 +24,23 @@ jobs:
     steps:
       - name: Checkout
         uses: actions/checkout@v4
-      - name: Build site
-        uses: withastro/action@v4
+      - name: Install pnpm
+        uses: pnpm/action-setup@v4
+      - name: Set up Node
+        uses: actions/setup-node@v4
         with:
           node-version: 22
+          cache: pnpm
+      - name: Install dependencies
+        run: pnpm install --frozen-lockfile
+      - name: Build site
+        run: pnpm build
+      - name: Generate redirect stubs
+        run: node scripts/build-redirects.mjs
+      - name: Upload redirect artifact
+        uses: actions/upload-pages-artifact@v3
+        with:
+          path: redirect-dist
 
   deploy:
     needs: build

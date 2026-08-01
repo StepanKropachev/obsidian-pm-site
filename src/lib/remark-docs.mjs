@@ -1,20 +1,18 @@
 import { visit } from 'unist-util-visit'
 
-export function rewriteDocsLinks({ base = '' } = {}) {
-  const prefix = base.replace(/\/$/, '')
+export function rewriteDocsLinks() {
   return (tree) => {
     visit(tree, 'link', (node) => {
       if (!node.url) return
       const m = node.url.match(/^(?:\.\/)?(?:\d+-)?([a-z0-9-]+)\.md(#.*)?$/i)
       if (m) {
-        node.url = `${prefix}/docs/${m[1]}${m[2] || ''}`
+        node.url = `/docs/${m[1]}${m[2] || ''}`
       }
     })
   }
 }
 
-export function transformPlaceholders({ base = '' } = {}) {
-  const prefix = base.replace(/\/$/, '')
+export function transformPlaceholders() {
   return (tree) => {
     visit(tree, 'blockquote', (node, index, parent) => {
       if (!parent || index === undefined) return
@@ -35,7 +33,7 @@ export function transformPlaceholders({ base = '' } = {}) {
       if (fileMatch) {
         const alt = (fileMatch[1] || label).trim()
         const file = fileMatch[2]
-        const src = /^https?:|^\//.test(file) ? file : `${prefix}/demos/${file}`
+        const src = /^https?:|^\//.test(file) ? file : `/demos/${file}`
         const isVideo = /\.(mp4|webm)$/i.test(file)
         const media = isVideo
           ? `<video src="${escapeHtml(src)}" autoplay muted loop playsinline aria-label="${escapeHtml(alt)}"></video>`

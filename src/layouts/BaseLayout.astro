@@ -10,16 +10,16 @@ interface Props {
 }
 
 const { title, description = 'Project management for Obsidian. Tables, Gantt, and kanban — your tasks stored as plain markdown in your vault.' } = Astro.props
-const base = import.meta.env.BASE_URL.replace(/\/$/, '')
 // `build.format: 'file'` yields `.html` pathnames (root is `/index.html`);
 // strip the extension — and `index` for the root — so the canonical matches the
-// extensionless URL GitHub Pages serves at 200 and the slash-less sitemap.
+// extensionless URL Workers static assets serves at 200 and the slash-less
+// sitemap.
 const canonicalPath = Astro.url.pathname
   .replace(/\/index\.html$/, '')
   .replace(/\.html$/, '')
   .replace(/\/$/, '')
 const canonical = new URL(canonicalPath, Astro.site)
-const ogImage = new URL(`${base}/og.png`, Astro.site)
+const ogImage = new URL('/og.png', Astro.site)
 
 // Sitewide entity: establishes the site and its author so search and AI
 // systems can attribute pages to a single, consistent source.
@@ -27,7 +27,7 @@ const siteJsonLd = {
   '@context': 'https://schema.org',
   '@type': 'WebSite',
   name: 'Obsidian Project Manager',
-  url: new URL(base, Astro.site).href,
+  url: Astro.site!.href.replace(/\/$/, ''),
   description: 'Project management for Obsidian. Tables, Gantt, and kanban — your tasks stored as plain markdown in your vault.',
   inLanguage: 'en',
   publisher: {
@@ -44,9 +44,9 @@ const siteJsonLd = {
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <meta name="generator" content={Astro.generator} />
     <meta name="google-site-verification" content="IwF9DkqGROAQjbyQ0gymIZqbKSC-zjt2D8nPiiYmi6Q" />
-    <link rel="icon" type="image/svg+xml" href={`${base}/favicon.svg`} />
-    <link rel="icon" type="image/x-icon" href={`${base}/favicon.ico`} />
-    <link rel="apple-touch-icon" href={`${base}/apple-touch-icon.png`} />
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <link rel="icon" type="image/x-icon" href="/favicon.ico" />
+    <link rel="apple-touch-icon" href="/apple-touch-icon.png" />
     <title>{title}</title>
     <meta name="description" content={description} />
     <link rel="canonical" href={canonical} />

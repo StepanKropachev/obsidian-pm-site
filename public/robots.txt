@@ -22,5 +22,5 @@ Allow: /
 User-agent: Applebot-Extended
 Allow: /
 
-# AI discovery files: /obsidian-pm-site/llms.txt and /obsidian-pm-site/llms-full.txt
-Sitemap: https://stepankropachev.github.io/obsidian-pm-site/sitemap-index.xml
+# AI discovery files: /llms.txt and /llms-full.txt
+Sitemap: https://dotpm.pm/sitemap-index.xml
