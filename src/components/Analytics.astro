@@ -1,8 +1,5 @@
 ---
-// GoatCounter — cookieless, privacy-friendly page analytics.
-// Register the site code at https://www.goatcounter.com/ and set it here
-// (or via the PUBLIC_GOATCOUNTER env var). Only loads in production builds so
-// local dev traffic never hits the counter.
+// Site code is registered at https://www.goatcounter.com/.
 const code = import.meta.env.PUBLIC_GOATCOUNTER ?? 'obsidian-pm'
 const enabled = import.meta.env.PROD && code
 ---
@@ -16,9 +13,7 @@ const enabled = import.meta.env.PROD && code
       src="//gc.zgo.at/count.js"
     ></script>
     <script is:inline>
-      // Fire a GoatCounter event for any clicked element tagged with
-      // data-gc-event, e.g. <a data-gc-event="cta-install">. The event name
-      // is the attribute value; path is prefixed so events sort together.
+      // Tag any clickable with data-gc-event="name" to count it.
       document.addEventListener('click', (e) => {
         const el = e.target.closest('[data-gc-event]')
         if (!el || !window.goatcounter) return

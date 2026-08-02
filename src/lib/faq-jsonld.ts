@@ -1,7 +1,3 @@
-// Parse the FAQ doc's markdown body into question/answer pairs so a
-// FAQPage JSON-LD block can be derived from the same source that renders
-// the page — one source of truth, no hand-maintained second copy.
-//
 // Each H2 becomes a question; the prose and list content until the next H2
 // becomes the plain-text answer (markdown stripped, per schema.org guidance).
 
@@ -14,8 +10,7 @@ const stripInline = (text: string): string =>
     .replace(/\s+/g, ' ')
     .trim()
 
-// Headings that are navigation, not genuine questions — excluded so the
-// schema only carries real Q&A.
+// H2s that are navigation rather than genuine questions.
 const NON_FAQ = new Set(['Where to go next'])
 
 export interface FaqEntry {

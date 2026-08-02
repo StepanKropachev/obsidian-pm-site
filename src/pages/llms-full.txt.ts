@@ -2,11 +2,7 @@ import type { APIRoute } from 'astro'
 import { getCollection } from 'astro:content'
 import { docsNav } from '../lib/docs-nav'
 
-// llms-full.txt — the entire documentation set concatenated into one plain
-// markdown file so an AI system can ingest all of it in a single fetch.
-// Generated from docsNav at build time, in nav order. The full set is well
-// within a single context window (~16K tokens). Served at
-// /llms-full.txt.
+// Every doc concatenated in nav order, for ingestion in a single fetch.
 
 const SITE = 'https://dotpm.pm'
 

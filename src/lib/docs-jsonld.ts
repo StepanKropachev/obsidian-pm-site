@@ -1,8 +1,3 @@
-// JSON-LD builders for documentation pages: a TechArticle describing the
-// page and a BreadcrumbList mirroring the Docs → page trail. Kept beside
-// faq-jsonld so all structured data derives from the same nav and content
-// source of truth rather than a hand-maintained second copy.
-
 const author = {
   '@type': 'Person',
   name: 'Stepan Kropachev',
@@ -44,9 +39,8 @@ export function techArticleJsonLd(input: DocsJsonLdInput): object {
 
 export function breadcrumbJsonLd(input: DocsJsonLdInput): object {
   const { title, url, siteHome } = input
-  // Home → Docs → this page. Every item carries a resolvable URL; the
-  // human-facing group crumb is intentionally omitted since groups have no
-  // landing page of their own.
+  // The nav group is deliberately not a crumb: groups have no landing page,
+  // and every breadcrumb item needs a resolvable URL.
   const items = [
     { name: 'Obsidian Project Manager', item: siteHome },
     { name: 'Docs', item: `${siteHome}/docs` },

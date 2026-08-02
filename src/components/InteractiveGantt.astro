@@ -144,11 +144,8 @@ dayCells.forEach((c, i) => {
   }
   const STATUS_CYCLE: StatusId[] = ['todo', 'in-progress', 'review', 'blocked', 'done']
 
-  // Analytics: report demo interactions to GoatCounter (prod only — the global
-  // is undefined otherwise). Static chrome buttons are tracked declaratively via
-  // data-gc-event; these calls cover the dynamic interactions (status, drag,
-  // edit, delete) that aren't plain button clicks. demoEngage fires once so we
-  // can measure how many visitors touch the demo at all.
+  // Covers the dynamic interactions that data-gc-event cannot reach. The
+  // goatcounter global only exists in production, hence the optional call.
   function gcCount(name: string) {
     ;(window as unknown as { goatcounter?: { count: (o: object) => void } }).goatcounter
       ?.count({ path: `event-${name}`, title: name, event: true })
@@ -454,9 +451,8 @@ dayCells.forEach((c, i) => {
 </script>
 
 <style is:global>
-  /* Plugin-faithful palette — mirror the Obsidian dark theme.
-     Block is `is:global` because dynamically created rows/bars (via JS) don't
-     carry Astro's scope attribute. All rules are namespaced under .igantt. */
+  /* is:global because rows and bars created from JS never carry Astro's scope
+     attribute. Every rule is namespaced under .igantt to compensate. */
   .igantt {
     --pm-bg: #16171a;
     --pm-bg2: #1a1b1e;
@@ -480,7 +476,6 @@ dayCells.forEach((c, i) => {
     line-height: 1.4;
   }
 
-  /* ── Top project bar ────────────────────────────────────────────────────── */
   .ig-topbar {
     display: flex;
     align-items: center;
@@ -586,7 +581,6 @@ dayCells.forEach((c, i) => {
   .ig-icon-btn:hover { background: var(--pm-bg3); color: var(--pm-text); }
   .ig-icon-btn .icon { font-size: 16px; color: inherit; }
 
-  /* ── Filter bar ─────────────────────────────────────────────────────────── */
   .ig-filterbar {
     display: flex;
     align-items: center;
@@ -638,7 +632,6 @@ dayCells.forEach((c, i) => {
     border-color: var(--pm-border-strong);
   }
 
-  /* ── Zoom bar ───────────────────────────────────────────────────────────── */
   .ig-zoombar {
     display: flex;
     align-items: center;
@@ -684,7 +677,6 @@ dayCells.forEach((c, i) => {
   }
   .ig-textbtn:hover { background: var(--pm-bg3); color: var(--pm-text); }
 
-  /* ── Body grid ──────────────────────────────────────────────────────────── */
   .ig-body {
     display: grid;
     grid-template-columns: 290px 1fr;
@@ -798,7 +790,6 @@ dayCells.forEach((c, i) => {
     background: var(--pm-bg2);
   }
 
-  /* ── Right: timeline ────────────────────────────────────────────────────── */
   .ig-right {
     position: relative;
     overflow: hidden;
@@ -986,7 +977,6 @@ dayCells.forEach((c, i) => {
     border-radius: 50%;
   }
 
-  /* ── Responsive ─────────────────────────────────────────────────────────── */
   @media (max-width: 900px) {
     .igantt { font-size: 12px; }
     .ig-body { grid-template-columns: 220px 1fr; }

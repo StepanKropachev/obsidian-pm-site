@@ -3,10 +3,7 @@ import { getCollection } from 'astro:content'
 import { docsNav } from '../lib/docs-nav'
 import { descriptionFromBody } from '../lib/doc-description'
 
-// llms.txt — a curated, machine-readable map of the site for AI systems.
-// Generated from docsNav at build time so it never drifts from the real
-// docs. Served at /llms.txt.
-// Convention: https://llmstxt.org / answer.ai's original proposal.
+// Convention: https://llmstxt.org
 
 const SITE = 'https://dotpm.pm'
 

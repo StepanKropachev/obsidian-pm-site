@@ -1,8 +1,6 @@
-// Derive a meta description from a doc's markdown body: the first real
-// paragraph after the H1, with markdown stripped and trimmed to a length
-// search engines will actually show (~155 chars). Falls back to '' when a
-// page has no prose intro, so the caller can use a sensible default.
+// Returns '' when a page has no prose intro, so callers can supply a default.
 
+// Roughly where search engines truncate a description.
 const MAX = 155
 
 const stripInline = (text: string): string =>
@@ -22,8 +20,7 @@ export function descriptionFromBody(body: string): string {
   for (const raw of lines) {
     const line = raw.trim()
     if (!started) {
-      // Skip headings, images, blockquotes, code fences, list markers,
-      // and blank lines until we reach the first prose line.
+      // Skip non-prose until the first real paragraph.
       if (
         line === '' ||
         line.startsWith('#') ||
@@ -38,7 +35,6 @@ export function descriptionFromBody(body: string): string {
       }
       started = true
     }
-    // Once collecting, a blank line ends the paragraph.
     if (line === '') break
     paragraph.push(line)
   }
@@ -46,7 +42,6 @@ export function descriptionFromBody(body: string): string {
   const text = stripInline(paragraph.join(' '))
   if (text.length <= MAX) return text
 
-  // Trim to the last word boundary before the limit, then add an ellipsis.
   const clipped = text.slice(0, MAX)
   const lastSpace = clipped.lastIndexOf(' ')
   return `${clipped.slice(0, lastSpace > 0 ? lastSpace : MAX).trim()}…`

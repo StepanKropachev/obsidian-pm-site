@@ -46,7 +46,6 @@ const currentGroup = docsGroupBySlug.get(currentSlug)
     const open = sidebar!.classList.toggle('is-open')
     toggle.setAttribute('aria-expanded', String(open))
   })
-  // Collapse again after navigating via a link on mobile.
   sidebar?.querySelectorAll('#docs-nav a').forEach((a) =>
     a.addEventListener('click', () => {
       sidebar.classList.remove('is-open')

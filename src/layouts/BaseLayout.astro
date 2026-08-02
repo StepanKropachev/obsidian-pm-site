@@ -10,10 +10,8 @@ interface Props {
 }
 
 const { title, description = 'Project management for Obsidian. Tables, Gantt, and kanban — your tasks stored as plain markdown in your vault.' } = Astro.props
-// `build.format: 'file'` yields `.html` pathnames (root is `/index.html`);
-// strip the extension — and `index` for the root — so the canonical matches the
-// extensionless URL Workers static assets serves at 200 and the slash-less
-// sitemap.
+// build.format 'file' yields `.html` pathnames, but the served URL is
+// extensionless. Strip it so the canonical matches what visitors actually get.
 const canonicalPath = Astro.url.pathname
   .replace(/\/index\.html$/, '')
   .replace(/\.html$/, '')
@@ -21,8 +19,6 @@ const canonicalPath = Astro.url.pathname
 const canonical = new URL(canonicalPath, Astro.site)
 const ogImage = new URL('/og.png', Astro.site)
 
-// Sitewide entity: establishes the site and its author so search and AI
-// systems can attribute pages to a single, consistent source.
 const siteJsonLd = {
   '@context': 'https://schema.org',
   '@type': 'WebSite',
@@ -65,8 +61,8 @@ const siteJsonLd = {
     <script type="application/ld+json" set:html={JSON.stringify(siteJsonLd)} is:inline />
     <Analytics />
     <script is:inline>
-      // Enable reveal styles before first paint so content only starts
-      // hidden when JS is present to bring it back. No JS → fully visible.
+      // Set before first paint, so content only starts hidden when JS is
+      // present to bring it back. Without JS the page renders fully visible.
       document.documentElement.classList.add('motion')
     </script>
   </head>
@@ -76,10 +72,7 @@ const siteJsonLd = {
     <Footer />
 
     <script>
-      // Quiet scroll-reveal: flip .is-in as each element enters the
-      // viewport, then stop observing it. A [data-reveal-stagger] block
-      // cascades its children on a short timer instead of all at once.
-      // Reduced-motion or no IO → reveal everything immediately.
+      // Scroll-reveal: flip .is-in as each element enters the viewport.
       const reveal = (el: Element) => {
         if (el.hasAttribute('data-reveal-stagger')) {
           Array.from(el.children).forEach((child, i) => {

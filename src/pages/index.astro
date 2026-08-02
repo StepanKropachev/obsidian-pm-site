@@ -223,10 +223,6 @@ const structuredData = {
 </BaseLayout>
 
 <style>
-  /* Hero — Linear pattern: split header (statement left, support right),
-     then the app below at near full viewport width with a sharp lower
-     edge — the glow behind and the contact shadow under it sell the
-     depth, not a fade. */
   .hero {
     position: relative;
     background: var(--surface);
@@ -274,7 +270,6 @@ const structuredData = {
     z-index: 2;
     margin-top: 5rem;
   }
-  /* Faint pool of light directly under the app — the only glow in the hero */
   .hero-stage::before {
     content: '';
     position: absolute;
@@ -292,8 +287,8 @@ const structuredData = {
     position: relative;
     z-index: 2;
   }
-  /* Hero shows the live interactive gantt on desktop, a static screenshot
-     on mobile where drag interactions don't translate to touch. */
+  /* Mobile falls back to a screenshot; the gantt's drag interactions have no
+     touch equivalent. */
   .hero-static { display: none; }
   .mockup-frame.is-interactive {
     box-shadow:
@@ -303,7 +298,6 @@ const structuredData = {
       0 90px 180px -64px rgba(113, 112, 255, 0.22);
   }
 
-  /* Pitch */
   .pitch {
     background: var(--surface);
     padding-top: 6rem;
@@ -352,10 +346,6 @@ const structuredData = {
     letter-spacing: -0.005em;
   }
 
-  /* Views — each block is a full-width stage. Heading and copy share a
-     split header; the screenshot below takes the whole stage width and
-     dissolves into the dark page at the bottom, with a crisp closeup
-     fragment floating over the faded zone. */
   .views {
     background: var(--surface);
     padding: 5rem 0 3rem;
@@ -373,8 +363,6 @@ const structuredData = {
   .view-block {
     padding: 3rem 0 4rem;
   }
-  /* Linear pattern: view name as a small eyebrow over a statement
-     headline, support copy top-aligned in the right column */
   .view-head {
     display: grid;
     grid-template-columns: minmax(0, 1.15fr) minmax(0, 1fr);
@@ -433,7 +421,6 @@ const structuredData = {
     height: auto;
     border-radius: inherit;
   }
-  /* 1px gradient rim hugging the fragment's corners */
   .float-frag::after {
     content: '';
     position: absolute;
@@ -451,13 +438,11 @@ const structuredData = {
   .frag-left { left: clamp(0.5rem, 4vw, 4rem); }
   .frag-right { right: clamp(0.5rem, 4vw, 4rem); }
 
-  /* Section headers — left axis, like everything else on the page */
   .section-head {
     margin-bottom: 3rem;
     max-width: 40rem;
   }
 
-  /* Features */
   .features {
     background: var(--surface);
     padding: 7rem 0;
@@ -507,7 +492,6 @@ const structuredData = {
     .feature-grid { grid-template-columns: 1fr; }
   }
 
-  /* Principles */
   .principles {
     background: var(--surface);
     padding: 7rem 0;
@@ -544,7 +528,6 @@ const structuredData = {
     .principle-grid { grid-template-columns: 1fr; }
   }
 
-  /* Proof */
   .proof {
     position: relative;
     background: var(--surface);
@@ -576,7 +559,6 @@ const structuredData = {
     justify-content: center;
   }
 
-  /* Install */
   .install {
     background: var(--surface);
     padding: 7rem 0 9rem;
@@ -630,7 +612,6 @@ const structuredData = {
     .install-steps { grid-template-columns: 1fr; }
   }
 
-  /* Responsive */
   @media (max-width: 960px) {
     .hero { padding-top: 4.5rem; }
     .hero-inner {
@@ -656,8 +637,6 @@ const structuredData = {
     .float-frag { display: none; }
     .hero-interactive { display: none; }
     .hero-static { display: block; }
-    /* Mobile keeps the soft bottom fade — the static screenshot still
-       dissolves into the page there */
     .hero-mockup {
       -webkit-mask-image: linear-gradient(180deg, #000 76%, transparent 100%);
               mask-image: linear-gradient(180deg, #000 76%, transparent 100%);
@@ -672,8 +651,8 @@ const structuredData = {
 </style>
 
 <script>
-  // Split the muted tail into words and scrub each one's brighten across the
-  // section's scroll-into-view progress, Linear-style.
+  // Wraps each word in its own span so a scroll-driven animation range can
+  // brighten them in sequence as the section scrolls into view.
   const tail = document.querySelector('.pitch-tail')
   if (tail && tail.textContent) {
     const words = tail.textContent.trim().split(/\s+/)
@@ -682,7 +661,6 @@ const structuredData = {
       const span = document.createElement('span')
       span.className = 'pitch-word'
       span.textContent = word
-      // Stagger each word across the cover phase so they light up in sequence.
       const start = 12 + (i / words.length) * 58
       const end = start + (58 / words.length) * 2.4
       span.style.animationRangeStart = `cover ${start}%`
