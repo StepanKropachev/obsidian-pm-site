@@ -31,6 +31,8 @@ Archived tasks are left out of all four.
 
 Open them with **Edit project** on the overview, the gear in the task toolbar, or **Edit project** from the project list's right-click menu. Settings open as a full page, and every change is saved as you make it. **Done** takes you back to the overview.
 
+> [Video: Opening project settings from the project list, then working down the page — name, icon, color and description, members, the status and priority overrides, the view and scheduling rows, and the inherited and per-project custom fields | projects-setting-up.mp4]
+
 ### General
 
 Name, icon, color, parent, and description. Renaming here renames both the project note and the folder it owns, so the two stay matching. The parent dropdown lists every project except this one and its own descendants.
