@@ -27,18 +27,20 @@ Setting progress manually on a parent that *has* subtasks is allowed, but the ro
 
 ### Collapsing
 
-Each task has a `collapsed` flag that controls whether its subtasks are hidden in the table and kanban (when "show subtasks on board" is on). Click the chevron next to a parent row to toggle.
+Click the chevron next to a parent row to hide or show its subtasks in the table. That state is per-device UI state kept in the plugin's settings, not a field on the task — folding a branch never rewrites a file in your vault.
 
 ## Dependencies
 
-A dependency is a "this task is blocked by these tasks" link. Open a task and use the **dependencies** field to add task IDs.
+A dependency is a "this task is blocked by these tasks" link. Open a task and use **Depends on** to add one. The picker searches every task in the vault — this project's tasks first, then everything else labelled with the project it belongs to — so a dependency can cross from one project into another.
 
 ### Why dependencies matter
 
 1. They show up as **arrows in the gantt view** — predecessor → dependent.
 2. **Auto-schedule** uses them to shift dependent dates when a predecessor moves.
 
-There's no "blocks" inverse field in storage — the relationship is stored once, on the dependent side, and the plugin computes the reverse when rendering.
+There's no "blocks" inverse field in storage — the relationship is stored once, on the dependent side, and the plugin computes the reverse when rendering. The task editor's **Blocks** row is that computed side: the tasks waiting on this one, wherever they live.
+
+Cycle protection follows the links wherever they go, across projects included. The picker won't offer a task that would close a loop.
 
 ## Auto-schedule
 
@@ -49,18 +51,20 @@ When **Auto-schedule** is on (Settings → Project Manager → Scheduling), chan
 - For a task with only one of start or due: that single date moves to the earliest-start.
 - Archived predecessors are skipped — they don't trigger any cascade.
 - Tasks whose status is marked complete are skipped — they aren't shifted, and they don't push dependents.
+- Dependents in *other* projects are rescheduled too. Auto-schedule resolves per project, so one that has turned it off won't be reshuffled by a predecessor in a project that has it on.
 
-The plugin only shifts dates *forward*. If a predecessor moves earlier, dependents stay put.
+The plugin only shifts dates *forward*. If a predecessor moves earlier, dependents stay put — unless **Pull dependents forward** is on, which lets finishing early move them up. That one is off by default.
 
 If your graph has a cycle, the affected tasks are skipped rather than rescheduled into oblivion.
 
 ## Where to go next
 
 - [Gantt view](10-gantt-view.md) — see dependency arrows visually.
-- [Settings reference](12-settings-reference.md) — the auto-schedule toggle.
+- [Working across projects](/docs/multi-project-views) — dependencies that cross a project boundary.
+- [Settings reference](12-settings-reference.md) — the auto-schedule toggles.
 
 ## Tips
 
 > Subtasks vs. dependencies — use subtasks when work is *part of* a larger task, dependencies when work is *ordered after* another task. A subtask of "Launch v2" might be "Write release notes". A dependency of "Launch v2" might be "Sign off from legal."
 
-> Auto-schedule is off-by-default-safe — it only moves dates forward and never deletes anything. Turn it off if you want full manual control.
+> Auto-schedule is on by default. It is safe by construction — dates only move forward, nothing is deleted — but turn it off, globally or on one project, if you want full manual control of dates.

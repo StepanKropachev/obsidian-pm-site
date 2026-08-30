@@ -1,50 +1,115 @@
-# Create your first project
+# Create a project
 
-A project is a container for tasks, custom fields, saved views, and the team members assigned to that work. Each project is a single markdown file in your vault.
-
-> [Video: Creating a new project — ribbon icon, project list, the new-project modal, then the file appearing in the explorer | new-project.mp4]
+A project is a folder in your vault. Inside it: one markdown note holding the project's settings, a `_tasks/` folder holding one file per task, and — once a project sits under another — a folder per sub-project.
 
 ## Open the project list
 
-Click the **Project manager** ribbon icon, or run **Open projects pane** from the command palette. The project list opens in a new tab.
+Click the **Project manager** ribbon icon, or run **Open projects pane** from the command palette. The list opens in a tab and shows every project in the vault as a row: icon, name, progress, tasks done over total, members, and the last due date. Sub-projects are nested under their parent, and the parent row counts the whole group.
 
-If you have no projects yet, the list is empty with a single **+ new project** button.
-
-![The empty project list — "No projects yet" with a + new project button](../../assets/screenshots/project-list-empty.png)
+With no projects yet, you get a single **+ new project** button.
 
 ## Create a project
 
-![The new-project modal — title, color, description, team members, and custom fields](../../assets/screenshots/create-project.png)
+Click **+ new project**, or run **Create new project** from the command palette. One dialog asks for everything a project needs:
 
-1. Click **+ new project** (or run **Create new project** from the command palette).
-2. In the modal, enter a **title**.
-3. Pick an **icon** (emoji) and a **color**. These show up in the project list and headers.
-4. Click **Create**.
+- **Name.** The big field at the top. The footer shows the exact file path the project will get, updating as you type. If a note of that name is already there, the field turns red and Create stays disabled.
+- **Icon.** Any icon Obsidian knows, searchable in a grid. Paste an emoji into the search field to use that instead.
+- **Color.** A full color picker. It tints the icon, the accent strip, the progress bars, and the project chip wherever the project shows up next to others.
+- **Parent.** Leave it on **No parent** for a top-level project, or pick a project to nest under. See below.
+- **Members.** Picked from the person notes already in your vault. Type a name nobody has a note for and the picker offers to create one, in the folder set by the people folder setting.
+- **Description.** What the project covers and what done looks like. It renders as markdown on the project overview.
 
-The project opens in its default view (table, by default — see [Settings reference](12-settings-reference.md) to change this).
+Press Enter in the name field, or Shift+Enter anywhere in the dialog, to create. The project opens on its overview page.
 
-## What was created on disk
+Nothing is written until you click Create. Close the dialog and no file appears.
 
-A single markdown file: `Projects/<Title>.md`.
+## What you get
 
-Inside the file:
+The project opens on its **overview**: progress and task counts across the top, your description, a milestone track, sub-projects, and a properties panel down the side. It's empty until you add work to it.
 
-- YAML frontmatter with `pm-project: true` and the project's metadata.
-- A heading with the icon and title.
-- A `## Tasks` section that the plugin keeps in sync as you add tasks.
+Three controls to know:
 
-The `Projects/` folder is auto-created if it doesn't exist. You can change its location under **Settings** → **Project Manager** → **Projects folder**.
+- **The project name** in the header opens the task views: table, timeline, or board.
+- **Edit project** opens the settings page, where everything from the create dialog can be changed, plus statuses, priorities, scheduling, and custom fields.
+- **The view switcher** in the task toolbar moves between table, gantt, and board. The pill beside the project name changes how many projects the view covers.
 
-A second folder named `<Title>_tasks/` is created the first time you add a task to this project (not before).
+Prefer to land straight in the task list instead of the overview? Set **Settings → Project Manager → Open projects in** to **Tasks**.
+
+## What lands on disk
+
+```
+Your Vault/
+└── Projects/
+    └── Website Redesign/
+        ├── Website Redesign.md      project settings and metadata
+        └── _tasks/
+            ├── audit-current-site.md
+            ├── new-homepage-copy.md
+            └── Archive/
+                └── old-task.md
+```
+
+The note carries `pm-project: true` in its frontmatter — that marker is what makes it a project. Everything else in the frontmatter is the project's own configuration: icon, color, parent, members, custom fields, saved views, task order.
+
+`_tasks/` is created with the project. Archived tasks move to `_tasks/Archive/`; being in that folder is what archived means.
+
+Projects made before version 2 sat as a loose note beside a `<Name>_tasks/` folder. They move into the new structure on their own the first time you open the vault after upgrading, keeping their filters, saved views, and open tabs.
+
+## Where new projects go
+
+**Settings → Project Manager → New project folder** decides where new top-level projects are created. Default is `Projects`. Leave it empty to create them in the vault root.
+
+It doesn't decide which projects the plugin shows. Projects are listed wherever their files live, so you can move a project folder anywhere in your vault and it stays in the list. To keep a corner of the vault out of it, add that folder under **Settings → Project Manager → Excluded folders**.
+
+If the list ever looks stale after a lot of moving around, run **Rebuild project index**.
+
+## Sub-projects
+
+A project can sit under another one. Set **Parent** in the new project dialog, or change it later in **Project settings → General → Parent**.
+
+A sub-project's folder is created inside its parent's folder:
+
+```
+Projects/
+└── Platform/
+    ├── Platform.md
+    ├── _tasks/
+    ├── API v2/
+    │   ├── API v2.md
+    │   └── _tasks/
+    └── Billing/
+        ├── Billing.md
+        └── _tasks/
+```
+
+Nesting goes as deep as you want. A project can't become its own ancestor — the Parent dropdown leaves out the project itself and everything already under it.
+
+### What a sub-project gets from its parent
+
+**Custom fields** flow downhill. A field defined in vault settings, or on any ancestor, shows up on every project underneath, listed as *Inherited* in the project settings. Each project can rename it, retype it, or hide it locally. If a project already had a field of its own that duplicates an inherited one, the merge button folds it in — task values and all.
+
+**Statuses, priorities, and behavior settings don't flow downhill.** They come from the project's own overrides, or from the vault settings. A sub-project doesn't pick up its parent's custom status list.
+
+### What nesting changes
+
+- The project list nests the sub-project's row under its parent, joined by tree lines. Collapse the parent to fold the group away.
+- The parent's row and its overview count the whole subtree — its own tasks plus everything under it.
+- The table, timeline, and board gain a **With sub-projects** scope, which shows the parent and every project beneath it in one view. See [Working across projects](/docs/multi-project-views).
+
+## Renaming and deleting
+
+Rename a project from **Project settings → General → Name**. The note and the folder both take the new name, and the task files stay put.
+
+Delete it from the danger zone at the bottom of the same page. The whole project folder goes to trash, tasks included — unless a sub-project is nested inside, in which case that folder survives and only the project's note and its `_tasks/` are removed.
 
 ## Where to go next
 
-- [Create your first task](03-first-task.md) — add work to the project.
-- [Vault layout](04-vault-layout.md) — understand where everything lives.
-- [Importing existing notes](19-importing-notes.md) — turn notes you already have into tasks.
+- [Create your first task](/docs/first-task) — add work to the project.
+- [Project overview and settings](/docs/project-overview) — the page a project opens on, and every knob it carries.
+- [Working across projects](/docs/multi-project-views) — one table, board, or timeline over many projects at once.
 
 ## Tips
 
-> A project is just a markdown file. You can move it, rename it (rename the file *and* the matching `_tasks/` folder), or version it with git. The plugin reads the file on next load.
+Use one project per outcome, and sub-projects for the workstreams inside it. "Launch v2" with "Website", "Docs", and "Pricing" underneath beats one project with three hundred tasks and a tag column.
 
-> Want to start from an existing note? See [Importing existing notes](19-importing-notes.md) — you can pull notes in as **tasks** with the import command, or convert a note into a **project** by adding the `pm-project: true` marker yourself.
+Turning an existing note into a project takes one line: add `pm-project: true` to its frontmatter, then run **Open current file as project**.

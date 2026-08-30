@@ -19,18 +19,25 @@ dotpm is a community plugin — listed in Obsidian's plugin browser under its or
   - **Create new project**
   - **Create new task**
   - **Create new subtask**
+  - **Open all projects in one view**
   - **Import notes as tasks**
+  - **Create task from selection**
   - **Open current file as project**
+  - **Archive completed tasks**
+  - **Rebuild project index**
+  - **Show tasks assigned to a person**
+  - **Show tasks assigned to this note**
+  - **Link assignees to their person notes**
   - **Undo last action**
   - **Redo last action**
 - A new settings section appears under **Settings** → **Project Manager** (see [Settings reference](12-settings-reference.md)).
 
 ## Where to go next
 
-- [Create your first project](02-first-project.md) — open the project list and create something to work in.
+- [Create a project](02-first-project.md) — open the project list and create something to work in.
 - [Vault layout](04-vault-layout.md) — where files end up on disk.
 - [Importing existing notes](19-importing-notes.md) — bring notes you already have into a project.
 
 ## Tips
 
-> dotpm doesn't change any files outside the projects folder. Your existing vault stays exactly as it was.
+> dotpm only touches files you point it at. It writes inside project folders, and outside them only when you run an import — which tells you first whether it's moving your notes or copying them.

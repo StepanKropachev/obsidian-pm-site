@@ -13,19 +13,21 @@ In the table view:
 
 Subtask rows can be selected independently of their parent. Selecting a parent does *not* auto-select its subtasks — you have to select them yourself.
 
+Archive is the exception: it always takes a task's whole subtree, selected or not.
+
 ## The bulk action bar
 
 With at least one row selected, a bar appears with these actions:
 
 - **Set status** — picks from the configured statuses.
-- **Set priority** — critical / high / medium / low.
+- **Set priority** — picks from the configured priorities.
 - **Set assignee** — assigns to one person, or **clear** to remove all assignees.
 - **Set tag** — adds a tag, or **clear** to remove all tags.
 - **Set due date** — applies the same date to all selected.
 - **Set progress** — 0–100.
 - **Set parent** — moves selected tasks to be subtasks of a chosen parent.
 - **Remove parent** — promotes selected tasks to top-level.
-- **Archive** — moves selected tasks to the project's `Archive/` folder.
+- **Archive** — moves selected tasks to the project's `_tasks/Archive/` folder, each with its subtree.
 - **Unarchive** — moves selected tasks out of `Archive/`.
 - **Delete** — permanently removes selected tasks (files are deleted).
 

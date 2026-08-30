@@ -8,11 +8,12 @@ The table is where most of the work happens. Filter, sort, edit inline, multi-se
 
 Top to bottom:
 
-1. **Filter bar** — text search, status / priority / assignee / tag pills, due-date filter, archived toggle. Shared across table, gantt, and kanban views.
-2. **Saved views bar** — your saved filter + sort + view-mode combos for this project.
-3. **Bulk action bar** — appears when you select rows.
-4. **Table** — your tasks, one row each. Subtasks indent under their parent.
-5. **+ add task** button at the bottom of the table — opens the task modal pre-set to the current project.
+1. **Scope pill** — beside the project name, saying how many projects the table covers: this project, this project with its sub-projects, a folder, or the whole vault. See [Working across projects](/docs/multi-project-views).
+2. **Filter bar** — text search, status / priority / assignee / tag pills, due-date filter, archived toggle. Shared across table, gantt, and kanban views.
+3. **Saved views bar** — your saved filter + sort + view-mode combos for this scope.
+4. **Bulk action bar** — appears when you select rows.
+5. **Table** — your tasks, one row each. Subtasks indent under their parent.
+6. **+ add task** button at the bottom of the table — opens the task editor pre-set to the current project.
 
 ## Adding a task
 
@@ -68,11 +69,14 @@ Use the column picker to show, hide, or reorder columns. Fixed-ish set:
 - Progress
 - Time (logged hours)
 - One column per **custom field** (toggleable in the column picker)
+- Project — appears only when the table covers more than one project
 - Actions menu
 
 ## Subtask collapse and expand
 
-Subtasks indent under their parent. Click the chevron next to a parent to collapse or expand. Each task remembers its own collapsed state (stored in the YAML).
+Subtasks indent under their parent. Click the chevron next to a parent to collapse or expand.
+
+Collapsed state is per-device UI state, kept in the plugin's own settings rather than in the task file — folding a branch doesn't rewrite anything in your vault.
 
 There are toolbar buttons for **expand all** and **collapse all** when you want to flip the whole tree.
 
@@ -105,6 +109,7 @@ The same context menu is available in the kanban and gantt views.
 
 - [Saved views](13-saved-views.md) — store and reuse a filter + sort combo.
 - [Bulk operations](15-bulk-operations.md) — the full bulk action bar.
+- [Working across projects](/docs/multi-project-views) — one table over several projects.
 - [Custom fields](08-custom-fields.md) — add columns of your own.
 
 ## Tips

@@ -1,83 +1,94 @@
 # How the data model works
 
-The plugin's data model is small: a project is a container, a task is a unit of work. Each gets its own markdown file. Everything else — statuses, dependencies, custom fields, saved views — hangs off these two.
+The data model is small: a project is a container, a task is a unit of work. Each gets its own markdown file. Statuses, dependencies, custom fields, saved views, hierarchy — all of it hangs off those two.
 
-If you've already followed the onboarding ([Create your first project](02-first-project.md), [Create your first task](03-first-task.md)), this is the *why* behind what you saw on disk.
-
-![A project file open in the editor alongside a task file, both showing their YAML properties](../../assets/screenshots/project-and-task-files.png)
+If you've already followed the onboarding ([Create a project](/docs/first-project), [Create your first task](/docs/first-task)), this is the why behind what you saw on disk.
 
 ## What a project is
 
-A project is a markdown file with `pm-project: true` in its frontmatter. Beyond the basics (title, icon, color) it holds:
+A project is a markdown note with `pm-project: true` in its frontmatter, sitting in a folder of the same name. Beyond identity — title, icon, color, description — the note holds:
 
-- **Custom field definitions** — see [Custom fields](08-custom-fields.md).
-- **Saved views** — filter/sort/view-mode combinations specific to this project.
-- **Team members** — the per-project assignee list, on top of the global one.
-- **Task IDs** — the ordered list of top-level tasks. The order in this list is the order you see in the table view (before any sort is applied).
+- **Task IDs.** The ordered list of top-level tasks. That order is what the table shows before you sort.
+- **Custom field definitions.** See [Custom fields](/docs/custom-fields).
+- **Saved views.** Filter, sort, and view-mode combinations belonging to this project.
+- **Team members.** The per-project assignee list, on top of the global one.
+- **A parent link.** A wikilink to another project's note, if this one is nested.
+- **A config block.** Only the settings this project overrides. Projects that override nothing don't have one.
 
-Projects don't have status, priority, or dates of their own. They're a container; the timeline comes from the tasks inside.
+Projects have no status, priority, or dates of their own. They're containers; the timeline comes from the tasks inside.
 
 ## What a task is
 
-A task is a markdown file with `pm-task: true` in its frontmatter, sitting inside a project's `<Project>_tasks/` folder. Every task has:
+A task is a markdown file with `pm-task: true` in its frontmatter, inside a project's `_tasks/` folder. Every task carries:
 
-- **Title** and **description** (the markdown body).
-- **Status** — see [Statuses and priorities](06-statuses-and-priorities.md).
-- **Priority** — critical / high / medium / low.
-- **Start** and **due** dates (`YYYY-MM-DD`, both optional).
-- **Progress** (0–100).
-- **Assignees** and **tags**.
-- **Subtasks** and **dependencies** — see [Subtasks and dependencies](07-subtasks-and-dependencies.md).
-- **Type** — `task` or `milestone`. Milestones are zero-duration and render as diamonds in the gantt view.
-- **Custom field values** — whatever the project defines.
-- **Time logs** and a **time estimate** — see [Time tracking](14-time-tracking.md).
+- **Title**, and a **description** — the markdown body of the file.
+- **Status**, from its project's workflow. See [Statuses and priorities](/docs/statuses-and-priorities).
+- **Priority**, from its project's scale.
+- **Start and due dates**, `YYYY-MM-DD`, both optional.
+- **Progress**, 0 to 100, set directly or rolled up from subtasks.
+- **Assignees and tags.**
+- **A parent ID and subtask IDs**, and **dependencies**. See [Subtasks and dependencies](/docs/subtasks-and-dependencies).
+- **Type** — `task` or `milestone`. Milestones are zero-duration and render as diamonds on the timeline.
+- **A completed date**, once it lands in a terminal status. The views use it to say whether the task finished on time or how many days late.
+- **Custom field values**, whatever its project defines.
+- **A time estimate and time logs.** See [Time tracking](/docs/time-tracking).
+- **Recurrence**, if it repeats.
 
-A task can have any depth of subtasks. There's no distinction between a "task" and a "subtask" beyond the parent link.
+A task can nest as deep as you like. There's no separate "subtask" thing — a subtask is a task whose parent ID points at another task.
+
+## Where the hierarchy lives
+
+Projects nest through the `parent` wikilink in the project note. Creating a sub-project puts its folder inside the parent's folder, which keeps the vault tidy, but the link is what the plugin reads. Move the folder and the relationship holds. A link pointing at a project that no longer exists, or one that closes a loop, is ignored and the project is treated as top-level.
+
+Tasks nest through IDs instead: a parent ID on the child, a list of subtask IDs on the parent. Nesting has no bearing on where the file sits — every task in a project, at every depth, is a flat file in `_tasks/`.
+
+Dependencies are IDs too, and they're resolved against the whole vault rather than one project's tree. That's what lets a task depend on work in another project. See [Working across projects](/docs/multi-project-views).
 
 ## Why one file per task
 
 Three reasons:
 
-1. **Git-friendly.** One change touches one file. Diffs are tiny and merges almost never conflict.
-2. **Sync-friendly.** Obsidian Sync, iCloud, Dropbox, Syncthing — they all move file-shaped things between devices. Two devices editing two different tasks means two different files; no conflict.
-3. **Hand-editable.** You can `grep` your tasks. You can write scripts against them. You can open a single task in your editor of choice without launching Obsidian.
+**Git-friendly.** One change touches one file. Diffs are tiny and merges almost never conflict.
 
-The trade-off: a project with a thousand tasks is a folder with a thousand files. Obsidian handles that fine, but file-explorer scrolling will get long. Most projects don't approach that scale.
+**Sync-friendly.** Obsidian Sync, iCloud, Dropbox, Syncthing — they all move file-shaped things between devices. Two devices editing two different tasks means two different files, and nothing to merge.
 
-## Tags and assignees
+**Hand-editable.** You can grep your tasks. You can script against them. You can open one in any editor without launching Obsidian.
 
-**Tags** are free-form strings on a task, used for filtering and grouping. They aren't shared with Obsidian's built-in `#tag` system — they're a separate list in the task's frontmatter.
+The trade-off: a project with a thousand tasks is a folder with a thousand files. Obsidian handles it fine, but file-explorer scrolling gets long. Most projects don't come close.
 
-**Assignees** are picked from two sources, combined:
+## Settings resolve per project
 
-- **Global team members** — set under **Settings** → **Project Manager** → **Team members**. Available in every project.
-- **Per-project team members** — set on the project. Available only in that project.
+Statuses, priorities, priority icons, default view, auto-schedule, pull-forward, auto-archive, and the table and board display options all resolve the same way: **the project's own override if it has one, the vault settings otherwise**. A project's overrides don't reach its sub-projects — each project either overrides a setting or falls back to the global one.
 
-Both lists are just arrays of strings. There's no user system, no permissions; assignees are names you can filter on.
+**Custom fields are the exception.** They resolve down the chain: vault settings first, then each ancestor project root-most first, then the project's own. A field defined once at the top reaches everything underneath, and any project below can rename it, retype it, or hide it locally. See [Project overview and settings](/docs/project-overview).
 
-### Setting per-project team members
+Statuses and priorities that no list defines but tasks still use are kept visible anyway, so nothing vanishes from a board because a status was deleted out from under it.
 
-To add team members that only show up in a single project:
+## People
 
-1. Open the project.
-2. Click the project title (or the **edit** icon in the header) to open the **Edit project** modal.
-3. Find the **Team members** section.
-4. Type a name into the input and press **Enter** (or click **+ add**). The name appears as a chip in the list.
-5. Remove a member by clicking the **×** on their chip.
-6. Save the project.
+Assignees and members are picked from the person notes in your vault. A picked person is stored as a wikilink, so the task shows up in that note's backlinks and in the graph. Plain text still works — a name nobody has a note for stays a string.
 
-Per-project members appear in assignee pickers *alongside* the global list — they don't replace it. Two projects with the same per-project name don't share state; each is its own string on each project file.
+The plugin treats a person written as a link, as an alias, and as plain text as one person, so filtering by assignee doesn't split someone across three spellings. **Link assignees to their person notes** converts typed names into links to notes of the same name.
 
-Stored as `teamMembers: []` in the project's frontmatter. Hand-edit if you'd rather.
+Two lists feed every picker:
+
+- **Global team members** — set under **Settings → Project Manager → Team members**. Available in every project.
+- **Per-project members** — set on the project. Available in that project only, and shown on its overview.
+
+They combine rather than replace, and the picker also offers anyone already assigned to a task in the project. There's no user system and no permissions; assignees are people you can filter on, click through to, and list with **Show tasks assigned to a person**.
+
+## Tags
+
+Free-form strings on a task, used for filtering and grouping, stored as a list in the task's frontmatter. They're separate from Obsidian's `#tag` system. A project's overview shows every tag its tasks use.
 
 ## Where to go next
 
-- [Subtasks and dependencies](07-subtasks-and-dependencies.md) — nest tasks and link blockers.
-- [Custom fields](08-custom-fields.md) — add typed fields specific to a project.
-- [Data format](17-data-format.md) — exactly what gets stored where.
+- [Subtasks and dependencies](/docs/subtasks-and-dependencies) — nesting, blockers, and auto-schedule.
+- [Custom fields](/docs/custom-fields) — field types and inheritance.
+- [Vault layout](/docs/vault-layout) — exactly what gets stored where.
 
 ## Tips
 
-> Use a project per *outcome*, not per *theme*. "Launch v2 site" is a project. "Marketing" is not — it's a tag.
+Use a project per outcome, not per theme. "Launch v2 site" is a project. "Marketing" is not — that's a tag, or a parent project with real projects under it.
 
-> Team members are global because the same person usually shows up in multiple projects. Per-project members exist for the cases where they don't.
+Global team members exist because the same people show up in most projects. Per-project members exist for the cases where they don't.

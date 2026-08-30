@@ -14,7 +14,7 @@ export const docsNav: DocGroup[] = [
     title: 'Getting started',
     items: [
       { slug: 'install', title: 'Install', filename: '01-install' },
-      { slug: 'first-project', title: 'Create your first project', filename: '02-first-project' },
+      { slug: 'first-project', title: 'Create a project', filename: '02-first-project' },
       { slug: 'first-task', title: 'Create your first task', filename: '03-first-task' },
       { slug: 'vault-layout', title: 'Vault layout', filename: '04-vault-layout' },
     ],
@@ -23,6 +23,7 @@ export const docsNav: DocGroup[] = [
     title: 'Concepts',
     items: [
       { slug: 'projects-and-tasks', title: 'How the data model works', filename: '05-projects-and-tasks' },
+      { slug: 'project-overview', title: 'Project overview and settings', filename: '23-project-overview' },
       { slug: 'statuses-and-priorities', title: 'Statuses and priorities', filename: '06-statuses-and-priorities' },
       { slug: 'subtasks-and-dependencies', title: 'Subtasks and dependencies', filename: '07-subtasks-and-dependencies' },
       { slug: 'custom-fields', title: 'Custom fields', filename: '08-custom-fields' },
@@ -34,6 +35,7 @@ export const docsNav: DocGroup[] = [
       { slug: 'table-view', title: 'Table view', filename: '09-table-view' },
       { slug: 'gantt-view', title: 'Gantt view', filename: '10-gantt-view' },
       { slug: 'kanban-view', title: 'Kanban view', filename: '11-kanban-view' },
+      { slug: 'multi-project-views', title: 'Working across projects', filename: '24-multi-project-views' },
     ],
   },
   {
@@ -53,6 +55,7 @@ export const docsNav: DocGroup[] = [
       { slug: 'settings-reference', title: 'Settings reference', filename: '12-settings-reference' },
       { slug: 'data-format', title: 'Data format', filename: '17-data-format' },
       { slug: 'importing-notes', title: 'Importing existing notes', filename: '19-importing-notes' },
+      { slug: 'tasknotes', title: 'TaskNotes integration', filename: '25-tasknotes' },
     ],
   },
   {
