@@ -1,6 +1,6 @@
 # Install
 
-Project Manager is a community plugin. Install it from inside Obsidian Community Plugin.
+dotpm is a community plugin — listed in Obsidian's plugin browser under its original name, **Project Manager**. Install it from inside Obsidian Community Plugin.
 
 ## Install from community plugins
 
@@ -33,4 +33,4 @@ Project Manager is a community plugin. Install it from inside Obsidian Community
 
 ## Tips
 
-> Project Manager doesn't change any files outside the projects folder. Your existing vault stays exactly as it was.
+> dotpm doesn't change any files outside the projects folder. Your existing vault stays exactly as it was.

@@ -39,8 +39,9 @@ const siteUrl = Astro.site!.href.replace(/\/$/, '')
 const structuredData = {
   '@context': 'https://schema.org',
   '@type': 'SoftwareApplication',
-  name: 'Obsidian Project Manager',
-  description: 'Project management inside Obsidian. Tables, Gantt charts, and kanban boards over tasks stored as plain markdown in your vault.',
+  name: 'dotpm',
+  alternateName: 'dotpm — a project manager for Obsidian',
+  description: 'dotpm is project management inside Obsidian. Tables, Gantt charts, and kanban boards over tasks stored as plain markdown in your vault.',
   applicationCategory: 'ProductivityApplication',
   operatingSystem: 'Windows, macOS, Linux, Android, iOS',
   softwareRequirements: 'Obsidian 1.7.2 or later',
@@ -60,7 +61,7 @@ const structuredData = {
 }
 ---
 
-<BaseLayout title="Obsidian Project Manager — Gantt, kanban & tables in your vault">
+<BaseLayout title="dotpm — Gantt, kanban &amp; tables in your Obsidian vault">
   <script type="application/ld+json" set:html={JSON.stringify(structuredData)} is:inline />
   <section class="hero">
     <div class="bg-glow" aria-hidden="true"></div>
@@ -90,7 +91,7 @@ const structuredData = {
           <InteractiveGantt />
         </div>
         <div class="mockup-frame is-hero hero-static">
-          <Image src={ganttShot} alt="Gantt chart timeline in the Obsidian Project Manager plugin, with task bars across a date axis" sizes="100vw" />
+          <Image src={ganttShot} alt="Gantt chart timeline in the dotpm plugin for Obsidian, with task bars across a date axis" sizes="100vw" />
         </div>
       </div>
     </div>
@@ -116,7 +117,7 @@ const structuredData = {
       </div>
       <div class="container-wide view-stage" data-reveal style="--reveal-delay: 90ms">
         <div class="stage-main fade-deep">
-          <div class="mockup-frame"><Image src={tableShot} alt="Obsidian Project Manager table view listing tasks with status, priority, due date, and progress columns" sizes="(max-width: 720px) 100vw, 94vw" /></div>
+          <div class="mockup-frame"><Image src={tableShot} alt="dotpm table view listing tasks with status, priority, due date, and progress columns" sizes="(max-width: 720px) 100vw, 94vw" /></div>
         </div>
         <div class="float-frag frag-wide frag-left"><Image src={tableCloseup} alt="Close-up of inline-editing a task's fields directly in the table view" sizes="(max-width: 720px) 0px, 48vw" /></div>
       </div>
@@ -150,7 +151,7 @@ const structuredData = {
       </div>
       <div class="container-wide view-stage" data-reveal style="--reveal-delay: 90ms">
         <div class="stage-main fade-deep">
-          <div class="mockup-frame"><Image src={kanbanShot} alt="Obsidian Project Manager kanban board with task cards grouped into status columns" sizes="(max-width: 720px) 100vw, 94vw" /></div>
+          <div class="mockup-frame"><Image src={kanbanShot} alt="dotpm kanban board with task cards grouped into status columns" sizes="(max-width: 720px) 100vw, 94vw" /></div>
         </div>
         <div class="float-frag frag-modal frag-right"><Image src={taskModal} alt="Task detail modal showing custom fields and the time-tracking panel" sizes="(max-width: 720px) 0px, 24vw" /></div>
       </div>

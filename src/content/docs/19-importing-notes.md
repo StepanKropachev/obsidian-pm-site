@@ -1,6 +1,6 @@
 # Importing existing notes
 
-You don't have to start fresh. If your vault already has notes that represent work — meeting actions, follow-ups, drafts, project briefs — you can pull them into Project Manager as tasks (or convert a note into a project) without losing any content.
+You don't have to start fresh. If your vault already has notes that represent work — meeting actions, follow-ups, drafts, project briefs — you can pull them into dotpm as tasks (or convert a note into a project) without losing any content.
 
 > [Video: Importing notes as tasks — running the command, selecting files, choosing import options, then the tasks appearing in the project | import-notes.mp4]
 
@@ -81,7 +81,7 @@ The import flow above creates *tasks*. If you have a note that should be a whole
 4. Run **Open current file as project** from the command palette while the file is active. The plugin switches the view to the project pane.
 5. From there, use **Import notes as tasks** to pull related notes in as tasks.
 
-> **Note:** Project Manager doesn't auto-add the `pm-project` marker for you — the command only *opens* files that already have it. This keeps the plugin from claiming notes you didn't intend to convert.
+> **Note:** dotpm doesn't auto-add the `pm-project` marker for you — the command only *opens* files that already have it. This keeps the plugin from claiming notes you didn't intend to convert.
 
 The simpler path, if your "project note" is small: create a fresh project via **+ new project**, then paste the original note's content into the project file's body (below the `## Tasks` heading the plugin maintains).
 

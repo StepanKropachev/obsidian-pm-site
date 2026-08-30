@@ -1,6 +1,6 @@
 # Vault layout
 
-Everything Project Manager creates is plain markdown in your vault. There's no database and no hidden state. You can move, rename, and version these files with the same tools you use for the rest of your notes.
+Everything dotpm creates is plain markdown in your vault. There's no database and no hidden state. You can move, rename, and version these files with the same tools you use for the rest of your notes.
 
 ![Obsidian file explorer showing the Projects folder, a project file, its tasks folder, and the Archive subfolder](../../assets/screenshots/vault-file-tree.png)
 

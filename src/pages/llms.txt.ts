@@ -12,9 +12,9 @@ export const GET: APIRoute = async () => {
   const bodyByFilename = new Map(docs.map((d) => [d.id, d.body ?? '']))
 
   const lines: string[] = [
-    '# Obsidian Project Manager',
+    '# dotpm',
     '',
-    '> Project management inside Obsidian — table, gantt, and kanban views over tasks stored as plain markdown (YAML frontmatter) in your vault. Local-first, no lock-in.',
+    '> dotpm (formerly Obsidian Project Manager) is project management inside Obsidian — table, gantt, and kanban views over tasks stored as plain markdown (YAML frontmatter) in your vault. Local-first, no lock-in.',
     '',
     '## Start here',
     `- [Landing page](${SITE}/): what the plugin does, screenshots, and install links.`,
