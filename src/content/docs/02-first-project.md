@@ -2,6 +2,8 @@
 
 A project is a folder in your vault. Inside it: one markdown note holding the project's settings, a `_tasks/` folder holding one file per task, and — once a project sits under another — a folder per sub-project.
 
+> [Video: Creating a project — the new project dialog, then a second project nested under it by setting Parent, and the settings page that opens afterwards | projects-creating.mp4]
+
 ## Open the project list
 
 Click the **Project manager** ribbon icon, or run **Open projects pane** from the command palette. The list opens in a tab and shows every project in the vault as a row: icon, name, progress, tasks done over total, members, and the last due date. Sub-projects are nested under their parent, and the parent row counts the whole group.
