@@ -5,8 +5,7 @@
   <div class="container-wide nav-inner">
     <a href="/" class="brand">
       <span class="brand-dot" aria-hidden="true"></span>
-      <span class="brand-name">Obsidian Project Manager</span>
-      <span class="brand-name-short">Obsidian PM</span>
+      <span class="brand-name">dotpm</span>
     </a>
     <nav class="nav-links">
       <a href="/">Home</a>
@@ -46,10 +45,10 @@
     align-items: center;
     gap: 0.55rem;
     color: var(--on-surface);
-    font-family: var(--font-display);
-    font-weight: 600;
-    font-size: 0.9375rem;
-    letter-spacing: -0.02em;
+    font-family: var(--font-brand);
+    font-weight: 500;
+    font-size: 1.3125rem;
+    letter-spacing: -0.015em;
   }
   .brand:hover { color: var(--on-surface); }
   .brand-dot {
@@ -59,6 +58,7 @@
     background: linear-gradient(180deg, var(--primary-bright) 0%, var(--primary-dim) 100%);
     box-shadow: 0 0 12px var(--primary), inset 0 0 0 1px rgba(255, 255, 255, 0.2);
     display: inline-block;
+    flex: none;
   }
   .nav-links {
     display: flex;
@@ -75,10 +75,7 @@
   .nav-links a:hover {
     color: var(--on-surface);
   }
-  .brand-name-short { display: none; }
   @media (max-width: 540px) {
-    .brand-name { display: none; }
-    .brand-name-short { display: inline; }
     .nav-links { gap: 1.25rem; }
   }
 </style>

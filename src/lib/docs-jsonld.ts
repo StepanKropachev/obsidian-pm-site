@@ -26,12 +26,13 @@ export function techArticleJsonLd(input: DocsJsonLdInput): object {
     publisher: author,
     isPartOf: {
       '@type': 'WebSite',
-      name: 'Obsidian Project Manager',
+      name: 'dotpm',
       url: siteHome,
     },
     about: {
       '@type': 'SoftwareApplication',
-      name: 'Obsidian Project Manager',
+      name: 'dotpm',
+      alternateName: 'dotpm — a project manager for Obsidian',
       applicationCategory: 'ProductivityApplication',
     },
   }
@@ -42,7 +43,7 @@ export function breadcrumbJsonLd(input: DocsJsonLdInput): object {
   // The nav group is deliberately not a crumb: groups have no landing page,
   // and every breadcrumb item needs a resolvable URL.
   const items = [
-    { name: 'Obsidian Project Manager', item: siteHome },
+    { name: 'dotpm', item: siteHome },
     { name: 'Docs', item: `${siteHome}/docs` },
     { name: title, item: url },
   ]

@@ -22,7 +22,8 @@ const ogImage = new URL('/og.png', Astro.site)
 const siteJsonLd = {
   '@context': 'https://schema.org',
   '@type': 'WebSite',
-  name: 'Obsidian Project Manager',
+  name: 'dotpm',
+  alternateName: 'dotpm — a project manager for Obsidian',
   url: Astro.site!.href.replace(/\/$/, ''),
   description: 'Project management for Obsidian. Tables, Gantt, and kanban — your tasks stored as plain markdown in your vault.',
   inLanguage: 'en',
@@ -53,7 +54,7 @@ const siteJsonLd = {
     <meta property="og:image" content={ogImage} />
     <meta property="og:image:width" content="1200" />
     <meta property="og:image:height" content="630" />
-    <meta property="og:image:alt" content="Obsidian Project Manager — Gantt, kanban and table views over markdown tasks" />
+    <meta property="og:image:alt" content="dotpm — Gantt, kanban and table views over markdown tasks in Obsidian" />
     <meta name="twitter:card" content="summary_large_image" />
     <meta name="twitter:title" content={title} />
     <meta name="twitter:description" content={description} />

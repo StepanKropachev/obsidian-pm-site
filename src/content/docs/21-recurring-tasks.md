@@ -1,6 +1,6 @@
 # Recurring tasks
 
-Some work repeats on a schedule — weekly reviews, monthly invoices, quarterly planning. Project Manager lets you mark a task as **recurring** so it's visible at a glance as a repeating commitment, with an interval and an optional end date.
+Some work repeats on a schedule — weekly reviews, monthly invoices, quarterly planning. dotpm lets you mark a task as **recurring** so it's visible at a glance as a repeating commitment, with an interval and an optional end date.
 
 ## Setting a recurrence
 
