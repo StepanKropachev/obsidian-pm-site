@@ -1,80 +1,112 @@
 # Vault layout
 
-Everything dotpm creates is plain markdown in your vault. There's no database and no hidden state. You can move, rename, and version these files with the same tools you use for the rest of your notes.
-
-![Obsidian file explorer showing the Projects folder, a project file, its tasks folder, and the Archive subfolder](../../assets/screenshots/vault-file-tree.png)
+Everything dotpm creates is plain markdown in your vault. No database, no hidden state. Each project owns a folder, and everything belonging to that project lives inside it.
 
 ## The layout
 
 ```
 Your Vault/
-└── Projects/
-    ├── Website Redesign.md            project metadata
-    ├── Website Redesign_tasks/        task files
-    │   ├── audit-current-site.md
-    │   ├── new-homepage-copy.md
-    │   ├── ...
-    │   └── Archive/                   archived tasks
-    │       └── old-task.md
-    └── Internal Tools.md
-        Internal Tools_tasks/
-        ...
+├── Projects/
+│   ├── Website Redesign/
+│   │   ├── Website Redesign.md          project note: settings and metadata
+│   │   └── _tasks/
+│   │       ├── audit-current-site.md    one file per task
+│   │       ├── new-homepage-copy.md
+│   │       ├── new-homepage-copy/
+│   │       │   └── attachments/         files pasted into that task
+│   │       │       └── Pasted-20260830-114233.png
+│   │       └── Archive/
+│   │           └── old-task.md          archived tasks
+│   └── Platform/
+│       ├── Platform.md
+│       ├── _tasks/
+│       ├── API v2/                      a sub-project, inside its parent
+│       │   ├── API v2.md
+│       │   └── _tasks/
+│       └── Billing/
+│           ├── Billing.md
+│           └── _tasks/
+└── People/
+    ├── Ada Lovelace.md                  person notes, linked from assignees
+    └── Grace Hopper.md
 ```
 
-## The Projects folder
+## The project folder
 
-The top-level folder where all projects live. Configurable under **Settings** → **Project Manager** → **Projects folder**. Default: `Projects`.
+A project owns the folder named after it. Inside: the project note under the same name, a `_tasks/` folder, and a folder per sub-project.
 
-You can put it anywhere in the vault — `Work/Projects`, `02 Areas/PM`, whatever fits your filing system. Set the path once; the plugin will use it for new projects and read existing ones from there.
+The plugin doesn't care where that folder sits. Projects are listed wherever their files are, so you can file `Platform/` under `Work/`, `02 Areas/`, or the vault root and it stays in the list. Three settings shape this:
 
-## Project file
+- **New project folder** — where newly created top-level projects go. Default `Projects`. Empty means the vault root.
+- **Excluded folders** — folders the plugin doesn't look in at all.
+- **People folder** — where person notes are looked for and created. Default `People`. Empty searches the whole vault.
 
-`<Project name>.md`. Frontmatter contains:
+If the list ever disagrees with the vault after a lot of moving, run **Rebuild project index**.
+
+## The project note
+
+`<Project name>.md`, inside the folder of the same name. Its frontmatter carries:
 
 - `pm-project: true` — the marker the plugin looks for.
-- Project metadata: title, icon, color, custom field definitions, team members, saved views, timestamps.
-- `taskIds` — the list of top-level task IDs (used to preserve order).
+- Identity: `id`, `title`, `description`, `icon`, `color`.
+- `taskIds` — top-level tasks in order. That order is the table's order before you sort.
+- `parent` — a wikilink to the parent project's note, on a sub-project only.
+- `customFields`, `teamMembers`, `savedViews`, `createdAt`, `updatedAt`.
+- `config` — only the settings this project overrides. A project that overrides nothing has no `config` block at all.
 
-The markdown body has a heading and a `## Tasks` section with wiki links to each task file. The plugin keeps this section in sync.
+The body has a heading and a `## Tasks` section of wikilinks, checked off as tasks finish. The plugin keeps that section in sync; edit the frontmatter, not the list.
 
-## Tasks folder
+## The tasks folder
 
-`<Project name>_tasks/`. Created the first time you add a task. Holds one file per task — including subtasks at any depth.
+`_tasks/`, created with the project. One file per task, including subtasks at any depth — nesting lives in the frontmatter, not in the folder structure.
 
-Files are named `<slug>.md`, where the slug is the task title — lowercased, non-alphanumeric stripped, hyphenated, max 40 chars.
+Files are named `<slug>.md`: the title lowercased, with whitespace hyphenated and the characters a filesystem won't take — `\ / : * ? " < > |` — replaced by `-`, cut at 60 characters. Everything else survives, so `Fix API (v2)!` becomes `fix-api-(v2)!.md`. Rename a task and the file follows.
 
-If a new task's slug collides with an existing file in the same project, the task modal shows an inline error and the task won't save until you pick a different title.
+If a new task's slug collides with a file already in that project, the editor shows an inline error and the task won't save until the title changes.
 
-> Tasks created before plugin version 1.5 keep their older `<slug>-<id>.md` filenames until you change the title or rename the file yourself.
+Tasks created before version 2 keep their old names — the 40-character cap, or the `<slug>-<id>.md` form from before version 1.5 — until you change the title.
 
-## Archive subfolder
+### Archive
 
-`<Project name>_tasks/Archive/`. Tasks moved here are treated as archived. There's no separate "archived" flag in the file — *being in the Archive folder is what archived means*.
+`_tasks/Archive/`. Being in that folder is what archived means; there's no separate flag. Archived tasks are hidden from the views unless you turn on **Show archived** in the filter bar, don't trigger notifications, and are skipped by auto-schedule and by dependency arrows.
 
-Archived tasks:
-- Are hidden from the default table view (toggle **Show archived** in the filter bar to see them).
-- Don't trigger notifications.
-- Are skipped by auto-schedule.
+To restore one, drag the file out of `Archive/`, or use bulk **Unarchive**.
 
-To restore: drag the file out of `Archive/`, or use bulk **Unarchive**.
+Tasks land here on their own if auto-archive is set, globally or on the project. **Archive completed tasks** does the same sweep on demand.
+
+### Attachments
+
+Paste or drop a file into a task's description and it's written to `_tasks/<task slug>/attachments/`, beside that task rather than in the vault's default attachment folder. The folder travels with the task when it's renamed, archived, or moved to another project.
+
+## Sub-projects
+
+A new sub-project's folder is created inside its parent's. That's where it lands, not what makes it a child — the hierarchy comes from the `parent` wikilink in the frontmatter. Move a sub-project's folder somewhere else and it stays a sub-project; clear the link and it becomes a top-level project wherever it sits.
+
+A `parent` link that points at a missing project, or one that closes a loop, is ignored and the project is treated as a root.
+
+## Upgrading from version 1
+
+Version 1 kept a project as a loose note beside a `<Name>_tasks/` folder. On the first launch after upgrading, every project moves into a folder of its own — note and tasks together — and open tabs, filters, and saved views follow the move. It's idempotent, so a run interrupted halfway finishes on the next launch.
 
 ## Editing by hand
 
-You can open any of these files in Obsidian — or any other editor — and edit the frontmatter directly. Two rules:
+Open any of these files in Obsidian, or any other editor, and change the frontmatter. Two rules:
 
-1. **Task IDs must be unique within a project**. Don't copy a file without changing its `id`.
-2. **Dates use `YYYY-MM-DD`**. An empty string (`""`) means unset; don't use `null`.
+1. Task IDs must be unique. Don't copy a task file without changing its `id`.
+2. Dates are `YYYY-MM-DD`. An empty string means unset; don't write `null`.
 
-The plugin re-reads files on vault change events, so manual edits show up immediately.
+The plugin re-reads files on vault change events, so hand edits show up right away.
+
+Moving a whole project to another vault means copying its folder — note, `_tasks/`, and any sub-project folders. Everything inside references everything else by ID, so the new location doesn't matter.
 
 ## Where to go next
 
-- [Projects and tasks](05-projects-and-tasks.md) — the data model.
-- [Data format](17-data-format.md) — the full YAML schema, field by field.
-- [Archived tasks](20-archived-tasks.md) — what the `Archive/` subfolder is for.
+- [How the data model works](/docs/projects-and-tasks) — what each field means.
+- [Create a project](/docs/first-project) — parents, renaming, deleting.
+- [Archived tasks](/docs/archived-tasks) — auto-archive and restoring.
 
 ## Tips
 
-> The one-file-per-task layout is what makes sync conflicts rare. When two devices edit different tasks, they edit different files — no merge needed.
+One file per task is what keeps sync conflicts rare. Two devices editing two tasks are editing two files, and there's nothing to merge.
 
-> Want to move a project to a different vault? Copy the project file and its `_tasks/` folder together. They reference each other by ID, so the relative location inside the new vault doesn't matter as long as both are present.
+Renaming a project from its settings page renames the note and its folder together. So does renaming the note in Obsidian's file explorer — the folder follows it. Drag the note somewhere else entirely and its `_tasks/` folder goes along as a sibling, so the pair never comes apart.

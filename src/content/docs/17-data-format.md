@@ -6,7 +6,7 @@ If you want to hand-edit, script against, or migrate your data — this is the c
 
 ## Project file
 
-Path: `<projectsFolder>/<Project title>.md`. Frontmatter marker: `pm-project: true`.
+Path: `<project folder>/<Project name>.md` — a project owns the folder named after it, and its note sits inside under the same name. Frontmatter marker: `pm-project: true`.
 
 ### Frontmatter schema
 
@@ -19,11 +19,13 @@ Path: `<projectsFolder>/<Project title>.md`. Frontmatter marker: `pm-project: tr
 | `color` | string | yes | Hex color, e.g. `#5ba0e2`. |
 | `icon` | string | yes | Emoji. |
 | `taskIds` | string[] | yes | Top-level task IDs, in display order. |
+| `parent` | string | no | Wikilink to the parent project's note. Present only on a sub-project. |
 | `customFields` | array | yes | See **Custom field definitions** below. Empty array if none. |
 | `teamMembers` | string[] | yes | Per-project assignee list. Empty if none. |
 | `savedViews` | array | yes | See **Saved views** below. Empty if none. |
 | `createdAt` | string | yes | ISO 8601 timestamp. |
 | `updatedAt` | string | yes | ISO 8601 timestamp. |
+| `config` | object | no | Only the settings this project overrides. Omitted entirely when it overrides nothing. See **Project config** below. |
 
 ### Example
 
@@ -68,21 +70,43 @@ updatedAt: "2026-05-23T14:31:02.000Z"
 Q3 site refresh
 
 ## Tasks
-- [[audit-current-site|Audit current site]]
-- [[new-homepage-copy|New homepage copy]]
+- [ ] [[audit-current-site|Audit current site]]
+- [x] [[new-homepage-copy|New homepage copy]]
+```
+
+The plugin regenerates the body from the frontmatter on every save — the heading, the description, and the `## Tasks` list, checked off against each task's status. Anything else you write there is lost. Put project prose in the `description` field instead.
+
+### Project config
+
+Present only for settings this project overrides. Any absent key falls back to the vault settings.
+
+```yaml
+config:
+  statuses: [...]          # same shape as the global status list
+  priorities: [...]        # same shape as the global priority list
+  priorityIcons: "arrows"  # chevrons | signal | arrows | alerts | none
+  hiddenCustomFields: ["sprint"]   # inherited field ids this project leaves out
+  defaultView: "gantt"     # table | gantt | kanban
+  autoSchedule: true
+  pullForwardOnEarlyFinish: false
+  autoArchiveDays: 30
+  showSubtreeConnections: true
+  lineBorders: "horizontal"        # none | horizontal | vertical | both
+  kanbanShowSubtasks: false
+  kanbanShowDescriptionPreview: false
 ```
 
 ## Task file
 
-Path: `<projectsFolder>/<Project title>_tasks/<slug>.md`. Frontmatter marker: `pm-task: true`.
+Path: `<project folder>/_tasks/<slug>.md`. Frontmatter marker: `pm-task: true`.
 
 ### File naming
 
-`<slug>.md`, where the slug is the title — lowercased, non-alphanumeric stripped, hyphenated, max 40 characters.
+`<slug>.md`, where the slug is the title with the characters a filesystem won't take — `\ / : * ? " < > |` — replaced by `-`, then lowercased, whitespace turned to hyphens, and cut at 60 characters. Everything else survives, so `Fix API (v2)!` becomes `fix-api-(v2)!.md`.
 
 Example: `audit-current-site.md`.
 
-Slug collisions within the same project are rejected: the task modal shows an inline error and won't save until the title is changed. Tasks created before plugin version 1.5 keep their `<slug>-<short-id>.md` filenames until the title changes or the file is renamed.
+Slug collisions within the same project are rejected: the task editor shows an inline error and won't save until the title is changed. Tasks created before version 2 keep their old filenames — the 40-character cap, or the `<slug>-<short-id>.md` form from before version 1.5 — until the title changes.
 
 ### Frontmatter schema
 
@@ -94,18 +118,18 @@ Slug collisions within the same project are rejected: the task modal shows an in
 | `id` | string | yes | Stable task ID. |
 | `title` | string | yes | |
 | `type` | string | yes | `"task"` or `"milestone"`. |
-| `status` | string | yes | Status ID (must exist in settings or it'll remap on next load). |
-| `priority` | string | yes | `"critical"`, `"high"`, `"medium"`, `"low"`. |
+| `status` | string | yes | Status ID, from the project's status list or the vault's. |
+| `priority` | string | yes | Priority ID, from the project's priority list or the vault's. |
 | `start` | string | yes | `YYYY-MM-DD` or `""` for unset. |
 | `due` | string | yes | `YYYY-MM-DD` or `""` for unset. |
 | `progress` | number | yes | 0–100. |
 | `assignees` | string[] | yes | Names. Empty array if none. |
 | `tags` | string[] | yes | Free-form tags. Empty if none. |
 | `subtaskIds` | string[] | yes | Direct children's IDs. |
-| `dependencies` | string[] | yes | IDs of tasks this task is blocked by. |
-| `collapsed` | boolean | yes | Whether the subtask tree is collapsed in the UI. |
+| `dependencies` | string[] | yes | IDs of tasks this task is blocked by. Resolved vault-wide, so they may point outside this project. |
 | `createdAt` | string | yes | ISO 8601 timestamp. |
 | `updatedAt` | string | yes | ISO 8601 timestamp. |
+| `completed` | string | no | `YYYY-MM-DD`, stamped when the task lands in a complete status. Omitted until then. |
 | `recurrence` | object | no | See **Recurrence** below. Omitted if not set. |
 | `timeEstimate` | number | no | Hours. Omitted if unset. |
 | `timeLogs` | array | no | See **Time logs** below. Omitted if empty. |
@@ -135,7 +159,6 @@ tags:
 subtaskIds:
   - "t_111111aabbdd"
 dependencies: []
-collapsed: false
 timeEstimate: 10
 timeLogs:
   - date: "2026-05-22"
@@ -148,7 +171,20 @@ updatedAt: "2026-05-23T14:00:00.000Z"
 ---
 
 Audit the existing site against the redesign brief. Flag anything that doesn't carry over.
+
+Project: [[Website Redesign|Website Redesign]]
+
+## Subtasks
+- [ ] [[check-legacy-redirects|Check legacy redirects]]
 ```
+
+The body is the task's **description**, followed by content the plugin generates on every save: a `Project:` wikilink (or `Parent:` on a subtask) and a `## Subtasks` list if it has children. Write your description above those; they're rewritten each time.
+
+### What isn't in the file
+
+**`collapsed`** — whether a task's subtree is folded in the table. It's per-device UI state, kept in the plugin's `data.json`, so toggling a chevron doesn't rewrite task files or produce a sync conflict.
+
+**`archived`** — see **Archive** below.
 
 ## Custom field definitions
 
@@ -188,7 +224,7 @@ If a field has no value on a task, the key is omitted.
 
 ## Recurrence
 
-Optional on a task:
+Optional on a task. Storing it marks the task as recurring and shows a badge; it doesn't generate the next occurrence. See [Recurring tasks](21-recurring-tasks.md).
 
 ```yaml
 recurrence:
@@ -218,7 +254,7 @@ Stored on the project (see project example above). Schema:
   filter:
     text: string
     statuses: string[]
-    priorities: ("critical"|"high"|"medium"|"low")[]
+    priorities: string[]              # priority ids
     assignees: string[]
     tags: string[]
     dueDateFilter: "any"|"overdue"|"this-week"|"this-month"|"no-date"
@@ -230,7 +266,7 @@ Stored on the project (see project example above). Schema:
 
 ## Archive
 
-There is no `archived: true` field. A task is archived when its file is inside the `<Project>_tasks/Archive/` subfolder. The plugin sets a runtime flag on load based on file location, but it isn't written back.
+There is no `archived: true` field. A task is archived when its file is inside the project's `_tasks/Archive/` folder. The plugin derives a runtime flag from the file's location on load and never writes it back, so moving the file is the whole operation.
 
 ## What's safe to hand-edit
 
@@ -241,10 +277,11 @@ There is no `archived: true` field. A task is archived when its file is inside t
 What to be careful with:
 
 - **IDs.** Must be unique within a project. Don't copy a file without changing its `id`.
-- **Status / priority IDs.** Must match what's configured in settings, or the task gets remapped on next load.
+- **Status / priority IDs.** Should match the project's lists, or the vault's. An unknown one is kept and shown rather than silently remapped, but it won't carry a color or a completion flag.
 - **Date format.** Always `YYYY-MM-DD`. Use `""` (empty string), not `null`, for unset.
 
 ## Where to go next
 
 - [Vault layout](04-vault-layout.md) — where these files sit.
-- [Projects and tasks](05-projects-and-tasks.md) — what each field means at the model level.
+- [How the data model works](05-projects-and-tasks.md) — what each field means at the model level.
+- [TaskNotes integration](/docs/tasknotes) — what an imported TaskNotes task brings across.

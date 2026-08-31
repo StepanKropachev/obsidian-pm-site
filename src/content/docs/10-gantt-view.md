@@ -1,6 +1,6 @@
 # Gantt view
 
-The gantt view is for *planning*. See start and due dates as bars on a timeline. Drag to reschedule. Watch dependencies as arrows between bars. Switch zoom levels from day to quarter.
+The gantt view is for *planning*. See start and due dates as bars on a timeline. Drag to reschedule. Watch dependencies as arrows between bars. Switch zoom levels from day to year.
 
 > [Video: A gantt walkthrough — dragging a bar to reschedule, resizing it, switching day / week / month / quarter zoom, a dependency arrow, and opening a task from a bar | gantt-walkthrough.mp4]
 
@@ -14,18 +14,19 @@ A vertical divider between the two is draggable — drag to resize the left pane
 
 ## Granularity (zoom)
 
-Four levels, switched via the toolbar:
+Five levels, switched via the toolbar:
 
 - **Day** — one cell per day.
 - **Week** — one cell per week. The header label format is configurable — see below.
 - **Month** — month columns.
 - **Quarter** — quarter columns.
+- **Year** — year columns, for long-range plans.
 
 The plugin auto-extends the visible date range based on your tasks (with a small padding on either side) and enforces a minimum range per granularity, so the timeline always has room to breathe.
 
 ## Week labels
 
-Under **Settings** → **Project Manager** → **Gantt week label**, pick how week headers read:
+Under **Settings** → **Project Manager** → **Gantt** → **Week label**, pick how week headers read:
 
 - **Week number** — "w15"
 - **Date range** — "apr 7–13"
@@ -94,7 +95,7 @@ A vertical line marks today on the timeline. The toolbar's **today** button scro
 
 - **Expand all** / **collapse all** — toggle every parent's subtask visibility.
 - **Today** — scroll the timeline to today.
-- **Granularity buttons** — day / week / month / quarter.
+- **Granularity buttons** — day / week / month / quarter / year.
 
 ## Keyboard
 
@@ -113,6 +114,7 @@ When a filter or search matches a deeply nested subtask whose parent is filtered
 ## Where to go next
 
 - [Subtasks and dependencies](07-subtasks-and-dependencies.md) — how dependency arrows are formed.
+- [Working across projects](/docs/multi-project-views) — dependencies that leave the project, and the chip that stands in for an off-screen arrow.
 - [Settings reference](12-settings-reference.md) — granularity default and week label format.
 
 ## Tips

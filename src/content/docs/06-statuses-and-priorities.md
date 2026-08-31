@@ -1,6 +1,6 @@
 # Statuses and priorities
 
-Statuses are fully customizable per vault. Priorities are a fixed set. Both are used everywhere — filters, sort order, kanban columns, the gantt left panel.
+Statuses and priorities are both fully customizable, per vault and per project. They're used everywhere — filters, sort order, kanban columns, the gantt left panel.
 
 ![The settings tab with the status list — color swatches and per-status controls](../../assets/screenshots/status-settings.png)
 
@@ -8,10 +8,10 @@ Statuses are fully customizable per vault. Priorities are a fixed set. Both are 
 
 | ID | Label | Marked as "done" |
 | --- | --- | --- |
-| `todo` | To do | no |
-| `in-progress` | In progress | no |
+| `todo` | To Do | no |
+| `in-progress` | In Progress | no |
 | `blocked` | Blocked | no |
-| `review` | In review | no |
+| `review` | In Review | no |
 | `done` | Done | yes |
 | `cancelled` | Cancelled | yes |
 
@@ -26,7 +26,7 @@ That's it. Status IDs themselves aren't special — the plugin doesn't hard-code
 
 ## Customize statuses
 
-Under **Settings** → **Project Manager** → **Statuses**:
+Under **Settings** → **Project Manager** → **Task fields** → **Statuses**:
 
 1. **Reorder** by dragging the handle on the left. Order in this list = order in kanban columns and the table view's status sort.
 2. **Edit** the label, icon, or color by clicking on the row.
@@ -42,19 +42,32 @@ If you want to keep history clean, change those tasks' status manually *before* 
 
 ## Priorities
 
-Priorities are a fixed set: **critical**, **high**, **medium**, **low**. You can't add, remove, or rename them in the current version.
+Priorities work the same way, under **Settings** → **Project Manager** → **Task fields** → **Priorities**. Each has a **label**, a **color**, and an optional **icon**, and the list is reorderable.
 
-Why fixed? They're used for the priority color rail on kanban cards and a few small UI affordances that depend on having a known set. Status is the open-ended customization point.
+Order is rank, highest first. It drives the sort order, and it decides which icon each priority gets from the icon set.
 
-Priorities have:
+Ships with four: Critical, High, Medium, Low. Add, rename, recolor, and reorder them freely.
 
-- A **label** and a **color** (currently not user-editable in the UI).
-- A position in the sort order: critical → high → medium → low.
+### Priority icons
+
+A priority with no icon of its own borrows one from the set chosen under **Settings** → **Project Manager** → **Style** → **Priority icons**: chevrons, signal bars, arrows, alerts, or none. Icons are handed out by rank, so the top priority gets the strongest icon.
+
+A scale longer than five leaves its lowest ranks without an icon. Give those a `#` emoji or a Lucide icon name of their own if you want one.
+
+## Per-project overrides
+
+Both lists are vault-wide defaults. A project can run its own instead — open **Edit project** → **Statuses** or **Priorities** and turn on the override. The project gets a copy of the global list to edit however it likes.
+
+The override is per project, not per subtree: a sub-project keeps using the global lists unless you turn its own on too. Turn the toggle back off and the project returns to the global list.
+
+A status or priority that no list defines any more, but that tasks still use, stays visible anyway — nothing vanishes from a board because an entry was removed out from under it.
 
 ## Where to go next
 
 - [Kanban view](11-kanban-view.md) — one column per status.
-- [Settings reference](12-settings-reference.md) — the full status editor.
+- [Project overview and settings](/docs/project-overview) — turning on a project's own lists.
+- [TaskNotes integration](/docs/tasknotes) — import statuses and priorities from TaskNotes.
+- [Settings reference](12-settings-reference.md) — the full status and priority editors.
 
 ## Tips
 

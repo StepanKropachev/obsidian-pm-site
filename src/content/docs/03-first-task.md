@@ -14,13 +14,15 @@ A task is a single unit of work. It lives in its own markdown file inside the pr
 2. Fill in any fields you need:
    - **Title** (required).
    - **Status** — see [Statuses and priorities](06-statuses-and-priorities.md).
-   - **Priority** — critical, high, medium, or low.
+   - **Priority** — from your priority list. Critical, High, Medium, Low out of the box, and editable in settings.
    - **Start** and **Due** — `YYYY-MM-DD`, both optional.
    - **Assignees** — picked from the project's team plus the global list.
    - **Tags** — free-form labels for filtering.
    - **Description** — free-form notes (markdown).
    - **Type** — task or milestone. A milestone has a single date and renders as a diamond in the gantt view.
-3. Save: click **Save**, or press **Shift+Enter** anywhere in the modal.
+3. Save: click **Save**, or press **Shift+Enter** anywhere in the editor.
+
+The editor opens as a modal by default. Set **Settings** → **Project Manager** → **Open tasks in** to **Tab** to have it open in a tab instead.
 
 ### Inline edit
 
@@ -34,13 +36,13 @@ By default, closing the task modal saves your changes. To require an explicit sa
 
 ## What was created on disk
 
-A markdown file at `Projects/<Project>_tasks/<slug>.md`, where `<slug>` is the task title — lowercased, spaces become hyphens, max 40 characters.
+A markdown file at `<project folder>/_tasks/<slug>.md`, where `<slug>` is the task title lowercased, with spaces turned to hyphens and characters a filesystem won't take replaced by `-`, cut at 60 characters.
 
 Example: a task titled "Write release notes" gets a filename like `write-release-notes.md`.
 
 If another task in the same project already uses that filename, the title input shows an inline error and the task won't save until you pick a different title.
 
-> Tasks created in earlier versions keep their `<slug>-<id>.md` filenames until you rename the title or the file yourself.
+> Tasks created in earlier versions keep their old filenames — the 40-character cap, or the `<slug>-<id>.md` form from before version 1.5 — until you change the title.
 
 The file's YAML frontmatter holds every field you can set on a task. The markdown body is the task's description.
 

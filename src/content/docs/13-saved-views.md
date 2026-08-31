@@ -1,6 +1,6 @@
 # Saved views
 
-A saved view is a named bundle of *filter + sort + view mode*. Switch between them in one click. Each project has its own.
+A saved view is a named bundle of *filter + sort + view mode*. Switch between them in one click. Each scope has its own set.
 
 ## What gets saved
 
@@ -10,7 +10,11 @@ A saved view captures three things:
 2. **Sort** — sort key (title / status / priority / assignee / due / progress) and direction (asc / desc).
 3. **View mode** — table / gantt / kanban. Captured automatically when you save; selecting a saved view switches the project to that mode. Older saved views from before this was tracked may have the field unset — selecting one of those keeps the current view mode.
 
-Saved views are stored on the **project** file (in its YAML frontmatter under `savedViews`). They travel with the project — share the project file and the views go with it.
+Saved views for a single project are stored on the **project note** (in its frontmatter under `savedViews`). They travel with the file — share the project and its views go with it.
+
+Views for a scope covering several projects — a subtree, a folder, the whole vault — live in the plugin's settings instead, since a group of projects has no file of its own to keep them in. See [Working across projects](/docs/multi-project-views).
+
+Each scope keeps its own views and its own filter state. "Platform" and "Platform and sub-projects" are two different sets, and neither disturbs the other.
 
 > Filter state on its own (without saving as a named view) also persists per project across plugin reloads. Saved views are for switching between *different* combos; reload persistence keeps your last working state intact.
 
@@ -63,6 +67,7 @@ Hand-editing is fine. The plugin re-reads on file change.
 ## Where to go next
 
 - [Table view](09-table-view.md) — the filter bar and sort controls.
+- [Working across projects](/docs/multi-project-views) — views over more than one project.
 - [Data format](17-data-format.md) — the YAML schema.
 
 ## Tips

@@ -1,100 +1,78 @@
 # Importing existing notes
 
-You don't have to start fresh. If your vault already has notes that represent work — meeting actions, follow-ups, drafts, project briefs — you can pull them into dotpm as tasks (or convert a note into a project) without losing any content.
-
-> [Video: Importing notes as tasks — running the command, selecting files, choosing import options, then the tasks appearing in the project | import-notes.mp4]
+You don't have to start fresh. Notes that already represent work — meeting actions, follow-ups, drafts, briefs — can be pulled into a project as tasks without losing their content.
 
 ## Import notes as tasks
 
-Use this when you have one or more markdown notes that you'd like to track as tasks inside a project.
-
-### Run the command
-
 Open the command palette and run **Import notes as tasks**.
 
-- If a project is currently open, the import goes into that project.
-- If no project is open, you'll be asked to pick one first.
+If a project is open, the import goes into that project. If none is, you're asked to pick one first.
 
 ### Phase 1 — pick the notes
 
-A modal opens listing every markdown file in your vault.
+A modal lists every markdown file in the vault.
 
-- **Search** — type in the top input to filter by filename or folder.
-- Check the box next to each note you want to import.
-- **Select all** selects every note currently matching the search.
-- The counter at the top right shows how many you've picked.
+- **Search** filters by filename or folder.
+- Check the box beside each note you want.
+- **Select all** takes every note matching the current search.
+- The counter at the top right shows how many are picked.
 
-Click **Next** when the selection looks right.
+Click **Next**.
 
-### Phase 2 — set defaults
+### Phase 2 — set the defaults
 
-For all the notes you're importing, pick:
+For the whole batch:
 
-- **Default status** — the status every new task starts in (usually `todo`).
-- **Default priority** — `medium` by default.
-- **File handling**:
-  - **Move to tasks folder** (default) — the original file is moved into the project's `_tasks/` folder and rewritten as a task.
-  - **Copy (keep original)** — leaves your original note alone and creates a new task file.
+- **Default status** — where new tasks start. Usually To Do.
+- **Default priority** — Medium by default.
+- **File handling:**
+  - **Move to tasks folder** (default) — the original file moves into the project's `_tasks/` folder and is rewritten as a task.
+  - **Copy (keep original)** — your note stays where it is and a new task file is written.
 
-Click **Import**.
+Click **Import**. The summary tells you how many were imported and how many skipped.
 
-### What happens to each note
+## What lands in the task
 
-For every selected file:
+For an ordinary note, the import is deliberately simple:
 
-1. The plugin reads the body and frontmatter.
-2. It creates a new task with:
-   - **Title** = the filename (without `.md`)
-   - **Description** = the body of the note
-   - **Status** and **priority** from the defaults you picked
-3. The task file is written into the project's `_tasks/` folder.
-4. If you chose **Move**, the original is moved there and overwritten with the new task YAML. If you chose **Copy**, the original stays put.
+- **Title** — the filename, without `.md`.
+- **Description** — the body of the note.
+- **Status and priority** — the defaults you picked.
 
-### What gets skipped
+Existing frontmatter is replaced by task YAML. If your notes carry metadata you care about, move it into the description or a custom field after importing.
 
-A note is skipped if it already has `pm-task: true` in its frontmatter — it's already a task, so importing it again would be a duplicate. The import summary at the end tells you how many were imported and how many were skipped.
+**Notes TaskNotes recognizes are a different story.** With TaskNotes 4.10 or newer installed, those come through its API with dates, tags, time estimates, recurrence, archive state, hierarchy, and dependencies intact. See [TaskNotes integration](/docs/tasknotes) — worth reading before a big import, because dependency and parent links only survive between notes imported in the same selection.
 
-### What's *not* preserved
+## What gets skipped
 
-The import is intentionally simple — it captures the title and the body. Existing frontmatter (other than `pm-task` detection) is replaced with task YAML. If your notes have metadata you care about, copy it into the task description or a custom field after import.
+A note already carrying `pm-task: true` in its frontmatter. It's a task already, and importing it again would duplicate it.
 
 ## Turn a note into a project
 
-The import flow above creates *tasks*. If you have a note that should be a whole **project** instead, the workflow is manual:
+The import above makes tasks. To promote a note to a whole project:
 
-1. Open the note.
-2. Add this to the top of the file (above any existing content):
-   ```yaml
-   ---
-   pm-project: true
-   id: "<any unique string>"
-   title: "<Project title>"
-   icon: "📌"
-   color: "#888888"
-   teamMembers: []
-   customFields: []
-   createdAt: "2026-05-24T00:00:00.000Z"
-   updatedAt: "2026-05-24T00:00:00.000Z"
-   ---
-   ```
-3. Save the file.
-4. Run **Open current file as project** from the command palette while the file is active. The plugin switches the view to the project pane.
-5. From there, use **Import notes as tasks** to pull related notes in as tasks.
+1. Add `pm-project: true` to its frontmatter. That one line is the marker.
+2. Save.
+3. Run **Open current file as project** with the note active.
 
-> **Note:** dotpm doesn't auto-add the `pm-project` marker for you — the command only *opens* files that already have it. This keeps the plugin from claiming notes you didn't intend to convert.
+Everything else — id, color, icon, timestamps — is filled in with defaults the first time the plugin writes the project, and the title falls back to the filename. Set them properly afterwards in **Edit project**.
 
-The simpler path, if your "project note" is small: create a fresh project via **+ new project**, then paste the original note's content into the project file's body (below the `## Tasks` heading the plugin maintains).
+The plugin never adds the marker on its own. That's what keeps it from claiming notes you didn't mean to convert.
+
+A converted note starts outside the folder-per-project layout, since it's sitting wherever you left it. It's moved into a folder of its own — note and `_tasks/` together — the next time the vault opens. See [Vault layout](/docs/vault-layout).
+
+Don't paste project content into the body of a project note. The plugin regenerates that body from the frontmatter on every save, so anything you add there is lost. The project's **description** field is the place for it: it survives saves and renders on the project overview.
 
 ## Where to go next
 
-- [Vault layout](04-vault-layout.md) — see where imported files end up.
-- [Bulk operations](15-bulk-operations.md) — clean up status, priority, or tags across the imported batch.
-- [Custom fields](08-custom-fields.md) — add fields to capture metadata from your old notes.
+- [TaskNotes integration](/docs/tasknotes) — what a TaskNotes import brings across.
+- [Vault layout](/docs/vault-layout) — where imported files end up.
+- [Bulk operations](/docs/bulk-operations) — clean up the batch in one move.
 
 ## Tips
 
-> Before a big import, **make a backup** (or commit your vault to git). The "move" option rewrites the original file with task YAML — it's not destructive, but it's not trivially reversible either.
+Back up, or commit your vault, before a large import with **Move** selected. It rewrites the original files, and the only way back is your version history.
 
-> Run **Bulk operations** right after importing: select all the new tasks, set tags or due dates in one go, instead of editing each one.
+Import, then bulk edit. Select the whole new batch and set tags, dates, or an assignee in one go rather than opening thirty tasks.
 
-> If you're importing dozens of files, expect the modal to take a second to load — it scans every `.md` file in your vault to build the picker.
+Importing dozens of files? Expect the picker to take a moment — it scans every markdown file in the vault to build the list.

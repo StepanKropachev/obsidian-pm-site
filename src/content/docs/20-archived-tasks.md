@@ -6,7 +6,7 @@ Archiving moves a task out of your active views without deleting it. Use it for 
 
 | | Archive | Delete |
 |---|---|---|
-| The file | Moved to `<project>_tasks/Archive/` | Permanently removed |
+| The file | Moved to the project's `_tasks/Archive/` | Permanently removed |
 | Reversible | Yes — unarchive any time | Only via Obsidian's file-recovery / git |
 | Shows in views | Hidden by default, toggleable | Gone |
 | Searchable in vault | Yes (it's still a file) | No |
@@ -18,7 +18,9 @@ Archiving moves a task out of your active views without deleting it. Use it for 
 
 ### From the task context menu
 
-Right-click any task row (in the table, kanban, or gantt view) and choose **Archive**. The file is moved to the project's `Archive/` subfolder and the row disappears from active views.
+Right-click any task row (in the table, kanban, or gantt view) and choose **Archive**. The file moves to the project's `_tasks/Archive/` folder and the row disappears from active views.
+
+A task never archives alone: its whole subtree moves with it, so a parent and its children stay together.
 
 If a task is already archived, the menu shows **Unarchive** instead — which moves it back to the main `_tasks/` folder.
 
@@ -28,18 +30,14 @@ Select multiple tasks in the table view, then click **Archive** in the bulk acti
 
 ## Where archived files live
 
-For a project at `Projects/My Project.md`:
+For a project at `Projects/My Project/`:
 
-- Active tasks: `Projects/My Project_tasks/*.md`
-- Archived tasks: `Projects/My Project_tasks/Archive/*.md`
+- Active tasks: `Projects/My Project/_tasks/*.md`
+- Archived tasks: `Projects/My Project/_tasks/Archive/*.md`
 
-Inside each archived task file, the frontmatter gains:
+**Being in that folder is what archived means.** There's no `archived: true` field in the frontmatter — the plugin derives the state from the file's location every time it loads, and never writes it back.
 
-```yaml
-archived: true
-```
-
-That flag is what the plugin uses to decide whether a task is "archived" — the folder location is mostly for tidiness in the file explorer. If you manually move a file in or out of `Archive/`, also flip the `archived:` flag in its frontmatter, or the views will get out of sync.
+So moving a file in or out of `Archive/` by hand is all it takes. Drag it out and the task is active again; there's no flag to keep in step.
 
 ## Showing archived tasks
 
@@ -55,23 +53,29 @@ The toggle is per-project and persists, so once you turn it on for a project, it
 
 ## Subtasks of archived parents
 
-Archiving a parent task does **not** automatically archive its subtasks. Each task's `archived` flag is independent. If you want a whole branch archived:
+Archiving a parent archives its whole subtree in one move — every descendant's file goes to `Archive/` with it. Unarchiving does the reverse, bringing the branch back together.
 
-1. Expand the parent.
-2. Select the parent and all its subtasks (Shift-click in the table).
-3. Bulk **Archive**.
+You don't need to select the children yourself, and you can't archive a parent while leaving its subtasks in the active views.
 
-Same applies to unarchiving — bring the parent and its children back together.
+## Auto-archive
 
-## Auto-archive on completion?
+Set **Settings → Project Manager → Archive → Auto-archive completed tasks** to 7, 14, 30, or 90 days and finished work moves itself out of the way that long after it was completed. `0` turns it off, which is the default. A project can set its own interval in its settings, so a support backlog can clear after a week while a research project keeps everything.
 
-Not currently. Tasks stay in active views when you mark them `done` — you have to archive them yourself (individually or in bulk). The most common workflow is: filter the table to status = `done`, **select all**, **archive**.
+The sweep runs at most once a day, and it's careful about what it takes:
+
+- A subtree moves as a unit. One unfinished descendant keeps the whole branch in place.
+- A task with no completion date is never swept — there's nothing to measure its age against.
+- A task that something still-active depends on waits until its dependents are archived too, so archiving never silently reschedules work you didn't touch.
+
+**Archive completed tasks** in the command palette runs the same sweep immediately, using the same rules.
+
+Prefer to do it by hand? Filter the table to a complete status, **select all**, **archive**.
 
 ## Where to go next
 
 - [Bulk operations](15-bulk-operations.md) — archive many tasks at once.
 - [Vault layout](04-vault-layout.md) — see exactly where archived files sit on disk.
-- [Statuses and priorities](06-statuses-and-priorities.md) — archive is *not* a status; it's a separate flag.
+- [Statuses and priorities](06-statuses-and-priorities.md) — archive is *not* a status; it's where the file sits.
 
 ## Tips
 

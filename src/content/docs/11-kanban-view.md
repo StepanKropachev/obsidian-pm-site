@@ -6,11 +6,12 @@ The kanban view is for *moving work*. One column per status, one card per task. 
 
 ## Anatomy
 
-- **One column per status**, in the order set under **Settings** → **Statuses**.
+- **One column per status**, in the order set under **Settings** → **Project Manager** → **Task fields** → **Statuses** — or the project's own status list, if it overrides them.
+- With several projects in scope, the columns are every status used across them, and each card carries a colored project chip. See [Working across projects](/docs/multi-project-views).
 - **One card per task** in each column.
 - **Filter bar** above the board — text search, status / priority / assignee / tag pills, due-date filter, archived toggle, and saved views. Shared across table, gantt, and kanban.
 
-Each card shows: title, a priority color rail (for critical and high), parent task name (if the card is a subtask and "show subtasks" is on), a subtask progress badge (for parents with children), and logged time if any.
+Each card shows: title, a priority color rail, parent task name (if the card is a subtask and **Show subtasks** is on), a subtask progress badge (for parents with children), and logged time if any. Turn on **Show description preview** to give each card the first few lines of its description.
 
 ## Drag between columns
 
@@ -24,7 +25,9 @@ Each column has a **+** button at the bottom. Clicking creates a task pre-set to
 
 By default, only top-level tasks appear on the board — subtasks are hidden, but their progress feeds a badge on the parent card.
 
-Turn on **Settings** → **Project Manager** → **Show subtasks on board** to show subtasks as their own cards. The parent card still shows; the subtasks are independent cards that can be dragged separately.
+Turn on **Settings** → **Project Manager** → **Board** → **Show subtasks** to show subtasks as their own cards. The parent card still shows; the subtasks are independent cards that can be dragged separately.
+
+A project can override this in its own settings, so one board can show subtasks while the rest don't.
 
 ## Filtering
 
@@ -39,7 +42,8 @@ Right-click a card for actions: open, archive, delete, set priority, set assigne
 ## Where to go next
 
 - [Statuses and priorities](06-statuses-and-priorities.md) — customize columns by reordering or editing statuses.
-- [Settings reference](12-settings-reference.md) — the "show subtasks on board" toggle.
+- [Working across projects](/docs/multi-project-views) — one board over several projects.
+- [Settings reference](12-settings-reference.md) — the board toggles.
 
 ## Tips
 
