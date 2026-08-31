@@ -12,15 +12,11 @@
       <a href="/docs/install">Docs</a>
       <a href="https://github.com/stepankropachev/obsidian-pm" rel="noopener" data-gc-event="nav-github">GitHub</a>
       <a
-        class="btn btn-secondary nav-donate"
         href="https://buymeacoffee.com/kropachev"
         target="_blank"
         rel="noopener"
         data-gc-event="nav-donate"
-      >
-        <span class="icon">coffee</span>
-        Donate
-      </a>
+      >Donate</a>
     </nav>
   </div>
 </header>
@@ -75,20 +71,17 @@
     gap: 1.5rem;
     align-items: center;
   }
-  /* Plain nav links only — the donate button styles itself as .btn-secondary. */
-  .nav-links a:not(.btn) {
+  .nav-links a {
     color: var(--on-surface-variant);
     font-size: 0.875rem;
     font-weight: 500;
     letter-spacing: -0.005em;
     transition: color 140ms ease;
   }
-  .nav-links a:not(.btn):hover {
+  .nav-links a:hover {
     color: var(--on-surface);
   }
   @media (max-width: 540px) {
     .nav-links { gap: 1.25rem; }
-    .nav-donate { padding: 0.5rem 0.75rem; }
-    .nav-donate .icon { display: none; }
   }
 </style>
