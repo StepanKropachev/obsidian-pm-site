@@ -73,7 +73,7 @@ File an issue on GitHub. Include:
 - Steps to reproduce.
 - A minimal sample if possible (a small project file + its task folder).
 
-[Open an issue on GitHub](https://github.com/stepankropachev/obsidian-pm/issues) — link from the plugin's GitHub page.
+[Open an issue on GitHub](https://github.com/dotpm/obsidian-pm/issues) — link from the plugin's GitHub page.
 
 ## Where to go next
 

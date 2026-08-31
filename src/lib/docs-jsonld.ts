@@ -1,7 +1,7 @@
 const author = {
-  '@type': 'Person',
-  name: 'Stepan Kropachev',
-  url: 'https://github.com/StepanKropachev',
+  '@type': 'Organization',
+  name: 'dotpm',
+  url: 'https://dotpm.pm',
 } as const
 
 export interface DocsJsonLdInput {
