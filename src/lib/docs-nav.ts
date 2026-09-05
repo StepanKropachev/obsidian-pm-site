@@ -44,6 +44,7 @@ export const docsNav: DocGroup[] = [
       { slug: 'saved-views', title: 'Saved views', filename: '13-saved-views' },
       { slug: 'time-tracking', title: 'Time tracking', filename: '14-time-tracking' },
       { slug: 'bulk-operations', title: 'Bulk operations', filename: '15-bulk-operations' },
+      { slug: 'duplicating-projects', title: 'Duplicating projects', filename: '26-duplicating-projects' },
       { slug: 'keyboard-shortcuts', title: 'Keyboard shortcuts', filename: '16-keyboard-shortcuts' },
       { slug: 'archived-tasks', title: 'Archived tasks', filename: '20-archived-tasks' },
       { slug: 'recurring-tasks', title: 'Recurring tasks', filename: '21-recurring-tasks' },
