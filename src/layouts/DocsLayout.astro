@@ -110,6 +110,67 @@ const next = idx >= 0 && idx < allDocItems.length - 1 ? allDocItems[idx + 1] : n
   </script>
 
   <script>
+    // Section anchors: a link icon beside each heading that copies a deep link
+    // to that section straight to the clipboard.
+    const anchored = Array.from(
+      document.querySelectorAll<HTMLElement>('.doc-content h2[id], .doc-content h3[id], .doc-content h4[id]')
+    )
+
+    const copyText = async (text: string) => {
+      try {
+        await navigator.clipboard.writeText(text)
+        return true
+      } catch {
+        // Clipboard API needs a secure context; fall back to a throwaway textarea.
+        const ta = document.createElement('textarea')
+        ta.value = text
+        ta.setAttribute('readonly', '')
+        ta.style.position = 'fixed'
+        ta.style.top = '0'
+        ta.style.opacity = '0'
+        document.body.appendChild(ta)
+        ta.select()
+        let ok = false
+        try {
+          ok = document.execCommand('copy')
+        } catch {}
+        ta.remove()
+        return ok
+      }
+    }
+
+    for (const heading of anchored) {
+      const label = (heading.textContent || '').trim()
+      const link = document.createElement('a')
+      link.className = 'heading-anchor'
+      link.href = `#${heading.id}`
+      link.title = 'Copy link to this section'
+      link.setAttribute('aria-label', `Copy link to section: ${label}`)
+      const icon = document.createElement('span')
+      icon.className = 'icon'
+      icon.textContent = 'link'
+      link.appendChild(icon)
+      heading.appendChild(link)
+
+      let reset: number | undefined
+      link.addEventListener('click', async (e) => {
+        e.preventDefault()
+        const path = location.pathname.replace(/\.html$/, '')
+        const ok = await copyText(`${location.origin}${path}#${heading.id}`)
+        history.replaceState(null, '', `#${heading.id}`)
+        if (!ok) return
+        icon.textContent = 'check'
+        link.dataset.copied = ''
+        window.clearTimeout(reset)
+        reset = window.setTimeout(() => {
+          icon.textContent = 'link'
+          delete link.dataset.copied
+        }, 1400)
+      })
+    }
+  </script>
+
+  <script>
     // Lightbox: click a doc image to view it full-size; Esc or click to close.
     const imgs = Array.from(document.querySelectorAll<HTMLImageElement>('.doc-content img'))
     if (imgs.length) {
@@ -209,6 +270,54 @@ const next = idx >= 0 && idx < allDocItems.length - 1 ? allDocItems[idx + 1] : n
     margin-bottom: 0.5rem;
     color: var(--on-surface);
   }
+  .doc-content :is(h2, h3, h4) .heading-anchor {
+    position: relative;
+    display: inline-flex;
+    align-items: center;
+    margin-left: 0.4rem;
+    vertical-align: middle;
+    color: var(--on-surface-muted);
+    opacity: 0;
+    transition: opacity 0.12s ease, color 0.12s ease;
+  }
+  .doc-content :is(h2, h3, h4):hover .heading-anchor,
+  .doc-content .heading-anchor:focus-visible,
+  .doc-content .heading-anchor[data-copied] {
+    opacity: 1;
+  }
+  .doc-content .heading-anchor:hover,
+  .doc-content .heading-anchor[data-copied] {
+    color: var(--primary);
+  }
+  .doc-content .heading-anchor .icon {
+    font-size: 0.8em;
+    color: inherit;
+  }
+  /* No hover to reveal it on touch, so keep it faintly visible. */
+  @media (hover: none) {
+    .doc-content :is(h2, h3, h4) .heading-anchor {
+      opacity: 0.45;
+    }
+  }
+  .doc-content .heading-anchor[data-copied]::after {
+    content: 'Copied';
+    position: absolute;
+    left: 50%;
+    bottom: calc(100% + 0.4rem);
+    transform: translateX(-50%);
+    padding: 0.2rem 0.45rem;
+    font-family: var(--font-body);
+    font-size: 0.6875rem;
+    font-weight: 500;
+    line-height: 1.2;
+    white-space: nowrap;
+    color: var(--on-surface);
+    background: var(--surface-container-lowest);
+    border-radius: var(--radius-sm);
+    box-shadow: var(--shadow-ambient);
+    pointer-events: none;
+  }
+
   .doc-content p {
     margin: 0 0 1rem;
     font-size: 0.9375rem;
