@@ -19,11 +19,13 @@ const canonicalPath = Astro.url.pathname
 const canonical = new URL(canonicalPath, Astro.site)
 const ogImage = new URL('/og.png', Astro.site)
 
+// No `alternateName`: Google was picking its own site name ("Obsidian Project
+// Manager") over ours in the SERP, so `dotpm` is the one name we advertise —
+// here and in `og:site_name`.
 const siteJsonLd = {
   '@context': 'https://schema.org',
   '@type': 'WebSite',
   name: 'dotpm',
-  alternateName: 'dotpm — a project manager for Obsidian',
   url: Astro.site!.href.replace(/\/$/, ''),
   description: 'Project management for Obsidian. Tables, Gantt, and kanban — your tasks stored as plain markdown in your vault.',
   inLanguage: 'en',
@@ -47,6 +49,7 @@ const siteJsonLd = {
     <title>{title}</title>
     <meta name="description" content={description} />
     <link rel="canonical" href={canonical} />
+    <meta property="og:site_name" content="dotpm" />
     <meta property="og:title" content={title} />
     <meta property="og:description" content={description} />
     <meta property="og:type" content="website" />
